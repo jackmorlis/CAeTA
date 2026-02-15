@@ -1,0 +1,39 @@
+# Environment files
+.env
+backend/.env
+
+# Node modules
+node_modules/
+lovable-frontend/node_modules/
+admin-frontend/node_modules/
+
+# Build outputs
+lovable-frontend/dist/
+admin-frontend/dist/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Docker volumes
+postgres_data/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Blueprint (reference doc, not part of the app)
+blueprint.md

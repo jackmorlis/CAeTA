@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Malaysia flag with stripes, canton, crescent and star -->
+  <rect width="32" height="32" fill="#CC0001"/>
+
+  <!-- Red and white stripes (14 stripes total) -->
+  <rect y="0" width="32" height="2.286" fill="#CC0001"/>
+  <rect y="2.286" width="32" height="2.286" fill="#FFFFFF"/>
+  <rect y="4.571" width="32" height="2.286" fill="#CC0001"/>
+  <rect y="6.857" width="32" height="2.286" fill="#FFFFFF"/>
+  <rect y="9.143" width="32" height="2.286" fill="#CC0001"/>
+  <rect y="11.429" width="32" height="2.286" fill="#FFFFFF"/>
+  <rect y="13.714" width="32" height="2.286" fill="#CC0001"/>
+  <rect y="16" width="32" height="2.286" fill="#FFFFFF"/>
+  <rect y="18.286" width="32" height="2.286" fill="#CC0001"/>
+  <rect y="20.571" width="32" height="2.286" fill="#FFFFFF"/>
+  <rect y="22.857" width="32" height="2.286" fill="#CC0001"/>
+  <rect y="25.143" width="32" height="2.286" fill="#FFFFFF"/>
+  <rect y="27.429" width="32" height="2.286" fill="#CC0001"/>
+  <rect y="29.714" width="32" height="2.286" fill="#FFFFFF"/>
+
+  <!-- Blue canton -->
+  <rect width="16" height="16" fill="#010066"/>
+
+  <!-- Yellow crescent and star -->
+  <g fill="#FFCC00">
+    <!-- Crescent -->
+    <circle cx="7" cy="8" r="4" fill="#FFCC00"/>
+    <circle cx="8" cy="8" r="3.5" fill="#010066"/>
+
+    <!-- 14-pointed star -->
+    <path d="M11,8 l0.5,1.5 1.5,0.5 -1.5,0.5 -0.5,1.5 -0.5,-1.5 -1.5,-0.5 1.5,-0.5 z" transform="translate(1,0)"/>
+    <path d="M11,8 l0.5,1.5 1.5,0.5 -1.5,0.5 -0.5,1.5 -0.5,-1.5 -1.5,-0.5 1.5,-0.5 z" transform="translate(1,0) rotate(25.7 12 8)"/>
+    <path d="M11,8 l0.5,1.5 1.5,0.5 -1.5,0.5 -0.5,1.5 -0.5,-1.5 -1.5,-0.5 1.5,-0.5 z" transform="translate(1,0) rotate(51.4 12 8)"/>
+    <path d="M11,8 l0.5,1.5 1.5,0.5 -1.5,0.5 -0.5,1.5 -0.5,-1.5 -1.5,-0.5 1.5,-0.5 z" transform="translate(1,0) rotate(77.1 12 8)"/>
+    <path d="M11,8 l0.5,1.5 1.5,0.5 -1.5,0.5 -0.5,1.5 -0.5,-1.5 -1.5,-0.5 1.5,-0.5 z" transform="translate(1,0) rotate(102.8 12 8)"/>
+    <path d="M11,8 l0.5,1.5 1.5,0.5 -1.5,0.5 -0.5,1.5 -0.5,-1.5 -1.5,-0.5 1.5,-0.5 z" transform="translate(1,0) rotate(128.5 12 8)"/>
+    <path d="M11,8 l0.5,1.5 1.5,0.5 -1.5,0.5 -0.5,1.5 -0.5,-1.5 -1.5,-0.5 1.5,-0.5 z" transform="translate(1,0) rotate(154.2 12 8)"/>
+    <path d="M11,8 l0.5,1.5 1.5,0.5 -1.5,0.5 -0.5,1.5 -0.5,-1.5 -1.5,-0.5 1.5,-0.5 z" transform="translate(1,0) rotate(180 12 8)"/>
+    <path d="M11,8 l0.5,1.5 1.5,0.5 -1.5,0.5 -0.5,1.5 -0.5,-1.5 -1.5,-0.5 1.5,-0.5 z" transform="translate(1,0) rotate(205.7 12 8)"/>
+    <path d="M11,8 l0.5,1.5 1.5,0.5 -1.5,0.5 -0.5,1.5 -0.5,-1.5 -1.5,-0.5 1.5,-0.5 z" transform="translate(1,0) rotate(231.4 12 8)"/>
+    <path d="M11,8 l0.5,1.5 1.5,0.5 -1.5,0.5 -0.5,1.5 -0.5,-1.5 -1.5,-0.5 1.5,-0.5 z" transform="translate(1,0) rotate(257.1 12 8)"/>
+    <path d="M11,8 l0.5,1.5 1.5,0.5 -1.5,0.5 -0.5,1.5 -0.5,-1.5 -1.5,-0.5 1.5,-0.5 z" transform="translate(1,0) rotate(282.8 12 8)"/>
+    <path d="M11,8 l0.5,1.5 1.5,0.5 -1.5,0.5 -0.5,1.5 -0.5,-1.5 -1.5,-0.5 1.5,-0.5 z" transform="translate(1,0) rotate(308.5 12 8)"/>
+    <path d="M11,8 l0.5,1.5 1.5,0.5 -1.5,0.5 -0.5,1.5 -0.5,-1.5 -1.5,-0.5 1.5,-0.5 z" transform="translate(1,0) rotate(334.2 12 8)"/>
+  </g>
+</svg>

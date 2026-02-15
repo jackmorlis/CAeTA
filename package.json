@@ -1,0 +1,25 @@
+{
+  "name": "dr-eticket",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:debug": "npx playwright test --debug"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flow-beer-code/DOMcard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flow-beer-code/DOMcard/issues"
+  },
+  "homepage": "https://github.com/flow-beer-code/DOMcard#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
+  }
+}
