@@ -21,6 +21,9 @@ venv/
 # Docker volumes
 postgres_data/
 
+# Local SQLite DB
+*.db
+
 # IDE
 .vscode/
 .idea/
