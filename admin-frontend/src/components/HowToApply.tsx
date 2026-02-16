@@ -15,14 +15,14 @@ const HowToApply = () => {
       title: "Get your arrival card by email",
       icon: Mail,
       description:
-        "Receive your Dominican Republic E-Ticket as a PDF via email.",
+        "Receive your Curaçao Digital Immigration Card as a PDF via email.",
     },
     {
       number: "3",
       title: "Show it at the airport",
       icon: Plane,
       description:
-        "Present the card to immigration on arrival in the Dominican Republic.",
+        "Present the card to immigration on arrival in Curaçao.",
     },
   ];
 

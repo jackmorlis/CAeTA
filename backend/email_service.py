@@ -2,7 +2,8 @@ import os
 import io
 import requests
 from typing import Optional
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
+from zoneinfo import ZoneInfo
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -45,7 +46,7 @@ def send_payment_confirmation_email(
         return False
 
     # Email subject
-    subject = "Thank you for using Dominican Republic Earrival Form"
+    subject = "Thank you for using Curaçao eArrival Form"
 
     # Format amount for display
     amount_display = f"${amount_paid:.2f}" if amount_paid else "Amount not available"
@@ -78,11 +79,11 @@ def send_payment_confirmation_email(
     delivery_tracker_html = ""
 
     if earliest_arrival_date:
-        today = date.today()
+        today = datetime.now(ZoneInfo('America/Curacao')).date()
         days_until_arrival = (earliest_arrival_date - today).days
 
-        if days_until_arrival > 2:
-            delivery_date = earliest_arrival_date - timedelta(days=2)
+        if days_until_arrival > 7:
+            delivery_date = earliest_arrival_date - timedelta(days=7)
             delivery_date_formatted = delivery_date.strftime("%A, %b %d, %Y")
             delivery_day = delivery_date.strftime("%d")
             delivery_month = delivery_date.strftime("%b")
@@ -93,9 +94,9 @@ Est. delivery: {delivery_month} {delivery_day}, 07:00 AM
 
 [✓] Application → [2] Waiting → [ ] Delivered
 
-We've received your Dominican Republic E-Ticket application and are currently reviewing it. Your document will be delivered on {delivery_date_formatted}.
+We've received your Curaçao eArrival Form application and are currently reviewing it. Your document will be delivered on {delivery_date_formatted}.
 
-The estimated delivery date ensures that your Dominican Republic E-Ticket will be valid on the date of your trip.
+The estimated delivery date ensures that your Curaçao eArrival Form will be valid on the date of your trip.
 ======================================================
 """
 
@@ -112,7 +113,7 @@ The estimated delivery date ensures that your Dominican Republic E-Ticket will b
                                 </div>
                             </td>
                             <td style="width: 10%; text-align: center; vertical-align: middle;">
-                                <img src="https://flagcdn.com/w40/do.png" alt="MY" style="width: 28px; height: 18px; border-radius: 2px;">
+                                <img src="https://flagcdn.com/w40/cw.png" alt="CW" style="width: 28px; height: 18px; border-radius: 2px;">
                             </td>
                             <td style="width: 30%; text-align: right; vertical-align: middle;">
                                 <div style="border: 2px solid #1f2937; border-radius: 8px; padding: 8px 12px; display: inline-block; text-align: center;">
@@ -133,15 +134,15 @@ The estimated delivery date ensures that your Dominican Republic E-Ticket will b
                     <table style="width: 100%; max-width: 350px; margin: 0 auto;">
                         <tr>
                             <td style="text-align: center; width: 33%;">
-                                <div style="width: 32px; height: 32px; border-radius: 50%; background-color: #1f2937; color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;">✓</div>
+                                <div style="width: 32px; height: 32px; border-radius: 50%; background-color: #1f2937; color: white; text-align: center; line-height: 32px; font-size: 14px; margin: 0 auto;">&#10003;</div>
                                 <div style="font-size: 11px; color: #4b5563; margin-top: 4px;">Application</div>
                             </td>
                             <td style="text-align: center; width: 33%;">
-                                <div style="width: 32px; height: 32px; border-radius: 50%; background-color: #1f2937; color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold;">2</div>
+                                <div style="width: 32px; height: 32px; border-radius: 50%; background-color: #1f2937; color: white; text-align: center; line-height: 32px; font-size: 14px; font-weight: bold; margin: 0 auto;">2</div>
                                 <div style="font-size: 11px; color: #4b5563; margin-top: 4px;">Waiting</div>
                             </td>
                             <td style="text-align: center; width: 33%;">
-                                <div style="width: 32px; height: 32px; border-radius: 50%; background-color: #e5e7eb; color: #9ca3af; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;">3</div>
+                                <div style="width: 32px; height: 32px; border-radius: 50%; background-color: #e5e7eb; color: #9ca3af; text-align: center; line-height: 32px; font-size: 14px; margin: 0 auto;">3</div>
                                 <div style="font-size: 11px; color: #9ca3af; margin-top: 4px;">Delivered</div>
                             </td>
                         </tr>
@@ -150,8 +151,8 @@ The estimated delivery date ensures that your Dominican Republic E-Ticket will b
 
                 <!-- Message -->
                 <div style="padding: 15px; font-size: 14px; color: #374151; line-height: 1.5;">
-                    <p style="margin: 0 0 8px 0;">We've received your <strong>Dominican Republic E-Ticket</strong> application and are currently reviewing it. Your document will be delivered on <strong>{delivery_date_formatted}</strong>.</p>
-                    <p style="margin: 0; font-size: 12px; color: #6b7280;">The estimated delivery date ensures that your Dominican Republic E-Ticket will be valid on the date of your trip.</p>
+                    <p style="margin: 0 0 8px 0;">We've received your <strong>Curaçao eArrival Form</strong> application and are currently reviewing it. Your document will be delivered on <strong>{delivery_date_formatted}</strong>.</p>
+                    <p style="margin: 0; font-size: 12px; color: #6b7280;">The estimated delivery date ensures that your Curaçao eArrival Form will be valid on the date of your trip.</p>
                 </div>
             </div>
 """
@@ -172,7 +173,7 @@ Arrival Submission Service Fee x {num_travelers} Travelers: ${base_total:.2f}
 TOTAL AMOUNT PAID: {amount_display}
 ===============================================
 
-You will receive a confirmation email with your personal details and PIN, which serves as your Dominican Republic E-Ticket.
+You will receive your Curaçao eArrival Form via email as a PDF with a QR code. Present this QR code to immigration upon arrival in Curaçao.
 
 If you need to make any changes, please use the contact form or write us an email with your reference number at help@earrival-support.com.
 
@@ -183,7 +184,7 @@ If you have any questions or need further assistance, feel free to contact us.
 You can reach out to us anytime at help@earrival-support.com
 
 Wishing you a wonderful trip,
-The Team at dominican.earrivalform.com
+The CDIC Service Team
 """
 
     # HTML version
@@ -264,7 +265,7 @@ The Team at dominican.earrivalform.com
 <body>
     <div class="container">
         <div class="header">
-            <h1>🇩🇴 Dominican Republic Earrival Form</h1>
+            <h1>🇨🇼 Curaçao eArrival Form</h1>
         </div>
 
         <div class="content">
@@ -297,7 +298,7 @@ The Team at dominican.earrivalform.com
                 </table>
             </div>
 
-            <p><strong>You will receive a confirmation email with your personal details and PIN, which serves as your Dominican Republic E-Ticket.</strong></p>
+            <p><strong>You will receive your Curaçao eArrival Form via email as a PDF with a QR code. Present this QR code to immigration upon arrival in Curaçao.</strong></p>
 
             <p>If you need to make any changes, please use the contact form or write us an email with your reference number at <a href="mailto:help@earrival-support.com">help@earrival-support.com</a>.</p>
 
@@ -310,7 +311,7 @@ The Team at dominican.earrivalform.com
 
         <div class="footer">
             <p>Wishing you a wonderful trip,<br>
-            <strong>The Team at dominican.earrivalform.com</strong></p>
+            <strong>The CDIC Service Team</strong></p>
         </div>
     </div>
 </body>
@@ -323,7 +324,7 @@ The Team at dominican.earrivalform.com
             MAILGUN_API_URL,
             auth=("api", MAILGUN_API_KEY),
             data={
-                "from": f"Dominican Republic Earrival Form <{MAILGUN_FROM_EMAIL}>",
+                "from": f"Curaçao eArrival Form <{MAILGUN_FROM_EMAIL}>",
                 "to": [to_email],
                 "subject": subject,
                 "text": text_content,
@@ -369,7 +370,7 @@ def send_internal_order_notification(
         print("❌ Mailgun not configured. Skipping internal notification.")
         return False
 
-    internal_emails = ["1-octo-orders-aaaarzja2l44jibiecf3rg4ynm@octo-services.slack.com"]
+    internal_emails = ["1-octo-orders-cw-aaaateg4deshixeowf5uwcji2e@octo-services.slack.com"]
     subject = f"New Order: {reference_number}"
 
     # Build travelers section
@@ -612,7 +613,7 @@ Payment Status: {payment_data.get('payment_status', 'N/A')}
         </div>
 
         <div class="footer">
-            <p>This is an automated notification from Dominican Republic E-Ticket system.</p>
+            <p>This is an automated notification from Curaçao eArrival Form system.</p>
         </div>
     </div>
 </body>
@@ -625,7 +626,7 @@ Payment Status: {payment_data.get('payment_status', 'N/A')}
             MAILGUN_API_URL,
             auth=("api", MAILGUN_API_KEY),
             data={
-                "from": f"dominican.earrivalform <{MAILGUN_FROM_EMAIL}>",
+                "from": f"CDIC Service <{MAILGUN_FROM_EMAIL}>",
                 "to": internal_emails,
                 "subject": subject,
                 "text": text_content,
@@ -813,7 +814,7 @@ Submitted at: {contact_data.get('created_at', 'N/A')}
         </div>
 
         <div class="footer">
-            <p>This is an automated notification from Dominican Republic E-Ticket system.</p>
+            <p>This is an automated notification from Curaçao eArrival Form system.</p>
         </div>
     </div>
 </body>
@@ -826,7 +827,7 @@ Submitted at: {contact_data.get('created_at', 'N/A')}
             MAILGUN_API_URL,
             auth=("api", MAILGUN_API_KEY),
             data={
-                "from": f"dominican.earrivalform Contact <{MAILGUN_FROM_EMAIL}>",
+                "from": f"CDIC Service Contact <{MAILGUN_FROM_EMAIL}>",
                 "to": internal_emails,
                 "subject": subject,
                 "text": text_content,
@@ -868,7 +869,7 @@ def send_contact_form_confirmation(
         return False
 
     # Email subject
-    subject = "We've received your inquiry - Dominican Republic Earrival Form"
+    subject = "We've received your inquiry - Curaçao eArrival Form"
 
     # Plain text version
     text_content = f"""Hi {customer_name},
@@ -877,7 +878,7 @@ Thanks for reaching out! We've received your inquiry and will get back to you sh
 Our team is on it, and we aim to respond within 0-6 business hours.
 
 Best Regards,
-The Team at dominican.earrivalform.com
+The CDIC Service Team
 """
 
     # HTML version
@@ -931,7 +932,7 @@ The Team at dominican.earrivalform.com
 <body>
     <div class="container">
         <div class="header">
-            <h1>🇩🇴 Dominican Republic Earrival Form</h1>
+            <h1>🇨🇼 Curaçao eArrival Form</h1>
         </div>
 
         <div class="content">
@@ -943,7 +944,7 @@ The Team at dominican.earrivalform.com
 
         <div class="footer">
             <p>Best Regards,<br>
-            <strong>The Team at dominican.earrivalform.com</strong></p>
+            <strong>The CDIC Service Team</strong></p>
         </div>
     </div>
 </body>
@@ -956,7 +957,7 @@ The Team at dominican.earrivalform.com
             MAILGUN_API_URL,
             auth=("api", MAILGUN_API_KEY),
             data={
-                "from": f"Dominican Republic Earrival Form <{MAILGUN_FROM_EMAIL}>",
+                "from": f"Curaçao eArrival Form <{MAILGUN_FROM_EMAIL}>",
                 "to": [to_email],
                 "subject": subject,
                 "text": text_content,
@@ -997,8 +998,6 @@ def send_capture_job_report(
         print("❌ Mailgun not configured. Skipping capture job report.")
         return False
 
-    from datetime import datetime
-
     admin_email = "admin@octoservicesinc.com"
     subject = f"Capture Job Report - {datetime.utcnow().strftime('%Y-%m-%d %H:%M')} UTC"
 
@@ -1037,7 +1036,7 @@ Failed: {job_result.get('failed', 0)}
             MAILGUN_API_URL,
             auth=("api", MAILGUN_API_KEY),
             data={
-                "from": f"DRET System <{MAILGUN_FROM_EMAIL}>",
+                "from": f"CDIC Service <{MAILGUN_FROM_EMAIL}>",
                 "to": admin_email,
                 "subject": subject,
                 "text": report
@@ -1100,7 +1099,7 @@ Please note: It may take 3-5 business days for this to reflect in your account, 
 If you have any questions, please contact our support team at help@earrival-support.com
 
 Best regards,
-The Team at dominican.earrivalform.com
+The CDIC Service Team
 """
 
     # HTML version
@@ -1226,7 +1225,7 @@ The Team at dominican.earrivalform.com
 
         <div class="footer">
             <p>Best regards,<br>
-            <strong>The Team at dominican.earrivalform.com</strong></p>
+            <strong>The CDIC Service Team</strong></p>
         </div>
     </div>
 </body>
@@ -1238,7 +1237,7 @@ The Team at dominican.earrivalform.com
             MAILGUN_API_URL,
             auth=("api", MAILGUN_API_KEY),
             data={
-                "from": f"Dominican Republic Earrival Form <{MAILGUN_FROM_EMAIL}>",
+                "from": f"Curaçao eArrival Form <{MAILGUN_FROM_EMAIL}>",
                 "to": [to_email],
                 "subject": subject,
                 "text": text_content,
@@ -1269,12 +1268,12 @@ def send_delivery_email(
     pdf_filename: str
 ) -> bool:
     """
-    Send delivery email with E-Ticket PDF attachment to customer.
+    Send delivery email with Digital Immigration Card PDF attachment to customer.
 
     Args:
         to_email: Customer's email address
         customer_name: Customer's name
-        reference_number: Application reference number (DRET-XXXXXX)
+        reference_number: Application reference number (CDIC-XXXXXX)
         pdf_content: Raw PDF file bytes
         pdf_filename: Filename for the PDF attachment
 
@@ -1285,25 +1284,25 @@ def send_delivery_email(
         print("⚠️ Mailgun not configured. Skipping delivery email.")
         return False
 
-    subject = f"Your Dominican Republic E-Ticket is Ready — {reference_number}"
+    subject = f"Your Curaçao eArrival Form is Ready — {reference_number}"
 
     # Plain text version
     text_content = f"""Hello {customer_name},
 
-Great news! Your Dominican Republic E-Ticket has been processed and is attached to this email as a PDF.
+Great news! Your Curaçao eArrival Form has been processed and is attached to this email as a PDF.
 
 REFERENCE NUMBER: {reference_number}
 
 IMPORTANT:
 - Please download and save the attached PDF to your device.
 - Print a copy or have it ready on your phone for your trip.
-- Present this document upon arrival in the Dominican Republic.
+- Present this document upon arrival in Curaçao.
 
 If you have any questions or need further assistance, feel free to contact us.
 You can reach out to us anytime at help@earrival-support.com
 
 Wishing you a wonderful trip,
-The Team at dominican.earrivalform.com
+The CDIC Service Team
 """
 
     # HTML version
@@ -1404,13 +1403,13 @@ The Team at dominican.earrivalform.com
 <body>
     <div class="container">
         <div class="header">
-            <h1>Dominican Republic Earrival Form</h1>
+            <h1>Curaçao eArrival Form</h1>
         </div>
 
         <div class="content">
             <div class="success-box">
-                <h2>Your E-Ticket is Ready!</h2>
-                <p>Your Dominican Republic E-Ticket has been processed and is attached to this email.</p>
+                <h2>Your Digital Immigration Card is Ready!</h2>
+                <p>Your Curaçao eArrival Form has been processed and is attached to this email.</p>
             </div>
 
             <p>Hello {customer_name},</p>
@@ -1425,7 +1424,7 @@ The Team at dominican.earrivalform.com
                 <ul>
                     <li>Please download and save the attached PDF to your device.</li>
                     <li>Print a copy or have it ready on your phone for your trip.</li>
-                    <li>Present this document upon arrival in the Dominican Republic.</li>
+                    <li>Present this document upon arrival in Curaçao.</li>
                 </ul>
             </div>
 
@@ -1435,7 +1434,7 @@ The Team at dominican.earrivalform.com
 
         <div class="footer">
             <p>Wishing you a wonderful trip,<br>
-            <strong>The Team at dominican.earrivalform.com</strong></p>
+            <strong>The CDIC Service Team</strong></p>
         </div>
     </div>
 </body>
@@ -1447,7 +1446,7 @@ The Team at dominican.earrivalform.com
             MAILGUN_API_URL,
             auth=("api", MAILGUN_API_KEY),
             data={
-                "from": f"Dominican Republic Earrival Form <{MAILGUN_FROM_EMAIL}>",
+                "from": f"Curaçao eArrival Form <{MAILGUN_FROM_EMAIL}>",
                 "to": [to_email],
                 "subject": subject,
                 "text": text_content,

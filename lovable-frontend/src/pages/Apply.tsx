@@ -259,7 +259,7 @@ const Apply = () => {
           first_name: t.firstName, last_name: t.lastName,
           date_of_birth: t.birthDate, gender: t.gender,
           nationality: t.nationality, passport_number: t.passport,
-          passport_expiry: t.passportExpiry, country_of_birth: t.countryOfBirth,
+          passport_expiry_date: t.passportExpiry, country_of_birth: t.countryOfBirth,
           email: i === 0 ? t.email : undefined,
           country_of_residence: t.countryOfResidence,
           state_province: t.stateProvince, city: t.city,
@@ -377,6 +377,7 @@ const Apply = () => {
       const prefix = `travelers.${i}` as const;
       if (!t.countryOfResidence?.trim()) { form.setError(`${prefix}.countryOfResidence` as any, { type: 'manual', message: 'Country of residence is required' }); valid = false; }
       if (!t.city?.trim()) { form.setError(`${prefix}.city` as any, { type: 'manual', message: 'City is required' }); valid = false; }
+      if (!t.stateProvince?.trim()) { form.setError(`${prefix}.stateProvince` as any, { type: 'manual', message: 'State / Province is required' }); valid = false; }
     });
 
     // Email only for first traveler
@@ -857,7 +858,7 @@ const Apply = () => {
                       <FormField control={form.control} name={`travelers.${index}.stateProvince`} render={({ field }) =>
                         <FormItem className="space-y-3">
                           <FormLabel className="text-base md:text-lg font-bold text-slate-800">
-                            State / Province
+                            State / Province <span className="text-red-500">*</span>
                           </FormLabel>
                           <FormControl>
                             <Input placeholder="e.g., New York" {...field} className="h-12 border-2 border-gray-200 hover:border-primary focus:border-primary" />

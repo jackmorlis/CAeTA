@@ -319,7 +319,7 @@ const AdminPanel = () => {
       // Service description
       doc.setFontSize(9);
       doc.setFont('helvetica', 'normal');
-      doc.text('E-Ticket and travel application document support service', pageWidth / 2, y, { align: 'center' });
+      doc.text('Digital Immigration Card and travel application document support service', pageWidth / 2, y, { align: 'center' });
       y += sectionGap;
 
       // Divider line
@@ -386,14 +386,14 @@ const AdminPanel = () => {
         addLabelValue('Length of Stay', days > 0 ? `${days} days` : 'N/A');
       }
       addLabelValue('Departure Airport', selectedApp.embarkation_port);
-      addLabelValue('Arrival Airport (DR)', selectedApp.disembarkation_port);
+      addLabelValue('Arrival Airport (Curaçao)', selectedApp.disembarkation_port);
       addLabelValue('Airline Name', selectedApp.airline_name);
       addLabelValue('Flight Number', selectedApp.flight_number);
       addLabelValue('Travel Purpose', selectedApp.travel_purpose);
       addLabelValue('Accommodation Type', selectedApp.accommodation_type);
       addLabelValue('Accommodation Address', selectedApp.accommodation_details);
       if (selectedApp.return_departure_airport) {
-        addLabelValue('Return Departure Airport (DR)', selectedApp.return_departure_airport);
+        addLabelValue('Return Departure Airport (Curaçao)', selectedApp.return_departure_airport);
         addLabelValue('Return Destination Airport', selectedApp.return_destination_airport);
         addLabelValue('Return Airline', selectedApp.return_airline_name);
         addLabelValue('Return Flight No', selectedApp.return_flight_number);
@@ -482,15 +482,15 @@ const AdminPanel = () => {
   };
 
   const isArrivalDateUrgent = (arrivalDate: string) => {
-    // Check if arrival date is more than 3 days away (inclusive counting)
-    // No timezone conversion - compare dates as-is
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Reset to midnight for date-only comparison
+    // Check if arrival date is more than 7 days away
+    // Use Curaçao timezone for "today"
+    const now = new Date();
+    const today = new Date(now.toLocaleString('en-US', { timeZone: 'America/Curacao' }));
+    today.setHours(0, 0, 0, 0);
     const arrival = new Date(arrivalDate + 'T00:00:00'); // Parse as local date
     const diffTime = arrival.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    // Yellow if arrival is 3+ days away (e.g., Oct 31 → Nov 2 = 2 days diff, but 3 days inclusive)
-    return diffDays >= 3;
+    return diffDays >= 7;
   };
 
   const getStatusBadge = (status: string) => {
@@ -711,9 +711,9 @@ const AdminPanel = () => {
           {/* Applications Table */}
           <Card>
             <CardHeader>
-              <CardTitle>E-Ticket Workflow</CardTitle>
+              <CardTitle>Digital Immigration Card Workflow</CardTitle>
               <CardDescription>
-                Manage e-ticket application fulfillment
+                Manage Digital Immigration Card application fulfillment
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -968,11 +968,61 @@ const AdminPanel = () => {
                     const traveler = selectedApp.travelers[currentTravelerIndex];
                     return (
                       <>
-                        {/* Section 1: Personal Information */}
+                        {/* Section 1: Travel Information — matches DI Card form Section 1 */}
                         <div>
-                          <h3 className="text-lg font-semibold mb-4">Section 1: Personal Information</h3>
+                          <h3 className="text-lg font-semibold mb-4">Section 1: Travel Information</h3>
                           <div className="space-y-3">
-                            {/* Row 1: First Name and Last Name */}
+                            {/* Travel Dates */}
+                            <div className="grid grid-cols-1 gap-4">
+                              <div>
+                                <span className="text-slate-600 font-medium">Travel Dates:</span>
+                                <span className="ml-2 font-semibold">
+                                  {selectedApp.arrival_date ? formatSimpleDate(selectedApp.arrival_date) : 'N/A'}
+                                  {' — '}
+                                  {selectedApp.departure_date ? formatSimpleDate(selectedApp.departure_date) : 'N/A'}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Flight Number | Carrier Name */}
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <span className="text-slate-600 font-medium">Flight Number:</span>
+                                <span className="ml-2 font-semibold">{selectedApp.flight_number || 'N/A'}</span>
+                              </div>
+                              <div>
+                                <span className="text-slate-600 font-medium">Carrier Name:</span>
+                                <span className="ml-2 font-semibold">{selectedApp.airline_name || 'N/A'}</span>
+                              </div>
+                            </div>
+
+                            {/* Port of Embarkation | Purpose of Visit */}
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <span className="text-slate-600 font-medium">Port of Embarkation:</span>
+                                <span className="ml-2 font-semibold">{selectedApp.embarkation_port || selectedApp.departure_country || 'N/A'}</span>
+                              </div>
+                              <div>
+                                <span className="text-slate-600 font-medium">Purpose of Visit:</span>
+                                <span className="ml-2 font-semibold capitalize">{selectedApp.travel_purpose || 'N/A'}</span>
+                              </div>
+                            </div>
+
+                            {/* Intended Place of Stay (full width) */}
+                            <div className="grid grid-cols-1 gap-4">
+                              <div>
+                                <span className="text-slate-600 font-medium">Intended Place of Stay:</span>
+                                <span className="ml-2 font-semibold">{selectedApp.accommodation_details || 'N/A'}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Section 2: Passport Information — matches DI Card form Section 2 */}
+                        <div>
+                          <h3 className="text-lg font-semibold mb-4">Section 2: Passport Information</h3>
+                          <div className="space-y-3">
+                            {/* First Name | Last Name */}
                             <div className="grid grid-cols-2 gap-4">
                               <div>
                                 <span className="text-slate-600 font-medium">First Name:</span>
@@ -984,272 +1034,79 @@ const AdminPanel = () => {
                               </div>
                             </div>
 
-                            {/* Row 2: Passport No. | Nationality */}
+                            {/* Gender | Date of Birth */}
                             <div className="grid grid-cols-2 gap-4">
                               <div>
-                                <span className="text-slate-600 font-medium">Passport No.:</span>
-                                <span className="ml-2 font-semibold font-mono">{traveler.passport_number}</span>
+                                <span className="text-slate-600 font-medium">Gender:</span>
+                                <span className="ml-2 font-semibold capitalize">{traveler.gender}</span>
                               </div>
-                              <div>
-                                <span className="text-slate-600 font-medium">Nationality / Citizenship:</span>
-                                <span className="ml-2 font-semibold">{traveler.nationality}</span>
-                              </div>
-                            </div>
-
-                            {/* Row 3: Date of Birth | Sex */}
-                            <div className="grid grid-cols-2 gap-4">
                               <div>
                                 <span className="text-slate-600 font-medium">Date of Birth:</span>
                                 <span className="ml-2 font-semibold">{traveler.date_of_birth || 'N/A'}</span>
                               </div>
-                              <div>
-                                <span className="text-slate-600 font-medium">Sex:</span>
-                                <span className="ml-2 font-semibold capitalize">{traveler.gender}</span>
-                              </div>
                             </div>
 
-                            {/* Row 4: Passport Expiry | Place of Birth */}
+                            {/* Passport Number | Expiration Date */}
                             <div className="grid grid-cols-2 gap-4">
                               <div>
-                                <span className="text-slate-600 font-medium">Date of Passport Expiry:</span>
+                                <span className="text-slate-600 font-medium">Passport Number:</span>
+                                <span className="ml-2 font-semibold font-mono">{traveler.passport_number}</span>
+                              </div>
+                              <div>
+                                <span className="text-slate-600 font-medium">Expiration Date:</span>
                                 <span className="ml-2 font-semibold">{traveler.passport_expiry_date || 'N/A'}</span>
                               </div>
-                              <div>
-                                <span className="text-slate-600 font-medium">Place of Birth:</span>
-                                <span className="ml-2 font-semibold">{traveler.place_of_birth || 'N/A'}</span>
-                              </div>
                             </div>
 
-                            {/* Row 4b: Civil Status | Occupation */}
+                            {/* Nationality (full width) */}
+                            <div className="grid grid-cols-1 gap-4">
+                              <div>
+                                <span className="text-slate-600 font-medium">Nationality:</span>
+                                <span className="ml-2 font-semibold">{traveler.nationality}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Section 3: Personal Information — matches DI Card form Section 3 */}
+                        <div>
+                          <h3 className="text-lg font-semibold mb-4">Section 3: Personal Information</h3>
+                          <div className="space-y-3">
+                            {/* City of Residence | State/Province */}
                             <div className="grid grid-cols-2 gap-4">
                               <div>
-                                <span className="text-slate-600 font-medium">Civil Status:</span>
-                                <span className="ml-2 font-semibold capitalize">{traveler.civil_status || 'N/A'}</span>
+                                <span className="text-slate-600 font-medium">City of Residence:</span>
+                                <span className="ml-2 font-semibold">{traveler.city || 'N/A'}</span>
                               </div>
                               <div>
-                                <span className="text-slate-600 font-medium">Occupation:</span>
-                                <span className="ml-2 font-semibold">{traveler.occupation || 'N/A'}</span>
+                                <span className="text-slate-600 font-medium">State/Province of Residence:</span>
+                                <span className="ml-2 font-semibold">{traveler.state_province || 'N/A'}</span>
                               </div>
                             </div>
 
-                            {/* Row 4c: Country of Residence | City */}
+                            {/* Country of Residence | Country of Birth */}
                             <div className="grid grid-cols-2 gap-4">
                               <div>
                                 <span className="text-slate-600 font-medium">Country of Residence:</span>
                                 <span className="ml-2 font-semibold">{traveler.country_of_residence || 'N/A'}</span>
                               </div>
                               <div>
-                                <span className="text-slate-600 font-medium">City:</span>
-                                <span className="ml-2 font-semibold">{traveler.city || 'N/A'}</span>
+                                <span className="text-slate-600 font-medium">Country of Birth:</span>
+                                <span className="ml-2 font-semibold">{traveler.place_of_birth || 'N/A'}</span>
                               </div>
                             </div>
 
-                            {/* Row 5: Email Address (Full Width) */}
-                            <div className="grid grid-cols-1 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Email Address:</span>
-                                <span className="ml-2 font-semibold">{traveler.email}</span>
-                              </div>
-                            </div>
-
-                            {/* Row 6: Confirm Email Address (Full Width) */}
-                            <div className="grid grid-cols-1 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Confirm Email Address:</span>
-                                <span className="ml-2 font-semibold">{traveler.email}</span>
-                              </div>
-                            </div>
-
-                            {/* Row 7: Country Code | Mobile No. */}
+                            {/* Email | Confirm Email */}
                             <div className="grid grid-cols-2 gap-4">
                               <div>
-                                <span className="text-slate-600 font-medium">Country / Region Code:</span>
-                                <span className="ml-2 font-semibold">{traveler.phone_code}</span>
+                                <span className="text-slate-600 font-medium">Email:</span>
+                                <span className="ml-2 font-semibold">{traveler.email || 'N/A'}</span>
                               </div>
                               <div>
-                                <span className="text-slate-600 font-medium">Mobile No.:</span>
-                                <span className="ml-2 font-semibold">{traveler.phone}</span>
+                                <span className="text-slate-600 font-medium">Confirm Email:</span>
+                                <span className="ml-2 font-semibold">{traveler.email || 'N/A'}</span>
                               </div>
                             </div>
-                          </div>
-                        </div>
-
-                        {/* Section 2: Traveling Information */}
-                        <div>
-                          <h3 className="text-lg font-semibold mb-2">Section 2: Traveling Information</h3>
-                          <p className="text-sm text-red-600 mb-4">
-                            ** Please note that your trip must be within 3 days (including the date of submission)
-                          </p>
-                          <div className="space-y-3">
-                            {/* Row 1: Date of Arrival | Date of Departure */}
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Date of Arrival:</span>
-                                <span className="ml-2 font-semibold">{selectedApp.arrival_date ? formatSimpleDate(selectedApp.arrival_date) : 'N/A'}</span>
-                              </div>
-                              <div>
-                                <span className="text-slate-600 font-medium">Date of Departure:</span>
-                                <span className="ml-2 font-semibold">{selectedApp.departure_date ? formatSimpleDate(selectedApp.departure_date) : 'N/A'}</span>
-                              </div>
-                            </div>
-
-                            {/* Row 2: Arrival Date | Departure Date */}
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Arrival Date:</span>
-                                <span className="ml-2 font-semibold">{selectedApp.arrival_date || 'N/A'}</span>
-                              </div>
-                              <div>
-                                <span className="text-slate-600 font-medium">Departure Date:</span>
-                                <span className="ml-2 font-semibold">{selectedApp.departure_date || 'N/A'}</span>
-                              </div>
-                            </div>
-
-                            {/* Row 3: Length of Stay */}
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Length of Stay:</span>
-                                <span className="ml-2 font-semibold">
-                                  {selectedApp.arrival_date && selectedApp.departure_date && (() => {
-                                    const arrival = new Date(selectedApp.arrival_date!);
-                                    const departure = new Date(selectedApp.departure_date!);
-                                    const days = Math.ceil((departure.getTime() - arrival.getTime()) / (1000 * 60 * 60 * 24));
-                                    return days > 0 ? `${days} days` : 'N/A';
-                                  })() || 'N/A'}
-                                </span>
-                              </div>
-                              <div>
-                                <span className="text-slate-600 font-medium">Departure Country:</span>
-                                <span className="ml-2 font-semibold">{selectedApp.departure_country || 'N/A'}</span>
-                              </div>
-                            </div>
-
-                            {/* Arrival: Departure Airport | Arrival Airport (DR) */}
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Departure Airport:</span>
-                                <span className="ml-2 font-semibold">{selectedApp.embarkation_port || 'N/A'}</span>
-                              </div>
-                              <div>
-                                <span className="text-slate-600 font-medium">Arrival Airport (DR):</span>
-                                <span className="ml-2 font-semibold">{selectedApp.disembarkation_port || 'N/A'}</span>
-                              </div>
-                            </div>
-
-                            {/* Airline Name | Flight Number */}
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Airline Name:</span>
-                                <span className="ml-2 font-semibold">{selectedApp.airline_name || 'N/A'}</span>
-                              </div>
-                              <div>
-                                <span className="text-slate-600 font-medium">Flight Number:</span>
-                                <span className="ml-2 font-semibold">{selectedApp.flight_number || 'N/A'}</span>
-                              </div>
-                            </div>
-
-                            {/* Travel Purpose */}
-                            <div className="grid grid-cols-1 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Travel Purpose:</span>
-                                <span className="ml-2 font-semibold capitalize">{selectedApp.travel_purpose || 'N/A'}</span>
-                              </div>
-                            </div>
-
-                            {/* Accommodation */}
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Accommodation Type:</span>
-                                <span className="ml-2 font-semibold capitalize">{selectedApp.accommodation_type || 'N/A'}</span>
-                              </div>
-                              <div>
-                                <span className="text-slate-600 font-medium">Accommodation Address:</span>
-                                <span className="ml-2 font-semibold">{selectedApp.accommodation_details || 'N/A'}</span>
-                              </div>
-                            </div>
-
-                            {/* Return / Departure Flight Details */}
-                            {(selectedApp.return_departure_airport || selectedApp.return_destination_airport) && <>
-                              <div className="border-t pt-3 mt-3">
-                                <h4 className="text-md font-semibold text-slate-700 mb-2">Departure Details</h4>
-                              </div>
-                              <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                  <span className="text-slate-600 font-medium">Departure Airport (DR):</span>
-                                  <span className="ml-2 font-semibold">{selectedApp.return_departure_airport || 'N/A'}</span>
-                                </div>
-                                <div>
-                                  <span className="text-slate-600 font-medium">Destination Airport:</span>
-                                  <span className="ml-2 font-semibold">{selectedApp.return_destination_airport || 'N/A'}</span>
-                                </div>
-                              </div>
-                              <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                  <span className="text-slate-600 font-medium">Airline Name:</span>
-                                  <span className="ml-2 font-semibold">{selectedApp.return_airline_name || 'N/A'}</span>
-                                </div>
-                                <div>
-                                  <span className="text-slate-600 font-medium">Flight Number:</span>
-                                  <span className="ml-2 font-semibold">{selectedApp.return_flight_number || 'N/A'}</span>
-                                </div>
-                              </div>
-                              <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                  <span className="text-slate-600 font-medium">Flight Date:</span>
-                                  <span className="ml-2 font-semibold">{selectedApp.return_flight_date || 'N/A'}</span>
-                                </div>
-                                <div></div>
-                              </div>
-                            </>}
-
-                            {/* Permanent Address (legacy, show only if present) */}
-                            {selectedApp.permanent_address && <div className="grid grid-cols-1 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Permanent Address:</span>
-                                <span className="ml-2 font-semibold">{selectedApp.permanent_address}</span>
-                              </div>
-                            </div>}
-                          </div>
-                        </div>
-
-                        {/* Section 3: Customs Declarations */}
-                        <div>
-                          <h3 className="text-lg font-semibold mb-4">Section 3: Customs Declarations</h3>
-                          <div className="space-y-3">
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Currency &gt; $10K:</span>
-                                <span className="ml-2 font-semibold capitalize">{selectedApp.exceeds_money_limit || 'no'}</span>
-                              </div>
-                              {selectedApp.exceeds_money_limit === 'yes' && selectedApp.currency_amount && (
-                                <div>
-                                  <span className="text-slate-600 font-medium">Amount:</span>
-                                  <span className="ml-2 font-semibold">{selectedApp.currency_amount} {selectedApp.currency_type || ''}</span>
-                                </div>
-                              )}
-                            </div>
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Animals or Food Products:</span>
-                                <span className="ml-2 font-semibold capitalize">{selectedApp.has_animals_or_food || 'no'}</span>
-                              </div>
-                              <div>
-                                <span className="text-slate-600 font-medium">Taxable Goods:</span>
-                                <span className="ml-2 font-semibold capitalize">{selectedApp.has_taxable_goods || 'no'}</span>
-                              </div>
-                            </div>
-                            {selectedApp.has_taxable_goods === 'yes' && selectedApp.taxable_value && (
-                              <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                  <span className="text-slate-600 font-medium">Taxable Value:</span>
-                                  <span className="ml-2 font-semibold">{selectedApp.taxable_value} {selectedApp.taxable_currency || ''}</span>
-                                </div>
-                                <div>
-                                  <span className="text-slate-600 font-medium">Description:</span>
-                                  <span className="ml-2 font-semibold">{selectedApp.taxable_description || 'N/A'}</span>
-                                </div>
-                              </div>
-                            )}
                           </div>
                         </div>
                       </>
@@ -1261,7 +1118,7 @@ const AdminPanel = () => {
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                       <h3 className="text-lg font-semibold mb-3 text-blue-800 flex items-center gap-2">
                         <Mail className="h-5 w-5" />
-                        Send E-Ticket Delivery Email
+                        Send Digital Immigration Card Delivery Email
                       </h3>
                       {selectedApp.delivery_email_sent_at ? (
                         <div className="space-y-3">
@@ -1308,7 +1165,7 @@ const AdminPanel = () => {
                       ) : (
                         <div className="space-y-3">
                           <p className="text-sm text-blue-700">
-                            Upload the E-Ticket PDF and send it to the customer at{' '}
+                            Upload the Digital Immigration Card PDF and send it to the customer at{' '}
                             <strong>{selectedApp.travelers[0]?.email}</strong>
                           </p>
                           <div className="flex items-center gap-3">

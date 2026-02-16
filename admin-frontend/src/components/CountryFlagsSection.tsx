@@ -60,7 +60,7 @@ const CountryFlagsSection = () => {
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h2 className="text-3xl lg:text-4xl font-bold text-primary mb-8">
-              Countries that Need an <span className="text-primary-light">Dominican Republic E-Ticket</span>
+              Countries that Need a <span className="text-primary-light">Curaçao Digital Immigration Card</span>
             </h2>
             <p className="text-lg text-muted-foreground">Loading countries...</p>
           </div>
@@ -72,10 +72,10 @@ const CountryFlagsSection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl lg:text-4xl font-bold text-primary mb-4">
-            Countries Requiring an <span className="text-primary-light">Dominican Republic E-Ticket</span>
+            Countries Requiring a <span className="text-primary-light">Curaçao Digital Immigration Card</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Travelers from these countries must complete an online application before entering the Dominican Republic.
+            Travelers from these countries must complete an online application before entering Curaçao.
           </p>
         </div>
 

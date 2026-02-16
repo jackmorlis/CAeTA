@@ -207,6 +207,7 @@ class Traveler(Base):
     residential_address = Column(String, nullable=True)  # Residential address (moved from application level)
     country_of_residence = Column(String, nullable=True)
     city = Column(String, nullable=True)
+    state_province = Column(String, nullable=True)
 
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
 
@@ -285,7 +286,7 @@ class TravelerCreate(BaseModel):
 
     # Passport
     passport_number: str
-    # passport_expiry_date removed from form (kept in DB as nullable)
+    passport_expiry_date: Optional[date] = None
 
     # Contact (only required for primary traveler, optional for additional travelers)
     email: Optional[EmailStr] = None
@@ -295,6 +296,7 @@ class TravelerCreate(BaseModel):
     # Address
     country_of_residence: Optional[str] = None
     city: Optional[str] = None
+    state_province: Optional[str] = None
     residential_address: Optional[str] = None  # Moved from application level
 
     @validator('gender')
@@ -322,6 +324,7 @@ class TravelerResponse(BaseModel):
     phone: Optional[str]
     country_of_residence: Optional[str]
     city: Optional[str]
+    state_province: Optional[str]
     residential_address: Optional[str]
     created_at: datetime
 
@@ -344,8 +347,8 @@ class ApplicationCreate(BaseModel):
     airline_name: Optional[str] = None  # Airline (free-text)
     flight_number: Optional[str] = None
     flight_date: Optional[date] = None
-    arrival_date: Optional[str] = None
-    departure_date: Optional[str] = None
+    arrival_date: Optional[date] = None
+    departure_date: Optional[date] = None
 
     # Trip details
     travel_purpose: Optional[str] = None
@@ -695,11 +698,11 @@ def verify_token(token: str) -> Optional[dict]:
         return None
 
 def generate_reference_number(db: Session) -> str:
-    """Generate a short, unique reference number in format DRET-XXXXXX"""
+    """Generate a short, unique reference number in format CDIC-XXXXXX"""
     while True:
         # Generate 6 random alphanumeric characters (uppercase)
         random_chars = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-        reference = f"DRET-{random_chars}"
+        reference = f"CDIC-{random_chars}"
 
         # Check if it already exists in database
         exists = db.query(Application).filter(Application.session_id == reference).first()
@@ -898,8 +901,8 @@ async def lifespan(app: FastAPI):
 # ===== FastAPI App =====
 
 app = FastAPI(
-    title="Dominican Republic E-Ticket Service API",
-    description="API for Dominican Republic E-Ticket form submission service",
+    title="Curaçao Digital Immigration Card Service API",
+    description="API for Curaçao Digital Immigration Card form submission service",
     version="1.0.0",
     lifespan=lifespan
 )
@@ -1026,7 +1029,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 @limiter.limit("100/minute")
 async def root(request: Request):
     return {
-        "message": "Dominican Republic E-Ticket Service API",
+        "message": "Curaçao Digital Immigration Card Service API",
         "version": "1.0.0",
         "status": "running"
     }
@@ -1058,7 +1061,7 @@ async def get_paypal_client_id(request: Request):
 async def create_application(request: Request, application: ApplicationCreate, db: Session = Depends(get_db)):
     """Create a new visa application with travelers"""
     try:
-        # Generate unique reference number (short format: DRET-XXXXXX)
+        # Generate unique reference number (short format: CDIC-XXXXXX)
         session_id = generate_reference_number(db)
 
         # Create application
@@ -1216,6 +1219,7 @@ async def create_application(request: Request, application: ApplicationCreate, d
                 postback_url = os.getenv("REDTRACK_POSTBACK_URL", "https://your-domain.rdtk.io/postback")
                 params = {
                     'clickid': application.redtrack_click_id,
+                    'campaign_id': '6991e8bb63c3c735141e609c',
                     'sum': f"{float(application.amount_paid):.2f}",
                 }
                 response = requests.get(postback_url, params=params, timeout=5)
@@ -1226,6 +1230,8 @@ async def create_application(request: Request, application: ApplicationCreate, d
         return db_application
 
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Failed to create application: {str(e)}")
 
@@ -1516,7 +1522,7 @@ async def send_delivery_email_endpoint(
         customer_name=customer_name,
         reference_number=reference_number,
         pdf_content=contents,
-        pdf_filename=file.filename or f"eticket_{reference_number}.pdf"
+        pdf_filename=file.filename or f"cdic_{reference_number}.pdf"
     )
 
     if not success:
@@ -2464,7 +2470,7 @@ async def create_paypal_order(request: Request, request_data: CreateOrderRequest
                 "description": request_data.description
             }],
             "application_context": {
-                "brand_name": "DRET Service",
+                "brand_name": "CDIC Service",
                 "landing_page": "BILLING",
                 "user_action": "PAY_NOW",
                 "return_url": request_data.return_url or "http://localhost:8080/payment-success",

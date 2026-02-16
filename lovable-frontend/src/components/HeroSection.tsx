@@ -84,7 +84,7 @@ const HeroSection = () => {
                   </div>
                   <div>
                     <div className="font-bold text-foreground">Delivery &amp; Approval</div>
-                    <div className="text-sm text-muted-foreground mt-0.5">Receive your immigration card confirmation by email with your PIN once approved. Present it at immigration for faster processing.</div>
+                    <div className="text-sm text-muted-foreground mt-0.5">Receive your immigration card via email as a PDF with a QR code once approved. Present it at immigration for faster processing.</div>
                   </div>
                 </div>
               </div>
@@ -134,7 +134,7 @@ const HeroSection = () => {
               <div className="text-left">
                 <h3 className="font-bold text-foreground text-lg mb-2">Receive Your Card</h3>
                 <p className="text-sm text-muted-foreground">
-                  Your digital arrival card will be sent directly to your email with your PIN.
+                  Your digital arrival card will be sent directly to your email as a PDF with a QR code.
                 </p>
               </div>
             </div>

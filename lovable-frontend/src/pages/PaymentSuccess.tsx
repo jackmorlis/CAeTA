@@ -71,31 +71,22 @@ const PaymentSuccess = () => {
     );
   }
 
-  // Calculate earliest arrival date and check if >2 days away
+  // Calculate delivery info based on arrival date
   const getDeliveryInfo = () => {
-    if (!applicationData?.travelers || applicationData.travelers.length === 0) {
+    if (!applicationData?.arrival_date) {
       return null;
     }
 
-    let earliestArrivalDate: Date | null = null;
-    for (const traveler of applicationData.travelers) {
-      if (traveler.arrival_date) {
-        const arrivalDate = new Date(traveler.arrival_date);
-        if (!earliestArrivalDate || arrivalDate < earliestArrivalDate) {
-          earliestArrivalDate = arrivalDate;
-        }
-      }
-    }
+    const earliestArrivalDate = new Date(applicationData.arrival_date + 'T00:00:00');
 
-    if (!earliestArrivalDate) return null;
-
-    const today = new Date();
+    const now = new Date();
+    const today = new Date(now.toLocaleString('en-US', { timeZone: 'America/Curacao' }));
     today.setHours(0, 0, 0, 0);
     const daysUntilArrival = Math.ceil((earliestArrivalDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 
-    if (daysUntilArrival > 2) {
+    if (daysUntilArrival > 7) {
       const deliveryDate = new Date(earliestArrivalDate);
-      deliveryDate.setDate(deliveryDate.getDate() - 2);
+      deliveryDate.setDate(deliveryDate.getDate() - 7);
 
       return {
         deliveryDateFormatted: deliveryDate.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' }),
@@ -267,7 +258,7 @@ const PaymentSuccess = () => {
                 <div>
                   <strong className="block mb-1">Immigration Card Delivery</strong>
                   <span className="text-sm">
-                    You will receive a confirmation email with your personal details and PIN, which serves as your Curaçao Digital Immigration Card.
+                    You will receive your Curaçao Digital Immigration Card via email as a PDF with a QR code. Present this QR code to immigration upon arrival, either printed or on your mobile device.
                   </span>
                 </div>
               </li>

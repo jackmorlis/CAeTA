@@ -1,4 +1,4 @@
-import australiaCoupleImage from '@/assets/malay_couple_new.webp';
+import curacaoCoupleImage from '@/assets/curacao_couple_final.webp';
 
 const VisaGuideSection = () => {
   return (
@@ -29,7 +29,7 @@ const VisaGuideSection = () => {
           {/* Image */}
           <div className="w-full md:w-2/5 lg:w-1/2 flex-shrink-0 order-1 md:order-2">
             <img
-              src={australiaCoupleImage}
+              src={curacaoCoupleImage}
               alt="Curaçao travelers"
               className="w-full h-full object-cover rounded-lg shadow-soft"
             />

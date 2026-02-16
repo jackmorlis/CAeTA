@@ -23,6 +23,7 @@ export interface Traveler {
   residential_address?: string;
   country_of_residence?: string;
   city?: string;
+  state_province?: string;
 }
 
 export interface ApplicationCreate {
