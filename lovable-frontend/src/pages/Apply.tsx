@@ -181,7 +181,12 @@ const travelerSchema = z.object({
 const formSchema = z.object({
   travelers: z.array(travelerSchema).min(1).max(5),
   // Step 1 — Trip Details
-  arrivalDate: z.string().min(1, "Arrival date is required"),
+  arrivalDate: z.string().min(1, "Arrival date is required").refine((val) => {
+    if (!val) return true;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return new Date(val + "T00:00:00") >= today;
+  }, { message: "Arrival date cannot be in the past" }),
   departureDate: z.string().min(1, "Departure date is required"),
   carrierName: z.string().min(1, "Carrier name is required"),
   flightNumber: z.string().min(1, "Flight number is required"),
@@ -196,6 +201,18 @@ const formSchema = z.object({
   termsSignature: z.string().optional().default(""),
   // Payment
   processingOption: z.enum(["fast", "ultra"]).optional(),
+}).superRefine((data, ctx) => {
+  if (data.arrivalDate && data.departureDate) {
+    const arrival = new Date(data.arrivalDate + "T00:00:00");
+    const departure = new Date(data.departureDate + "T00:00:00");
+    if (departure < arrival) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Departure date cannot be before arrival date",
+        path: ["departureDate"],
+      });
+    }
+  }
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -259,7 +276,7 @@ const Apply = () => {
           first_name: t.firstName, last_name: t.lastName,
           date_of_birth: t.birthDate, gender: t.gender,
           nationality: t.nationality, passport_number: t.passport,
-          passport_expiry_date: t.passportExpiry, country_of_birth: t.countryOfBirth,
+          passport_expiry_date: t.passportExpiry, place_of_birth: t.countryOfBirth,
           email: i === 0 ? t.email : undefined,
           country_of_residence: t.countryOfResidence,
           state_province: t.stateProvince, city: t.city,
@@ -510,7 +527,7 @@ const Apply = () => {
                             Arrival Date <span className="text-red-500">*</span>
                           </FormLabel>
                           <FormControl>
-                            <DateSelectInput date={field.value} onDateChange={field.onChange} minDate="2026-01-01" maxDate="2027-12-31" defaultYear={2026} />
+                            <DateSelectInput date={field.value} onDateChange={field.onChange} minDate={new Date().toISOString().split('T')[0]} maxDate="2027-12-31" defaultYear={new Date().getFullYear()} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>} />
@@ -561,7 +578,7 @@ const Apply = () => {
                             Departure Date <span className="text-red-500">*</span>
                           </FormLabel>
                           <FormControl>
-                            <DateSelectInput date={field.value} onDateChange={field.onChange} minDate="2026-01-01" maxDate="2027-12-31" defaultYear={2026} />
+                            <DateSelectInput date={field.value} onDateChange={field.onChange} minDate={form.getValues("arrivalDate") || new Date().toISOString().split('T')[0]} maxDate="2027-12-31" defaultYear={new Date().getFullYear()} />
                           </FormControl>
                           <p className="text-sm text-slate-500">When you're leaving Curaçao</p>
                           <FormMessage />

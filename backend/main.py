@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends, Request, UploadFile, File
+from fastapi import FastAPI, HTTPException, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, StreamingResponse
@@ -27,7 +27,7 @@ from paypalcheckoutsdk.orders import OrdersCreateRequest, OrdersCaptureRequest, 
 from paypalcheckoutsdk.payments import AuthorizationsCaptureRequest, AuthorizationsVoidRequest
 
 # Import email service
-from email_service import send_payment_confirmation_email, send_internal_order_notification, send_contact_form_notification, send_contact_form_confirmation, send_refund_confirmation_email, send_delivery_email
+from email_service import send_payment_confirmation_email, send_internal_order_notification, send_contact_form_notification, send_contact_form_confirmation, send_refund_confirmation_email
 
 load_dotenv()
 
@@ -1480,64 +1480,6 @@ async def mark_application_pending(
         "application_id": str(application_id),
         "fulfillment_status": application.fulfillment_status,
         "fulfillment_delivered_at": application.fulfillment_delivered_at
-    }
-
-
-@app.post("/api/admin/applications/{application_id}/send-delivery-email")
-@limiter.limit("10/minute")
-async def send_delivery_email_endpoint(
-    request: Request,
-    application_id: uuid.UUID,
-    file: UploadFile = File(...),
-    db: Session = Depends(get_db),
-    _: dict = Depends(verify_admin_token)
-):
-    """Upload PDF and send delivery email to customer (admin only)"""
-    # Validate file type
-    if not file.filename or not file.filename.lower().endswith('.pdf'):
-        raise HTTPException(status_code=400, detail="Only PDF files are allowed")
-
-    # Read and validate file size (max 10MB)
-    contents = await file.read()
-    if len(contents) > 10 * 1024 * 1024:
-        raise HTTPException(status_code=400, detail="File size must be less than 10MB")
-
-    # Find the application with travelers
-    application = db.query(Application).filter(Application.id == application_id).first()
-    if not application:
-        raise HTTPException(status_code=404, detail="Application not found")
-
-    if not application.travelers:
-        raise HTTPException(status_code=400, detail="Application has no travelers")
-
-    # Get the primary traveler's email and name
-    primary_traveler = application.travelers[0]
-    customer_email = primary_traveler.email
-    customer_name = f"{primary_traveler.first_name} {primary_traveler.last_name}"
-    reference_number = application.session_id
-
-    # Send the delivery email with PDF attachment
-    success = send_delivery_email(
-        to_email=customer_email,
-        customer_name=customer_name,
-        reference_number=reference_number,
-        pdf_content=contents,
-        pdf_filename=file.filename or f"cdic_{reference_number}.pdf"
-    )
-
-    if not success:
-        raise HTTPException(status_code=500, detail="Failed to send delivery email. Check Mailgun configuration.")
-
-    # Record that the delivery email was sent
-    application.delivery_email_sent_at = datetime.utcnow()
-    db.commit()
-    db.refresh(application)
-
-    return {
-        "success": True,
-        "message": f"Delivery email sent to {customer_email}",
-        "application_id": str(application_id),
-        "delivery_email_sent_at": str(application.delivery_email_sent_at)
     }
 
 

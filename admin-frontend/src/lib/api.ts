@@ -416,31 +416,6 @@ class ApiClient {
     return response.json();
   }
 
-  async sendDeliveryEmail(applicationId: string, pdfFile: File): Promise<{ success: boolean; message: string; delivery_email_sent_at: string }> {
-    const formData = new FormData();
-    formData.append('file', pdfFile);
-
-    const token = this.getToken();
-    const response = await fetch(`${this.baseUrl}/api/admin/applications/${applicationId}/send-delivery-email`, {
-      method: 'POST',
-      headers: {
-        ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-      },
-      body: formData,
-    });
-
-    if (!response.ok) {
-      if (response.status === 401) {
-        this.clearToken();
-        throw new Error('Session expired. Please login again.');
-      }
-      const error = await response.json();
-      throw new Error(error.detail || 'Failed to send delivery email');
-    }
-
-    return response.json();
-  }
-
   // PayPal Methods
   async createPayPalOrder(amount: string, currency: string = 'USD', description: string = 'DAC Assistance — Service Fee'): Promise<{
     order_id: string;

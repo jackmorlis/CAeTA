@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Users, Clock, LogOut, Search, Download, Eye, CheckCircle, ChevronLeft, ChevronRight, FileText, Mail, Upload } from 'lucide-react';
+import { Loader2, Users, Clock, LogOut, Search, Download, Eye, CheckCircle, ChevronLeft, ChevronRight, FileText } from 'lucide-react';
 
 interface Stats {
   total_applications: number;
@@ -40,8 +40,6 @@ const AdminPanel = () => {
   const [capturingPayment, setCapturingPayment] = useState(false);
   const [voidingPayment, setVoidingPayment] = useState(false);
   const [exportingPDF, setExportingPDF] = useState(false);
-  const [selectedPdfFile, setSelectedPdfFile] = useState<File | null>(null);
-  const [sendingEmail, setSendingEmail] = useState(false);
   const perPage = 50;
 
   const { toast } = useToast();
@@ -172,30 +170,6 @@ const AdminPanel = () => {
       });
     } finally {
       setMarkingDelivered(false);
-    }
-  };
-
-  const handleSendDeliveryEmail = async () => {
-    if (!selectedApp || !selectedPdfFile) return;
-
-    try {
-      setSendingEmail(true);
-      const result = await apiClient.sendDeliveryEmail(selectedApp.id, selectedPdfFile);
-      toast({
-        title: "Delivery email sent",
-        description: result.message,
-      });
-      setSelectedPdfFile(null);
-      setSelectedApp(prev => prev ? { ...prev, delivery_email_sent_at: result.delivery_email_sent_at } : null);
-      await loadData();
-    } catch (error: any) {
-      toast({
-        title: "Failed to send delivery email",
-        description: error.message || "An error occurred while sending the delivery email",
-        variant: "destructive"
-      });
-    } finally {
-      setSendingEmail(false);
     }
   };
 
@@ -1113,100 +1087,6 @@ const AdminPanel = () => {
                     );
                   })()}
 
-                  {/* Delivery Email Section */}
-                  {selectedApp.fulfillment_status === 'pending' && (
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                      <h3 className="text-lg font-semibold mb-3 text-blue-800 flex items-center gap-2">
-                        <Mail className="h-5 w-5" />
-                        Send Digital Immigration Card Delivery Email
-                      </h3>
-                      {selectedApp.delivery_email_sent_at ? (
-                        <div className="space-y-3">
-                          <div className="text-sm text-green-700">
-                            <CheckCircle className="inline h-4 w-4 mr-1" />
-                            Delivery email sent on {formatDate(selectedApp.delivery_email_sent_at)}
-                          </div>
-                          <p className="text-xs text-blue-600">You can re-send with a different PDF if needed:</p>
-                          <div className="flex items-center gap-3">
-                            <label className="flex items-center gap-2 cursor-pointer border border-blue-300 rounded-md px-4 py-2 bg-white hover:bg-blue-50 transition-colors">
-                              <Upload className="h-4 w-4 text-blue-600" />
-                              <span className="text-sm">
-                                {selectedPdfFile ? selectedPdfFile.name : 'Choose PDF file'}
-                              </span>
-                              <input
-                                type="file"
-                                accept=".pdf"
-                                className="hidden"
-                                onChange={(e) => {
-                                  const file = e.target.files?.[0];
-                                  if (file) setSelectedPdfFile(file);
-                                }}
-                              />
-                            </label>
-                            <Button
-                              onClick={handleSendDeliveryEmail}
-                              disabled={!selectedPdfFile || sendingEmail}
-                              className="bg-blue-600 hover:bg-blue-700"
-                            >
-                              {sendingEmail ? (
-                                <>
-                                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                  Sending...
-                                </>
-                              ) : (
-                                <>
-                                  <Mail className="mr-2 h-4 w-4" />
-                                  Re-send Email
-                                </>
-                              )}
-                            </Button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="space-y-3">
-                          <p className="text-sm text-blue-700">
-                            Upload the Digital Immigration Card PDF and send it to the customer at{' '}
-                            <strong>{selectedApp.travelers[0]?.email}</strong>
-                          </p>
-                          <div className="flex items-center gap-3">
-                            <label className="flex items-center gap-2 cursor-pointer border border-blue-300 rounded-md px-4 py-2 bg-white hover:bg-blue-50 transition-colors">
-                              <Upload className="h-4 w-4 text-blue-600" />
-                              <span className="text-sm">
-                                {selectedPdfFile ? selectedPdfFile.name : 'Choose PDF file'}
-                              </span>
-                              <input
-                                type="file"
-                                accept=".pdf"
-                                className="hidden"
-                                onChange={(e) => {
-                                  const file = e.target.files?.[0];
-                                  if (file) setSelectedPdfFile(file);
-                                }}
-                              />
-                            </label>
-                            <Button
-                              onClick={handleSendDeliveryEmail}
-                              disabled={!selectedPdfFile || sendingEmail}
-                              className="bg-blue-600 hover:bg-blue-700"
-                            >
-                              {sendingEmail ? (
-                                <>
-                                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                  Sending...
-                                </>
-                              ) : (
-                                <>
-                                  <Mail className="mr-2 h-4 w-4" />
-                                  Send Email
-                                </>
-                              )}
-                            </Button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
                   {/* Navigation and Actions */}
                   <div className="flex justify-between items-center">
                     <div className="flex gap-2">
@@ -1249,18 +1129,10 @@ const AdminPanel = () => {
                       </Button>
                       <Button
                         onClick={handleToggleFulfillmentStatus}
-                        disabled={
-                          markingDelivered ||
-                          (selectedApp.fulfillment_status === 'pending' && !selectedApp.delivery_email_sent_at)
-                        }
+                        disabled={markingDelivered}
                         className={selectedApp.fulfillment_status === 'pending'
                           ? "bg-green-600 hover:bg-green-700"
                           : "bg-yellow-600 hover:bg-yellow-700"}
-                        title={
-                          selectedApp.fulfillment_status === 'pending' && !selectedApp.delivery_email_sent_at
-                            ? "Send the delivery email first before marking as delivered"
-                            : undefined
-                        }
                       >
                         {markingDelivered ? (
                           <>
