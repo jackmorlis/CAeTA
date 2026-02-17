@@ -160,7 +160,7 @@ const AdminPanel = () => {
 
       // Close modal and reload data
       setSelectedApp(null);
-      setSelectedPdfFile(null);
+
       await loadData();
     } catch (error: any) {
       toast({
@@ -185,7 +185,7 @@ const AdminPanel = () => {
       });
       // Close modal and reload data
       setSelectedApp(null);
-      setSelectedPdfFile(null);
+
       await loadData();
     } catch (error: any) {
       toast({
@@ -210,7 +210,7 @@ const AdminPanel = () => {
       });
       // Close modal and reload data
       setSelectedApp(null);
-      setSelectedPdfFile(null);
+
       await loadData();
     } catch (error: any) {
       toast({
@@ -840,7 +840,7 @@ const AdminPanel = () => {
                     </div>
                     <Button
                       variant="ghost"
-                      onClick={() => { setSelectedApp(null); setSelectedPdfFile(null); }}
+                      onClick={() => { setSelectedApp(null);}}
                     >
                       ✕
                     </Button>
@@ -1151,7 +1151,7 @@ const AdminPanel = () => {
                           </>
                         )}
                       </Button>
-                      <Button onClick={() => { setSelectedApp(null); setSelectedPdfFile(null); }} variant="outline">
+                      <Button onClick={() => { setSelectedApp(null);}} variant="outline">
                         Close
                       </Button>
                     </div>

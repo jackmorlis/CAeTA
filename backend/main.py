@@ -1424,17 +1424,10 @@ async def mark_application_delivered(
 ):
     """Mark an application as delivered (admin only - requires authentication)"""
     # Find the application
-    application = db.query(Application).filter(Application.id == application_id).first()
+    application = db.query(Application).filter(Application.id == str(application_id)).first()
 
     if not application:
         raise HTTPException(status_code=404, detail="Application not found")
-
-    # Enforce that delivery email was sent before marking as delivered
-    if not application.delivery_email_sent_at:
-        raise HTTPException(
-            status_code=400,
-            detail="Cannot mark as delivered: delivery email has not been sent yet"
-        )
 
     # Update fulfillment status
     application.fulfillment_status = "delivered"
@@ -1462,7 +1455,7 @@ async def mark_application_pending(
 ):
     """Mark an application as pending (undo delivered) (admin only - requires authentication)"""
     # Find the application
-    application = db.query(Application).filter(Application.id == application_id).first()
+    application = db.query(Application).filter(Application.id == str(application_id)).first()
 
     if not application:
         raise HTTPException(status_code=404, detail="Application not found")
@@ -1499,7 +1492,7 @@ async def update_application_capture(
 ):
     """Update application authorization/capture status after PayPal capture or void (admin only)"""
     # Find the application
-    application = db.query(Application).filter(Application.id == application_id).first()
+    application = db.query(Application).filter(Application.id == str(application_id)).first()
 
     if not application:
         raise HTTPException(status_code=404, detail="Application not found")
