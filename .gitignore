@@ -18,8 +18,9 @@ __pycache__/
 .venv/
 venv/
 
-# Docker volumes
+# Docker
 postgres_data/
+docker-compose.override.yml
 
 # Local SQLite DB
 *.db
