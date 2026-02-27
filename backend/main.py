@@ -2402,10 +2402,10 @@ async def create_paypal_order(request: Request, request_data: CreateOrderRequest
                     "currency_code": request_data.currency,
                     "value": request_data.amount
                 },
-                "description": request_data.description
+                "description": "DAC Assistance — Service Fee"
             }],
             "application_context": {
-                "brand_name": "CDIC Service",
+                "brand_name": "DAC Service",
                 "landing_page": "BILLING",
                 "user_action": "PAY_NOW",
                 "return_url": request_data.return_url or "http://localhost:8080/payment-success",
