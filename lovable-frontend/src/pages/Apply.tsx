@@ -244,11 +244,19 @@ const SearchableSelect: React.FC<{
 
 // ─── Component ──────────────────────────────────────────────────────
 const Apply = () => {
-  const [currentStep, setCurrentStep] = useState(0);
+  // Restore saved progress from sessionStorage
+  const saved = useMemo(() => {
+    try {
+      const raw = sessionStorage.getItem('caeta_form_draft');
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+  }, []);
+
+  const [currentStep, setCurrentStep] = useState(saved?.step ?? 0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [termsModalOpen, setTermsModalOpen] = useState(false);
   const [declarationModalOpen, setDeclarationModalOpen] = useState(false);
-  const [additionalNats, setAdditionalNats] = useState<string[]>([]);
+  const [additionalNats, setAdditionalNats] = useState<string[]>(saved?.additionalNats ?? []);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -257,14 +265,19 @@ const Apply = () => {
 
   const changeStep = (step: number) => {
     setCurrentStep(step);
+    // Save step change to sessionStorage immediately
+    try {
+      const raw = sessionStorage.getItem('caeta_form_draft');
+      const draft = raw ? JSON.parse(raw) : {};
+      draft.step = step;
+      sessionStorage.setItem('caeta_form_draft', JSON.stringify(draft));
+    } catch {}
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
   };
 
-  const form = useForm<FormData>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
+  const formDefaults = {
       passportCountryCode: "",
       usPermanentResident: "",
       passportNumber: "",
@@ -318,8 +331,26 @@ const Apply = () => {
       consentAgreed: false,
       declarationAgreed: false,
       signature: "",
-    },
+  };
+
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: saved?.formData ? { ...formDefaults, ...saved.formData } : formDefaults,
   });
+
+  // Auto-save form progress to sessionStorage on every change
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      try {
+        sessionStorage.setItem('caeta_form_draft', JSON.stringify({
+          formData: values,
+          step: currentStep,
+          additionalNats,
+        }));
+      } catch {}
+    });
+    return () => subscription.unsubscribe();
+  }, [form, currentStep, additionalNats]);
 
   // ─── Eligibility logic ──────────────────────────────────────────────
   const watchCountryCode = form.watch('passportCountryCode');
@@ -429,6 +460,7 @@ const Apply = () => {
       };
 
       const response = await apiClient.createApplication(payload);
+      sessionStorage.removeItem('caeta_form_draft');
       sessionStorage.setItem('application_session_id', response.session_id);
       toast({ title: "Application submitted successfully!", description: `Reference: ${response.session_id}` });
       navigate('/payment-success');
