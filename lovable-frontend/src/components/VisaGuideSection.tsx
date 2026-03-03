@@ -1,4 +1,4 @@
-import siteLogo from '@/assets/canada_eta_logo.webp';
+import etaAssistanceImg from '@/assets/eta_application_assistance.webp';
 
 const VisaGuideSection = () => {
   return (
@@ -29,7 +29,7 @@ const VisaGuideSection = () => {
           {/* Image */}
           <div className="w-full md:w-2/5 lg:w-1/2 flex-shrink-0 order-1 md:order-2">
             <img
-              src={siteLogo}
+              src={etaAssistanceImg}
               alt="Canada eTA"
               className="w-full h-full object-cover rounded-lg shadow-soft"
             />
