@@ -526,6 +526,11 @@ const Apply = () => {
     if (!d.passportExpiryDate) { form.setError('passportExpiryDate', { type: 'manual', message: 'Passport expiry date is required' }); valid = false; }
     else if (d.passportExpiryDate <= getTodayInToronto()) { form.setError('passportExpiryDate', { type: 'manual', message: 'Expiry date must be in the future' }); valid = false; }
 
+    if (!d.hasAdditionalNationalities) { form.setError('hasAdditionalNationalities', { type: 'manual', message: 'Please select yes or no' }); valid = false; }
+    else if (d.hasAdditionalNationalities === 'Yes' && (additionalNats.length === 0 || additionalNats.some(n => !n))) {
+      form.setError('hasAdditionalNationalities', { type: 'manual', message: 'Please add at least one nationality' }); valid = false;
+    }
+
     return valid;
   };
 
