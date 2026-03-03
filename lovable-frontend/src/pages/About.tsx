@@ -28,14 +28,14 @@ const About = () => {
           <div className="container mx-auto px-4 max-w-4xl text-center">
             <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
               Canada eTA Service is a private platform, not affiliated with any government or embassy. The
-              document fee is $49.99. We charge an additional service fee for our application support and expedited processing.
+              document fee is $89.99. We charge an additional service fee for our application support and expedited processing.
             </p>
             <p className="text-sm md:text-base text-muted-foreground leading-relaxed mt-4">
               With us, there are no surprises and no hidden charges. We regularly review our products and prices to guarantee
               they are fair and in keeping with the latest international travel regulations.
             </p>
             <p className="text-xs text-muted-foreground mt-4">
-              Last review of our pricing and fees: February 5, 2026
+              Last review of our pricing and fees: March 3, 2026
             </p>
           </div>
         </section>
@@ -51,13 +51,13 @@ const About = () => {
                 <div className="mb-4">
                   <h3 className="text-lg font-bold text-foreground">Fast Processing</h3>
                   <div className="flex items-end gap-2 mt-2">
-                    <div className="text-3xl font-bold text-foreground">$69.99</div>
+                    <div className="text-3xl font-bold text-foreground">$109.99</div>
                     <div className="text-xs text-muted-foreground mb-1">USD</div>
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">Standard expedited turnaround</p>
                 </div>
                 <div className="space-y-2 text-sm text-muted-foreground">
-                  <div className="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5" />Document Fee ($49.99) Included</div>
+                  <div className="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5" />Document Fee ($89.99) Included</div>
                   <div className="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5" />Expedited Service (+$20.00)</div>
                   <div className="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5" />Expert Application Review</div>
                   <div className="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5" />24-48 Hour Processing</div>
@@ -75,13 +75,13 @@ const About = () => {
                 <div className="mb-4">
                   <h3 className="text-lg font-bold text-foreground">Ultra-Fast Processing</h3>
                   <div className="flex items-end gap-2 mt-2">
-                    <div className="text-3xl font-bold text-foreground">$99.99</div>
+                    <div className="text-3xl font-bold text-foreground">$139.99</div>
                     <div className="text-xs text-muted-foreground mb-1">USD</div>
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">Priority service for urgent travelers</p>
                 </div>
                 <div className="space-y-2 text-sm text-muted-foreground">
-                  <div className="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5" />Document Fee ($49.99) Included</div>
+                  <div className="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5" />Document Fee ($89.99) Included</div>
                   <div className="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5" />Priority Handling (+$50.00)</div>
                   <div className="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5" />Expert Application Review</div>
                   <div className="flex items-start gap-2"><CheckCircle className="w-4 h-4 text-primary mt-0.5" />6-12 Hour Priority Processing</div>
@@ -174,7 +174,7 @@ const About = () => {
               <div className="grid md:grid-cols-3 gap-4 mb-8">
                 <Card className="p-5 text-center border border-slate-200">
                   <div className="text-[10px] uppercase tracking-wide text-muted-foreground mb-1">Document Fee</div>
-                  <div className="text-xl font-bold text-foreground">$49.99</div>
+                  <div className="text-xl font-bold text-foreground">$89.99</div>
                 </Card>
                 <Card className="p-5 text-center border border-slate-200">
                   <div className="text-[10px] uppercase tracking-wide text-muted-foreground mb-1">Fast Processing</div>
