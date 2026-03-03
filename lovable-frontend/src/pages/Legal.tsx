@@ -62,14 +62,14 @@ const Legal = () => {
                 <div>
                   <h3 className="text-xl  text-slate-800 mb-3">02. User Information and Responsibilities</h3>
                   <p>
-                    To use our Service, you will be required to provide personal and travel-related information necessary to complete your digital arrival card application. You are solely responsible for ensuring that all information you provide to us is accurate, complete, and up-to-date. We will not be liable for any errors, delays, or denials resulting from inaccurate, incomplete, or false information provided by you.
+                    To use our Service, you will be required to provide personal and travel-related information necessary to complete your electronic travel authorization application. You are solely responsible for ensuring that all information you provide to us is accurate, complete, and up-to-date. We will not be liable for any errors, delays, or denials resulting from inaccurate, incomplete, or false information provided by you.
                   </p>
                 </div>
 
                 <div>
                   <h3 className="text-xl  text-slate-800 mb-3">03. Our Relationship with You</h3>
                   <p>
-                    You acknowledge that {SITE_CONFIG.domain} is an independent entity and is not owned, operated, or affiliated with any government or governmental agency. The information and services we provide are for assistance purposes only and do not constitute legal advice. You are establishing a direct customer relationship with us for the purchase of our digital arrival card assistance service.
+                    You acknowledge that {SITE_CONFIG.domain} is an independent entity and is not owned, operated, or affiliated with any government or governmental agency. The information and services we provide are for assistance purposes only and do not constitute legal advice. You are establishing a direct customer relationship with us for the purchase of our electronic travel authorization assistance service.
                   </p>
                 </div>
 
@@ -126,14 +126,14 @@ const Legal = () => {
                 <div>
                   <h3 className="text-xl  text-slate-800 mb-3">10. Disclaimers</h3>
                   <p className="uppercase ">
-                    THE SERVICE IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS. TO THE FULLEST EXTENT PERMITTED BY LAW, CURACAO.EARRIVALFORM.COM DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. WE DO NOT GUARANTEE THE ACCURACY, COMPLETENESS, OR RELIABILITY OF THE SERVICE OR THAT IT WILL BE UNINTERRUPTED OR ERROR-FREE.
+                    THE SERVICE IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS. TO THE FULLEST EXTENT PERMITTED BY LAW, EXAMPLE.COM DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. WE DO NOT GUARANTEE THE ACCURACY, COMPLETENESS, OR RELIABILITY OF THE SERVICE OR THAT IT WILL BE UNINTERRUPTED OR ERROR-FREE.
                   </p>
                 </div>
 
                 <div>
                   <h3 className="text-xl  text-slate-800 mb-3">11. Limitation of Liability</h3>
                   <p className="uppercase ">
-                    TO THE FULLEST EXTENT PERMITTED BY LAW, CURACAO.EARRIVALFORM.COM SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA OR OTHER INTANGIBLE LOSSES, RESULTING FROM YOUR USE OF THE SERVICE. OUR TOTAL LIABILITY TO YOU FOR ANY AND ALL CLAIMS ARISING FROM THE SERVICE IS LIMITED TO U.S. $100.
+                    TO THE FULLEST EXTENT PERMITTED BY LAW, EXAMPLE.COM SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA OR OTHER INTANGIBLE LOSSES, RESULTING FROM YOUR USE OF THE SERVICE. OUR TOTAL LIABILITY TO YOU FOR ANY AND ALL CLAIMS ARISING FROM THE SERVICE IS LIMITED TO U.S. $100.
                   </p>
                 </div>
 
@@ -204,7 +204,7 @@ const Legal = () => {
                   <h3 className="text-xl  text-slate-800 mb-3">20. Commercial Terms</h3>
                   <div className="space-y-3">
                     <p>
-                      Purchases: You may purchase our digital arrival card assistance service on a one-time basis. Prices are subject to change but will not affect orders already placed.
+                      Purchases: You may purchase our electronic travel authorization assistance service on a one-time basis. Prices are subject to change but will not affect orders already placed.
                     </p>
                     <p>
                       Payment: We accept various credit/debit cards and other electronic payment methods ("Accepted Payment Method"). You authorize us to charge your Accepted Payment Method for the total amount of your order.
@@ -236,7 +236,7 @@ const Legal = () => {
 
               <div className="space-y-6 text-slate-700 leading-relaxed">
                 <p>
-                  At {SITE_CONFIG.domain}, we are committed to providing a reliable and efficient digital arrival card assistance service. We understand that plans can change, and this policy outlines the circumstances under which a refund may be issued for our service fee.
+                  At {SITE_CONFIG.domain}, we are committed to providing a reliable and efficient electronic travel authorization assistance service. We understand that plans can change, and this policy outlines the circumstances under which a refund may be issued for our service fee.
                 </p>
                 <p>
                   Our refund policy is based on the processing stage of your application at the time of your cancellation request. Refund requests must be made within 30 days of receiving our email confirming successful payment.
@@ -247,7 +247,7 @@ const Legal = () => {
                   <p className="mb-3">You are eligible for a refund under the following conditions:</p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li>
-                      <strong>Cancellation Before Delivery:</strong> If you request to cancel your application before your Curaçao Digital Immigration Card has been delivered, you are eligible for a refund less a cancellation/administration fee of $19.99 USD.
+                      <strong>Cancellation Before Delivery:</strong> If you request to cancel your application before your Canada eTA has been delivered, you are eligible for a refund less a cancellation/administration fee of $19.99 USD.
                     </li>
                     <li>
                       <strong>Error by {SITE_CONFIG.domain}:</strong> If your application is rejected due to a direct error made by our team during the data entry or submission process, and we are unable to correct it in a timely manner, you are eligible for a full refund.
@@ -260,13 +260,13 @@ const Legal = () => {
                   <p className="mb-3">We are unable to issue a refund under the following circumstances:</p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li>
-                      <strong>After Delivery:</strong> Once your Curaçao Digital Immigration Card has been delivered to you, our service is considered fully rendered and complete. We cannot issue a refund at this stage.
+                      <strong>After Delivery:</strong> Once your Canada eTA has been delivered to you, our service is considered fully rendered and complete. We cannot issue a refund at this stage.
                     </li>
                     <li>
                       <strong>Application Issues due to User Error:</strong> If your application encounters issues due to incorrect, incomplete, or false information provided by you. It is your responsibility to ensure all data submitted is accurate.
                     </li>
                     <li>
-                      <strong>Change of Travel Plans:</strong> If you decide to cancel your trip after your Curaçao Digital Immigration Card has been delivered.
+                      <strong>Change of Travel Plans:</strong> If you decide to cancel your trip after your Canada eTA has been delivered.
                     </li>
                   </ul>
                 </div>

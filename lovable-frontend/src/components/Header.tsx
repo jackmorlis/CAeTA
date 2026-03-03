@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import siteLogo from "@/assets/curacao_digital_entry.webp";
+import siteLogo from "@/assets/canada_eta_logo.webp";
 
 interface HeaderProps {
   fullSticky?: boolean;
@@ -15,8 +15,8 @@ const Header = ({ fullSticky = false, disableLinks = false, minimal = false }: H
     || location.pathname.startsWith("/confirm-payment")
     || location.pathname.startsWith("/payment-success");
   const disclaimerText = isApplicationFlow
-    ? "Disclaimer: Curaçao Digital Immigration Card is mandatory for all travelers."
-    : "Disclaimer: Curaçao Digital Immigration Card is mandatory for all travelers — curacao.earrivalform.com is an independent assistance portal, not a government site.";
+    ? "Disclaimer: A Canada eTA is required for visa-exempt foreign nationals travelling to Canada by air."
+    : "Disclaimer: A Canada eTA is required for visa-exempt foreign nationals — canada-eta.earrivalform.com is an independent assistance portal, not a government site.";
 
   const handleApplyClick = () => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -56,10 +56,10 @@ const Header = ({ fullSticky = false, disableLinks = false, minimal = false }: H
               {/* Logo / Flag + Title */}
               <div className="flex items-center gap-3 max-w-full overflow-hidden">
                 {disableLinks ? (
-                  <img src={siteLogo} alt="Curaçao Digital Immigration Card Logo" className="h-20 sm:h-24 lg:h-28 w-auto object-contain" />
+                  <img src={siteLogo} alt="Canada eTA Logo" className="h-20 sm:h-24 lg:h-28 w-auto object-contain" />
                 ) : (
                   <Link to="/" className="max-w-full">
-                    <img src={siteLogo} alt="Curaçao Digital Immigration Card Logo" className="h-20 sm:h-24 lg:h-28 w-auto object-contain" />
+                    <img src={siteLogo} alt="Canada eTA Logo" className="h-20 sm:h-24 lg:h-28 w-auto object-contain" />
                   </Link>
                 )}
               </div>
@@ -67,12 +67,12 @@ const Header = ({ fullSticky = false, disableLinks = false, minimal = false }: H
               {/* Apply button */}
               {disableLinks ? (
                 <div className="w-full sm:w-auto bg-primary text-primary-foreground font-bold px-4 sm:px-6 lg:px-8 py-2 sm:py-3 rounded-lg shadow-md text-sm sm:text-base whitespace-nowrap flex items-center justify-center h-11">
-                  <span className="hidden sm:inline">Apply For Curaçao DI Card</span>
+                  <span className="hidden sm:inline">Apply For Canada eTA</span>
                   <span className="sm:hidden">Apply Now</span>
                 </div>
               ) : (
                 <Button size="lg" onClick={handleApplyClick} className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-4 sm:px-6 lg:px-8 py-2 sm:py-3 rounded-lg shadow-md transition-all duration-200 hover:shadow-lg text-sm sm:text-base whitespace-nowrap">
-                  <span className="hidden sm:inline">Apply For Curaçao DI Card</span>
+                  <span className="hidden sm:inline">Apply For Canada eTA</span>
                   <span className="sm:hidden">Apply Now</span>
                 </Button>
               )}
@@ -102,10 +102,10 @@ const Header = ({ fullSticky = false, disableLinks = false, minimal = false }: H
             {/* Logo / Flag + Title */}
             <div className="flex items-center gap-3 max-w-full overflow-hidden">
               {disableLinks ? (
-                <img src={siteLogo} alt="Curaçao Digital Immigration Card Logo" className="h-20 sm:h-24 lg:h-28 w-auto object-contain" />
+                <img src={siteLogo} alt="Canada eTA Logo" className="h-20 sm:h-24 lg:h-28 w-auto object-contain" />
               ) : (
                 <Link to="/" className="max-w-full">
-                  <img src={siteLogo} alt="Curaçao Digital Immigration Card Logo" className="h-20 sm:h-24 lg:h-28 w-auto object-contain" />
+                  <img src={siteLogo} alt="Canada eTA Logo" className="h-20 sm:h-24 lg:h-28 w-auto object-contain" />
                 </Link>
               )}
             </div>
@@ -113,12 +113,12 @@ const Header = ({ fullSticky = false, disableLinks = false, minimal = false }: H
             {/* Apply button */}
             {disableLinks ? (
               <div className="w-full sm:w-auto bg-primary text-primary-foreground font-bold px-4 sm:px-6 lg:px-8 py-2 sm:py-3 rounded-lg shadow-md text-sm sm:text-base whitespace-nowrap flex items-center justify-center h-11">
-                <span className="hidden sm:inline">Apply For Curaçao DI Card</span>
+                <span className="hidden sm:inline">Apply For Canada eTA</span>
                 <span className="sm:hidden">Apply Now</span>
               </div>
             ) : (
               <Button size="lg" onClick={handleApplyClick} className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-4 sm:px-6 lg:px-8 py-2 sm:py-3 rounded-lg shadow-md transition-all duration-200 hover:shadow-lg text-sm sm:text-base whitespace-nowrap">
-                <span className="hidden sm:inline">Apply For Curaçao DI Card</span>
+                <span className="hidden sm:inline">Apply For Canada eTA</span>
                 <span className="sm:hidden">Apply Now</span>
               </Button>
             )}

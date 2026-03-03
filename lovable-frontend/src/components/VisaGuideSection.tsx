@@ -1,4 +1,4 @@
-import curacaoCoupleImage from '@/assets/curacao_couple_final.webp';
+import siteLogo from '@/assets/canada_eta_logo.webp';
 
 const VisaGuideSection = () => {
   return (
@@ -8,29 +8,29 @@ const VisaGuideSection = () => {
           {/* Content */}
           <div className="w-full md:w-3/5 lg:w-1/2 flex flex-col justify-center space-y-4 order-2 md:order-1">
             <h2 className="text-3xl lg:text-4xl font-bold text-primary leading-tight">
-              Our Curaçao Digital Immigration Card Submission Service
+              Our Canada eTA Application Assistance Service
             </h2>
 
             <div className="space-y-4 text-muted-foreground">
               <p className="text-lg">
-                Our Curaçao Digital Immigration Card submission service is built to handle the entire process on your behalf, ensuring your application is completed accurately and submitted correctly. Instead of navigating the form alone, you are guided through a simplified application with clear instructions, while our team reviews your details to identify and correct potential errors before submission.
+                Our Canada eTA application assistance service is built to handle the entire process on your behalf, ensuring your application is completed accurately and submitted correctly. Instead of navigating the official form alone, you are guided through a simplified application with clear instructions, while our team reviews your details to identify and correct potential errors before submission.
               </p>
 
               <p className="text-lg">
-                We provide expert checks to ensure all information and supporting documentation meet required formats and size guidelines, then securely submit your immigration card to the appropriate authority. From start to finish, our service includes multilingual customer support and ongoing assistance, giving you peace of mind that this essential travel requirement is being managed professionally.
+                We provide expert checks to ensure all passport information and travel details meet the required specifications, then securely submit your eTA application to the appropriate authority. From start to finish, our service includes multilingual customer support and ongoing assistance, giving you peace of mind that this essential travel requirement is being managed professionally.
               </p>
 
               <p className="text-lg">
-                Whether you are traveling for tourism, business, or family visits, our immigration card submission service helps ensure a smooth and efficient preparation for your journey.
+                Whether you are traveling for tourism, business, or transit through Canada, our eTA application assistance service helps ensure a smooth and efficient preparation for your journey.
               </p>
             </div>
           </div>
-          
+
           {/* Image */}
           <div className="w-full md:w-2/5 lg:w-1/2 flex-shrink-0 order-1 md:order-2">
             <img
-              src={curacaoCoupleImage}
-              alt="Curaçao travelers"
+              src={siteLogo}
+              alt="Canada eTA"
               className="w-full h-full object-cover rounded-lg shadow-soft"
             />
           </div>

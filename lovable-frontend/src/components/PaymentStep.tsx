@@ -734,7 +734,7 @@ export const PaymentStep = ({ amount, onSuccess, onError }: PaymentStepProps) =>
               <p className="mb-3">You are eligible for a refund under the following conditions:</p>
               <ul className="list-disc pl-6 space-y-2">
                 <li>
-                  <strong>Cancellation Before Delivery:</strong> If you request to cancel your application before your Curaçao Digital Immigration Card has been delivered, you are eligible for a refund less a cancellation/administration fee of $19.99 USD.
+                  <strong>Cancellation Before Delivery:</strong> If you request to cancel your application before your Canada eTA has been delivered, you are eligible for a refund less a cancellation/administration fee of $19.99 USD.
                 </li>
                 <li>
                   <strong>Error by {SITE_CONFIG.domain}:</strong> If your application is rejected due to a direct error made by our team during the data entry or submission process, and we are unable to correct it in a timely manner, you are eligible for a full refund.
@@ -747,13 +747,13 @@ export const PaymentStep = ({ amount, onSuccess, onError }: PaymentStepProps) =>
               <p className="mb-3">We are unable to issue a refund under the following circumstances:</p>
               <ul className="list-disc pl-6 space-y-2">
                 <li>
-                  <strong>After Delivery:</strong> Once your Curaçao Digital Immigration Card has been delivered to you, our service is considered fully rendered and complete. We cannot issue a refund at this stage.
+                  <strong>After Delivery:</strong> Once your Canada eTA has been delivered to you, our service is considered fully rendered and complete. We cannot issue a refund at this stage.
                 </li>
                 <li>
                   <strong>Application Issues due to User Error:</strong> If your application encounters issues due to incorrect, incomplete, or false information provided by you. It is your responsibility to ensure all data submitted is accurate.
                 </li>
                 <li>
-                  <strong>Change of Travel Plans:</strong> If you decide to cancel your trip after your Curaçao Digital Immigration Card has been delivered.
+                  <strong>Change of Travel Plans:</strong> If you decide to cancel your trip after your Canada eTA has been delivered.
                 </li>
               </ul>
             </div>

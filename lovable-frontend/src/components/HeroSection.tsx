@@ -19,13 +19,13 @@ const HeroSection = () => {
           {/* Left Content */}
           <div>
             <div className="inline-block bg-primary text-primary-foreground px-3 py-1.5 rounded-lg font-bold text-sm mb-3">
-              New Update — Curaçao Digital Immigration Card
+              Canada Electronic Travel Authorization (eTA)
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-foreground leading-tight mb-4">
-              Experience Faster Entry with the Curaçao Digital Immigration Card
+              Apply for Your Canada eTA Online — Fast &amp; Easy
             </h2>
             <p className="text-lg text-muted-foreground mb-6 max-w-2xl">
-              The Curaçao Digital Immigration Card is Curaçao's official digital entry and exit form — replacing the old paper-based card with a faster, more secure online system for all travelers arriving by air or sea.
+              A Canada eTA is an electronic travel authorization required for visa-exempt foreign nationals travelling to Canada by air. Apply online in minutes with our guided assistance service.
             </p>
             <div className="flex gap-4 mb-5">
               <Button
@@ -54,7 +54,7 @@ const HeroSection = () => {
                   </div>
                   <div>
                     <div className="font-bold text-foreground">Complete the online form</div>
-                    <div className="text-sm text-muted-foreground mt-0.5">Enter your personal and travel details accurately.</div>
+                    <div className="text-sm text-muted-foreground mt-0.5">Enter your passport, personal, and travel details accurately.</div>
                   </div>
                 </div>
 
@@ -74,7 +74,7 @@ const HeroSection = () => {
                   </div>
                   <div>
                     <div className="font-bold text-foreground">Details Review &amp; Verification</div>
-                    <div className="text-sm text-muted-foreground mt-0.5">Our specialists manually review your application to ensure all information is complete and accurate before processing.</div>
+                    <div className="text-sm text-muted-foreground mt-0.5">Our specialists review your application to ensure all information is complete and accurate before processing.</div>
                   </div>
                 </div>
 
@@ -84,13 +84,13 @@ const HeroSection = () => {
                   </div>
                   <div>
                     <div className="font-bold text-foreground">Delivery &amp; Approval</div>
-                    <div className="text-sm text-muted-foreground mt-0.5">Receive your immigration card via email as a PDF with a QR code once approved. Present it at immigration for faster processing.</div>
+                    <div className="text-sm text-muted-foreground mt-0.5">Receive your eTA confirmation via email once approved. Your eTA is electronically linked to your passport.</div>
                   </div>
                 </div>
               </div>
 
               <div className="text-sm text-muted-foreground mt-5 pt-4 border-t border-border">
-                💡 <strong>Pro Tip:</strong> Apply at least 3 days before your travel date.
+                Pro Tip: Apply at least 72 hours before your travel date.
               </div>
             </div>
           </div>
@@ -102,14 +102,13 @@ const HeroSection = () => {
         <div className="text-center space-y-6">
           {/* Title */}
           <h2 className="text-2xl font-bold text-foreground leading-tight">
-            Curaçao Digital Immigration Card
+            Canada eTA — Electronic Travel Authorization
           </h2>
 
           {/* Description */}
           <p className="text-base text-muted-foreground">
-            A valid Curaçao Digital Immigration Card is required for all travelers to complete entry procedures.
+            A Canada eTA is required for visa-exempt foreign nationals travelling to Canada by air.
           </p>
-
 
           {/* Simple Cards */}
           <div className="space-y-4 mt-8">
@@ -121,20 +120,20 @@ const HeroSection = () => {
               <div className="text-left">
                 <h3 className="font-bold text-foreground text-lg mb-2">Fill Out the Form</h3>
                 <p className="text-sm text-muted-foreground">
-                  Complete your details to generate the digital arrival card.
+                  Complete your passport and travel details to apply for your Canada eTA.
                 </p>
               </div>
             </div>
 
-            {/* Receive Card */}
+            {/* Receive eTA */}
             <div className="bg-white rounded-lg p-6 shadow-md flex items-start gap-4">
               <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
                 <Mail className="w-6 h-6 text-white" />
               </div>
               <div className="text-left">
-                <h3 className="font-bold text-foreground text-lg mb-2">Receive Your Card</h3>
+                <h3 className="font-bold text-foreground text-lg mb-2">Receive Your eTA</h3>
                 <p className="text-sm text-muted-foreground">
-                  Your digital arrival card will be sent directly to your email as a PDF with a QR code.
+                  Your eTA confirmation will be sent directly to your email. It is electronically linked to your passport.
                 </p>
               </div>
             </div>

@@ -4,18 +4,18 @@ import { Users, FileText, AlertCircle } from "lucide-react";
 const InfoCardsSection = () => {
   const infoCards = [
     {
-      title: "What is the Curaçao Digital Immigration Card?",
-      description: "New online form for traveller identification and entry details — replacing the old paper card.",
+      title: "What is a Canada eTA?",
+      description: "An Electronic Travel Authorization (eTA) is an entry requirement for visa-exempt foreign nationals travelling to Canada by air. It is electronically linked to your passport.",
       icon: FileText,
     },
     {
-      title: "Who Needs It?",
-      description: "Required for all travellers entering or departing Curaçao.",
+      title: "Who Needs an eTA?",
+      description: "Citizens of visa-exempt countries (excluding the U.S.) who are flying to or transiting through a Canadian airport need an eTA.",
       icon: Users,
     },
     {
       title: "Important",
-      description: "Complete in English to avoid delays or penalties. The form must be filled within three (3) days before arrival (i.e., up to 72 hours before your entry).",
+      description: "Apply before you book your flight. An approved eTA is valid for up to five years or until your passport expires, whichever comes first.",
       icon: AlertCircle,
     },
   ];

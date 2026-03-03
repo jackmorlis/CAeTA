@@ -6,16 +6,28 @@
 
 export const SITE_CONFIG = {
   // Domain and branding
-  domain: 'curacao.earrivalform.com',
-  siteName: 'Curaçao Digital Immigration Card',
-  siteNameShort: 'Curaçao DIC',
+  domain: 'canada-eta.earrivalform.com',
+  siteName: 'Canada eTA',
+  siteNameShort: 'Canada eTA',
 
   // Contact information
-  supportEmail: 'help@earrival-support.com',
+  supportEmail: 'support@canada-eta.earrivalform.com',
 
   // Legal
   arbitrationLocation: 'Newark, Delaware',
   governingState: 'State of Delaware',
+
+  // Pricing
+  pricing: {
+    basePrice: 89.99,
+    fastProcessingFee: 20.00,
+    ultraProcessingFee: 50.00,
+  },
+  processing: {
+    standard: 'Under 24 hours',
+    fast: 'Under 4 hours',
+    ultra: 'Under 1 hour',
+  },
 } as const;
 
 // Type-safe access to config values

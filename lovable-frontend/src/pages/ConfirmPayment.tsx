@@ -31,7 +31,7 @@ const ConfirmPayment = () => {
               Confirm Payment
             </h1>
             <p className="text-gray-600">
-              Complete your Curaçao Digital Immigration Card application payment
+              Complete your Canada eTA application payment
             </p>
           </div>
 
@@ -49,7 +49,7 @@ const ConfirmPayment = () => {
                 <h3 className="font-semibold mb-3">Order Summary</h3>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span>Curaçao Digital Immigration Card Application</span>
+                    <span>Canada eTA Application</span>
                     <span>$50.00</span>
                   </div>
                   <div className="flex justify-between">

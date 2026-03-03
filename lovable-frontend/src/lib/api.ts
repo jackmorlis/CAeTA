@@ -1,104 +1,93 @@
-// API Client for FastAPI Backend
+// API Client for FastAPI Backend — Canada eTA
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-export interface Traveler {
-  // Personal information
-  first_name: string;
-  last_name: string;
-  date_of_birth: string;
-  gender: 'male' | 'female';
-  place_of_birth?: string;
-  nationality: string;
-  civil_status?: string;
-  occupation?: string;
-
-  // Passport
-  passport_number: string;
-
-  // Contact (only required for primary traveler)
-  email?: string;
-  phone_code?: string;
-  phone?: string;
-
-  // Address
-  residential_address?: string;
-  country_of_residence?: string;
-  city?: string;
-}
-
 export interface ApplicationCreate {
-  // General Information
-  permanent_address?: string;
-  country_of_residence?: string;
-  city_of_residence?: string;
-  direction?: string;  // 'arrival' or 'departure'
-  stops_other_countries?: string;  // 'yes' or 'no'
+  // Step 0 — Representative
+  applying_on_behalf: string;
+  representative_surname?: string;
+  representative_given_names?: string;
 
-  // Travel / Flight
-  departure_country?: string;
-  embarkation_port?: string;
-  disembarkation_port?: string;
-  airline_name?: string;
-  flight_number?: string;
-  flight_date?: string;
+  // Step 1 — Travel Document
+  travel_document_type: string;
+  passport_country_code: string;
 
-  // Trip details
-  travel_purpose?: string;
-  arrival_date?: string;
-  departure_date?: string;
+  // Step 2 — Passport Details
+  nationality: string;
+  passport_number: string;
+  surname: string;
+  given_names: string;
+  middle_name?: string;
+  date_of_birth: string;
+  gender: string;
+  marital_status: string;
+  country_of_birth: string;
+  city_of_birth: string;
+  passport_issue_date: string;
+  passport_expiry_date: string;
+  additional_nationalities?: string[];
 
-  // Return / Departure flight information
-  return_departure_airport?: string;
-  return_destination_airport?: string;
-  return_airline_name?: string;
-  return_flight_date?: string;
-  return_flight_number?: string;
+  // Step 3 — Personal Details
+  previous_canada_visa: string;
+  uci_number?: string;
+  language_preference: string;
 
-  // Accommodation
-  accommodation_type?: string;
-  accommodation_details?: string;
+  // Step 4 — Contact Information
+  email: string;
 
-  // Customs — Currency
-  exceeds_money_limit?: string;
-  currency_amount?: number;
-  currency_type?: string;
-  currency_origin?: string;
-  is_values_owner?: string;
-  sender_name?: string;
-  sender_last_name?: string;
-  receiver_name?: string;
-  receiver_last_name?: string;
-  relationship_sender?: string;
-  money_use_destiny?: string;
+  // Step 5 — Residential Address
+  apartment_unit?: string;
+  street_address: string;
+  city: string;
+  country_residence: string;
+  district_region?: string;
+  postal_code?: string;
 
-  // Customs — Animals/Food
-  has_animals_or_food?: string;
+  // Employment Information
+  occupation: string;
+  job_title?: string;
+  employer_name?: string;
+  employer_country?: string;
+  employer_city?: string;
+  employment_since_year?: string;
 
-  // Customs — Taxable Goods
-  has_taxable_goods?: string;
-  taxable_value?: number;
-  taxable_currency?: string;
-  taxable_description?: string;
-  taxable_value_usd?: string;
+  // Step 6 — Travel Information
+  travel_date_known: string;
+  travel_date?: string;
+  travel_hour?: string;
+  travel_minute?: string;
+  travel_timezone?: string;
 
-  processing_option?: string;  // 'standard', 'fast', 'ultra'
-  travelers: Traveler[];
+  // Background Questions
+  bg_refused_visa: string;
+  bg_refused_visa_details?: string;
+  bg_criminal_offence: string;
+  bg_criminal_offence_details?: string;
+  bg_tuberculosis: string;
+  bg_tb_health_worker?: string;
+  bg_tb_diagnosed?: string;
+  bg_medical_condition: string;
+  bg_additional_details?: string;
 
-  // Payment fields (optional - filled after payment)
+  // Step 7 — Consent & Declaration
+  consent_agreed: boolean;
+  declaration_agreed: boolean;
+  signature: string;
+
+  // Processing & Payment
+  processing_option?: string;
   payment_method?: string;
   payment_status?: string;
   payment_transaction_id?: string;
   payment_order_id?: string;
   amount_paid?: number;
 
-  // Pre-authorization fields
+  // Pre-authorization
   authorization_id?: string;
   authorization_status?: string;
 
-  // RedTrack tracking
+  // Tracking
   redtrack_click_id?: string;
-  // Device fingerprint
   device_fingerprint?: Record<string, any>;
 }
 
@@ -107,41 +96,38 @@ export interface ApplicationResponse {
   session_id: string;
   status: string;
 
-  // General Information
-  permanent_address?: string;
-  country_of_residence?: string;
-  city_of_residence?: string;
-  direction?: string;
-  stops_other_countries?: string;
-
-  // Travel / Flight
-  departure_country?: string;
-  embarkation_port?: string;
-  disembarkation_port?: string;
-  airline_name?: string;
-  flight_number?: string;
-  flight_date?: string;
-
-  // Trip details
-  travel_purpose?: string;
-  arrival_date?: string;
-  departure_date?: string;
-
-  // Return / Departure flight information
-  return_departure_airport?: string;
-  return_destination_airport?: string;
-  return_airline_name?: string;
-  return_flight_date?: string;
-  return_flight_number?: string;
-
-  // Accommodation
-  accommodation_type?: string;
-  accommodation_details?: string;
-
-  // Customs
-  exceeds_money_limit?: string;
-  has_animals_or_food?: string;
-  has_taxable_goods?: string;
+  applying_on_behalf?: string;
+  travel_document_type?: string;
+  passport_country_code?: string;
+  nationality?: string;
+  passport_number?: string;
+  surname?: string;
+  given_names?: string;
+  date_of_birth?: string;
+  gender?: string;
+  country_of_birth?: string;
+  city_of_birth?: string;
+  passport_issue_date?: string;
+  passport_expiry_date?: string;
+  additional_nationalities?: string[];
+  previous_canada_visa?: string;
+  uci_number?: string;
+  language_preference?: string;
+  email?: string;
+  apartment_unit?: string;
+  street_address?: string;
+  city?: string;
+  country_residence?: string;
+  district_region?: string;
+  postal_code?: string;
+  travel_date_known?: string;
+  travel_date?: string;
+  travel_hour?: string;
+  travel_minute?: string;
+  travel_timezone?: string;
+  consent_agreed?: boolean;
+  declaration_agreed?: boolean;
+  signature?: string;
 
   processing_option?: string;
   created_at: string;
@@ -155,7 +141,6 @@ export interface ApplicationResponse {
   authorization_id?: string;
   authorization_status?: string;
   fulfillment_status?: string;
-  travelers: (Traveler & { id: string; application_id: string; created_at: string })[];
 }
 
 export interface ContactCreate {
@@ -174,7 +159,6 @@ class ApiClient {
     this.baseUrl = API_URL;
   }
 
-  // Auth token management
   setToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
   }
@@ -198,49 +182,31 @@ class ApiClient {
   async createApplication(data: ApplicationCreate): Promise<ApplicationResponse> {
     const response = await fetch(`${this.baseUrl}/api/applications`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.detail || 'Failed to create application');
     }
-
     return response.json();
   }
 
   async getApplication(sessionId: string): Promise<ApplicationResponse> {
     const response = await fetch(`${this.baseUrl}/api/applications/${sessionId}`);
-
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.detail || 'Failed to get application');
     }
-
     return response.json();
   }
 
-  async updateApplicationStatus(
-    sessionId: string,
-    status: string,
-    paidAt?: string,
-    amountPaid?: number
-  ): Promise<void> {
+  async updateApplicationStatus(sessionId: string, status: string, paidAt?: string, amountPaid?: number): Promise<void> {
     const response = await fetch(`${this.baseUrl}/api/applications/${sessionId}/status`, {
       method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        status,
-        paid_at: paidAt,
-        amount_paid: amountPaid,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status, paid_at: paidAt, amount_paid: amountPaid }),
     });
-
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.detail || 'Failed to update application status');
@@ -250,33 +216,25 @@ class ApiClient {
   async submitContact(data: ContactCreate): Promise<void> {
     const response = await fetch(`${this.baseUrl}/api/contact`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.detail || 'Failed to submit contact form');
     }
   }
 
-  // Admin Authentication
   async adminLogin(username: string, password: string): Promise<{ access_token: string; token_type: string }> {
     const response = await fetch(`${this.baseUrl}/api/admin/login`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
     });
-
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.detail || 'Login failed');
     }
-
     const data = await response.json();
     this.setToken(data.access_token);
     return data;
@@ -292,152 +250,81 @@ class ApiClient {
 
   async getAdminApplications(search?: string, status?: string): Promise<ApplicationResponse[]> {
     const url = new URL(`${this.baseUrl}/api/admin/applications`);
-    if (search) {
-      url.searchParams.append('search', search);
-    }
-    if (status) {
-      url.searchParams.append('status', status);
-    }
-
-    const response = await fetch(url.toString(), {
-      headers: this.getAuthHeaders(),
-    });
-
+    if (search) url.searchParams.append('search', search);
+    if (status) url.searchParams.append('status', status);
+    const response = await fetch(url.toString(), { headers: this.getAuthHeaders() });
     if (!response.ok) {
-      if (response.status === 401) {
-        this.clearToken();
-        throw new Error('Session expired. Please login again.');
-      }
+      if (response.status === 401) { this.clearToken(); throw new Error('Session expired. Please login again.'); }
       const error = await response.json();
       throw new Error(error.detail || 'Failed to get applications');
     }
-
     return response.json();
   }
 
-  async getAdminStats(): Promise<{
-    total_applications: number;
-    today_applications: number;
-    total_revenue: number;
-    pending_applications: number;
-  }> {
-    const response = await fetch(`${this.baseUrl}/api/admin/stats`, {
-      headers: this.getAuthHeaders(),
-    });
-
+  async getAdminStats(): Promise<{ total_applications: number; today_applications: number; total_revenue: number; pending_applications: number }> {
+    const response = await fetch(`${this.baseUrl}/api/admin/stats`, { headers: this.getAuthHeaders() });
     if (!response.ok) {
-      if (response.status === 401) {
-        this.clearToken();
-        throw new Error('Session expired. Please login again.');
-      }
+      if (response.status === 401) { this.clearToken(); throw new Error('Session expired. Please login again.'); }
       const error = await response.json();
       throw new Error(error.detail || 'Failed to get stats');
     }
-
     return response.json();
   }
 
   async exportAdminCSV(): Promise<Blob> {
-    const response = await fetch(`${this.baseUrl}/api/admin/export`, {
-      headers: this.getAuthHeaders(),
-    });
-
+    const response = await fetch(`${this.baseUrl}/api/admin/export`, { headers: this.getAuthHeaders() });
     if (!response.ok) {
-      if (response.status === 401) {
-        this.clearToken();
-        throw new Error('Session expired. Please login again.');
-      }
+      if (response.status === 401) { this.clearToken(); throw new Error('Session expired. Please login again.'); }
       throw new Error('Failed to export CSV');
     }
-
     return response.blob();
   }
 
-  // PayPal Methods
   async getPayPalClientId(): Promise<{ client_id: string; mode: string }> {
     const response = await fetch(`${this.baseUrl}/api/paypal/client-id`);
-
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.detail || 'Failed to get PayPal client ID');
     }
-
     return response.json();
   }
 
-  async createPayPalOrder(amount: string, currency: string = 'USD', description: string = 'DAC Assistance — Service Fee'): Promise<{
-    order_id: string;
-    approval_url?: string;
-    status: string;
-  }> {
+  async createPayPalOrder(amount: string, currency: string = 'USD', description: string = 'Canada eTA - Service Fee'): Promise<{ order_id: string; approval_url?: string; status: string }> {
     const response = await fetch(`${this.baseUrl}/api/paypal/create-order`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        amount,
-        currency,
-        description,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount, currency, description }),
     });
-
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.detail || 'Failed to create PayPal order');
     }
-
     return response.json();
   }
 
-  async capturePayPalOrder(orderId: string): Promise<{
-    order_id: string;
-    status: string;
-    payer_email?: string;
-    transaction_id?: string;
-    amount?: string;
-  }> {
+  async capturePayPalOrder(orderId: string): Promise<{ order_id: string; status: string; payer_email?: string; transaction_id?: string; amount?: string }> {
     const response = await fetch(`${this.baseUrl}/api/paypal/capture-order`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        order_id: orderId,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ order_id: orderId }),
     });
-
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.detail || 'Failed to capture PayPal payment');
     }
-
     return response.json();
   }
 
-  // Pre-authorization methods
-  async authorizePayPalOrder(orderId: string): Promise<{
-    order_id: string;
-    authorization_id: string;
-    status: string;
-    amount?: string;
-    payer_email?: string;
-  }> {
+  async authorizePayPalOrder(orderId: string): Promise<{ order_id: string; authorization_id: string; status: string; amount?: string; payer_email?: string }> {
     const response = await fetch(`${this.baseUrl}/api/paypal/authorize-order`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        order_id: orderId,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ order_id: orderId }),
     });
-
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.detail || 'Failed to authorize PayPal payment');
     }
-
     return response.json();
   }
 }

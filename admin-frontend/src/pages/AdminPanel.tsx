@@ -34,7 +34,6 @@ const AdminPanel = () => {
   const [exporting, setExporting] = useState(false);
   const [activeTab, setActiveTab] = useState<'pending' | 'delivered'>('pending');
   const [markingDelivered, setMarkingDelivered] = useState(false);
-  const [currentTravelerIndex, setCurrentTravelerIndex] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [capturingPayment, setCapturingPayment] = useState(false);
@@ -279,7 +278,7 @@ const AdminPanel = () => {
       // Header
       doc.setFontSize(16);
       doc.setFont('helvetica', 'bold');
-      doc.text('ORDER RECEIPT', pageWidth / 2, y, { align: 'center' });
+      doc.text('CANADA eTA - ORDER RECEIPT', pageWidth / 2, y, { align: 'center' });
       y += 10;
 
       // Generation timestamp (use order date, treat as UTC)
@@ -293,7 +292,7 @@ const AdminPanel = () => {
       // Service description
       doc.setFontSize(9);
       doc.setFont('helvetica', 'normal');
-      doc.text('Digital Immigration Card and travel application document support service', pageWidth / 2, y, { align: 'center' });
+      doc.text('Canada eTA (Electronic Travel Authorization) application support service', pageWidth / 2, y, { align: 'center' });
       y += sectionGap;
 
       // Divider line
@@ -329,50 +328,75 @@ const AdminPanel = () => {
       doc.line(margin, y, pageWidth - margin, y);
       y += sectionGap;
 
-      // Travelers Section
-      selectedApp.travelers.forEach((traveler, index) => {
-        addText(`TRAVELER ${index + 1} OF ${selectedApp.travelers.length}`, 12, true);
-        y += 3;
-        addLabelValue('First Name', traveler.first_name);
-        addLabelValue('Last Name', traveler.last_name);
-        addLabelValue('Passport Number', traveler.passport_number);
-        addLabelValue('Nationality', traveler.nationality);
-        addLabelValue('Date of Birth', traveler.date_of_birth);
-        addLabelValue('Gender', traveler.gender);
-        addLabelValue('Passport Expiry', traveler.passport_expiry_date);
-        addLabelValue('Email', traveler.email);
-        addLabelValue('Phone', `${traveler.phone_code} ${traveler.phone}`);
-        y += sectionGap;
-      });
+      // Applicant Information Section
+      addText('APPLICANT INFORMATION', 12, true);
+      y += 3;
+      addLabelValue('Surname', selectedApp.surname);
+      addLabelValue('Given Names', selectedApp.given_names);
+      addLabelValue('Date of Birth', selectedApp.date_of_birth);
+      addLabelValue('Gender', selectedApp.gender);
+      addLabelValue('Email', selectedApp.email);
+      addLabelValue('Nationality', selectedApp.nationality);
+      addLabelValue('Country of Birth', selectedApp.country_of_birth);
+      addLabelValue('City of Birth', selectedApp.city_of_birth);
 
+      y += sectionGap;
       doc.line(margin, y, pageWidth - margin, y);
       y += sectionGap;
 
-      // Travel Details Section
+      // Passport Information
+      addText('PASSPORT INFORMATION', 12, true);
+      y += 3;
+      addLabelValue('Applying On Behalf', selectedApp.applying_on_behalf);
+      addLabelValue('Travel Document Type', selectedApp.travel_document_type);
+      addLabelValue('Passport Country Code', selectedApp.passport_country_code);
+      addLabelValue('Passport Number', selectedApp.passport_number);
+      addLabelValue('Passport Issue Date', selectedApp.passport_issue_date);
+      addLabelValue('Passport Expiry Date', selectedApp.passport_expiry_date);
+      if (selectedApp.additional_nationalities && selectedApp.additional_nationalities.length > 0) {
+        addLabelValue('Additional Nationalities', selectedApp.additional_nationalities.join(', '));
+      }
+      addLabelValue('Previous Canada Visa', selectedApp.previous_canada_visa);
+      addLabelValue('UCI Number', selectedApp.uci_number);
+
+      y += sectionGap;
+      doc.line(margin, y, pageWidth - margin, y);
+      y += sectionGap;
+
+      // Address Information
+      addText('ADDRESS INFORMATION', 12, true);
+      y += 3;
+      addLabelValue('Apartment/Unit', selectedApp.apartment_unit);
+      addLabelValue('Street Address', selectedApp.street_address);
+      addLabelValue('City', selectedApp.city);
+      addLabelValue('Country of Residence', selectedApp.country_residence);
+      addLabelValue('District/Region', selectedApp.district_region);
+      addLabelValue('Postal Code', selectedApp.postal_code);
+
+      y += sectionGap;
+      doc.line(margin, y, pageWidth - margin, y);
+      y += sectionGap;
+
+      // Travel Details
       addText('TRAVEL DETAILS', 12, true);
       y += 3;
-      addLabelValue('Arrival Date', selectedApp.arrival_date);
-      addLabelValue('Departure Date', selectedApp.departure_date);
-      if (selectedApp.arrival_date && selectedApp.departure_date) {
-        const arrival = new Date(selectedApp.arrival_date);
-        const departure = new Date(selectedApp.departure_date);
-        const days = Math.ceil((departure.getTime() - arrival.getTime()) / (1000 * 60 * 60 * 24));
-        addLabelValue('Length of Stay', days > 0 ? `${days} days` : 'N/A');
+      addLabelValue('Travel Date Known', selectedApp.travel_date_known);
+      addLabelValue('Travel Date', selectedApp.travel_date);
+      if (selectedApp.travel_hour || selectedApp.travel_minute) {
+        addLabelValue('Travel Time', `${selectedApp.travel_hour || '--'}:${selectedApp.travel_minute || '--'}`);
       }
-      addLabelValue('Departure Airport', selectedApp.embarkation_port);
-      addLabelValue('Arrival Airport (Curaçao)', selectedApp.disembarkation_port);
-      addLabelValue('Airline Name', selectedApp.airline_name);
-      addLabelValue('Flight Number', selectedApp.flight_number);
-      addLabelValue('Travel Purpose', selectedApp.travel_purpose);
-      addLabelValue('Accommodation Type', selectedApp.accommodation_type);
-      addLabelValue('Accommodation Address', selectedApp.accommodation_details);
-      if (selectedApp.return_departure_airport) {
-        addLabelValue('Return Departure Airport (Curaçao)', selectedApp.return_departure_airport);
-        addLabelValue('Return Destination Airport', selectedApp.return_destination_airport);
-        addLabelValue('Return Airline', selectedApp.return_airline_name);
-        addLabelValue('Return Flight No', selectedApp.return_flight_number);
-        addLabelValue('Return Flight Date', selectedApp.return_flight_date);
-      }
+      addLabelValue('Travel Timezone', selectedApp.travel_timezone);
+      addLabelValue('Language Preference', selectedApp.language_preference);
+
+      y += sectionGap;
+      doc.line(margin, y, pageWidth - margin, y);
+      y += sectionGap;
+
+      // Consent
+      addText('CONSENT & SIGNATURE', 12, true);
+      y += 3;
+      addLabelValue('Consent Agreed', selectedApp.consent_agreed ? 'Yes' : 'No');
+      addLabelValue('Signature', selectedApp.signature);
 
       // Device Fingerprint Section (if available)
       if (selectedApp.device_fingerprint) {
@@ -434,7 +458,7 @@ const AdminPanel = () => {
       const a = document.createElement('a');
       a.href = url;
       const date = new Date().toISOString().split('T')[0].replace(/-/g, '_');
-      a.download = `dret_applications_${date}.csv`;
+      a.download = `canada_eta_applications_${date}.csv`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
@@ -453,18 +477,6 @@ const AdminPanel = () => {
     } finally {
       setExporting(false);
     }
-  };
-
-  const isArrivalDateUrgent = (arrivalDate: string) => {
-    // Check if arrival date is more than 7 days away
-    // Use Curaçao timezone for "today"
-    const now = new Date();
-    const today = new Date(now.toLocaleString('en-US', { timeZone: 'America/Curacao' }));
-    today.setHours(0, 0, 0, 0);
-    const arrival = new Date(arrivalDate + 'T00:00:00'); // Parse as local date
-    const diffTime = arrival.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays >= 7;
   };
 
   const getStatusBadge = (status: string) => {
@@ -498,15 +510,15 @@ const AdminPanel = () => {
       return <Badge variant="secondary">N/A</Badge>;
     }
     const variants: Record<string, string> = {
-      CREATED: "bg-blue-100 text-blue-800",        // Authorized, awaiting capture
-      PENDING: "bg-yellow-100 text-yellow-800",    // Authorization pending
-      CAPTURED: "bg-green-100 text-green-800",     // Funds captured
-      VOIDED: "bg-red-100 text-red-800",           // Authorization voided
-      EXPIRED: "bg-gray-100 text-gray-800",        // Authorization expired
-      DENIED: "bg-red-100 text-red-800",           // Authorization denied
-      FAILED: "bg-red-100 text-red-800",           // Authorization/capture failed
-      PARTIALLY_CAPTURED: "bg-orange-100 text-orange-800",  // Partial capture
-      CAPTURE_FAILED: "bg-red-100 text-red-800",   // Capture attempt failed
+      CREATED: "bg-blue-100 text-blue-800",
+      PENDING: "bg-yellow-100 text-yellow-800",
+      CAPTURED: "bg-green-100 text-green-800",
+      VOIDED: "bg-red-100 text-red-800",
+      EXPIRED: "bg-gray-100 text-gray-800",
+      DENIED: "bg-red-100 text-red-800",
+      FAILED: "bg-red-100 text-red-800",
+      PARTIALLY_CAPTURED: "bg-orange-100 text-orange-800",
+      CAPTURE_FAILED: "bg-red-100 text-red-800",
     };
     return (
       <Badge className={variants[authStatus] || "bg-gray-100 text-gray-800"}>
@@ -529,8 +541,6 @@ const AdminPanel = () => {
   };
 
   const formatSimpleDate = (dateString: string) => {
-    // Display date as-is without any timezone conversion (for arrival_date field)
-    // Input format: "YYYY-MM-DD", Output format: "YYYY-MM-DD"
     return dateString;
   };
 
@@ -614,8 +624,8 @@ const AdminPanel = () => {
           {/* Header */}
           <div className="mb-8 flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-slate-800 mb-2">Admin Dashboard</h1>
-              <p className="text-slate-600">Manage applications and view statistics</p>
+              <h1 className="text-3xl font-bold text-slate-800 mb-2">Canada eTA Admin Dashboard</h1>
+              <p className="text-slate-600">Manage eTA applications and view statistics</p>
             </div>
             <Button onClick={handleLogout} variant="outline">
               <LogOut className="mr-2 h-4 w-4" />
@@ -662,7 +672,7 @@ const AdminPanel = () => {
           <div className="mb-6 flex gap-4">
             <div className="flex-1 flex gap-2">
               <Input
-                placeholder="Search by reference number, email, or name..."
+                placeholder="Search by session ID, email, or name..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
@@ -685,9 +695,9 @@ const AdminPanel = () => {
           {/* Applications Table */}
           <Card>
             <CardHeader>
-              <CardTitle>Digital Immigration Card Workflow</CardTitle>
+              <CardTitle>Canada eTA Workflow</CardTitle>
               <CardDescription>
-                Manage Digital Immigration Card application fulfillment
+                Manage Canada eTA application fulfillment
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -717,13 +727,13 @@ const AdminPanel = () => {
                     <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Reference Number</TableHead>
-                      <TableHead>Travelers</TableHead>
+                      <TableHead>Session ID</TableHead>
+                      <TableHead>Surname</TableHead>
+                      <TableHead>Given Names</TableHead>
                       <TableHead>Email</TableHead>
-                      <TableHead>Arrival Date</TableHead>
-                      <TableHead>Processing</TableHead>
+                      <TableHead>Nationality</TableHead>
                       <TableHead>Status</TableHead>
-                      <TableHead>Auth Status</TableHead>
+                      <TableHead>Processing</TableHead>
                       <TableHead>Created</TableHead>
                       {activeTab === 'delivered' && <TableHead>Delivered At</TableHead>}
                       <TableHead>Actions</TableHead>
@@ -737,28 +747,25 @@ const AdminPanel = () => {
                         </TableCell>
                       </TableRow>
                     ) : (
-                      applications.map((app) => {
-                        const isUrgent = app.arrival_date && isArrivalDateUrgent(app.arrival_date);
-                        return (
-                        <TableRow key={app.id} className={isUrgent ? "bg-yellow-50" : ""}>
+                      applications.map((app) => (
+                        <TableRow key={app.id}>
                           <TableCell className="font-mono text-xs">
                             {app.session_id}
                           </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-2">
-                              <Users className="h-4 w-4" />
-                              <span>{app.travelers.length}</span>
-                            </div>
+                          <TableCell className="text-sm font-medium">
+                            {app.surname || 'N/A'}
                           </TableCell>
                           <TableCell className="text-sm">
-                            {app.travelers[0]?.email || 'N/A'}
+                            {app.given_names || 'N/A'}
                           </TableCell>
-                          <TableCell className="text-sm font-medium">
-                            {app.arrival_date ? formatSimpleDate(app.arrival_date) : 'N/A'}
+                          <TableCell className="text-sm">
+                            {app.email || 'N/A'}
                           </TableCell>
-                          <TableCell>{getProcessingBadge(app.processing_option)}</TableCell>
+                          <TableCell className="text-sm">
+                            {app.nationality || 'N/A'}
+                          </TableCell>
                           <TableCell>{getStatusBadge(app.status)}</TableCell>
-                          <TableCell>{getAuthStatusBadge(app.authorization_status)}</TableCell>
+                          <TableCell>{getProcessingBadge(app.processing_option)}</TableCell>
                           <TableCell className="text-sm text-slate-600">
                             {formatDate(app.created_at)}
                           </TableCell>
@@ -771,18 +778,14 @@ const AdminPanel = () => {
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => {
-                                setSelectedApp(app);
-                                setCurrentTravelerIndex(0);
-                              }}
+                              onClick={() => setSelectedApp(app)}
                             >
                               <Eye className="mr-2 h-4 w-4" />
                               View
                             </Button>
                           </TableCell>
                         </TableRow>
-                        );
-                      })
+                      ))
                     )}
                   </TableBody>
                 </Table>
@@ -822,7 +825,7 @@ const AdminPanel = () => {
           </Card>
 
           {/* Application Details Modal */}
-          {selectedApp && selectedApp.travelers.length > 0 && (
+          {selectedApp && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
               <Card className="max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                 <CardHeader>
@@ -831,11 +834,6 @@ const AdminPanel = () => {
                       <CardTitle>Application Details</CardTitle>
                       <CardDescription className="mt-1">
                         <span className="font-mono text-xs">{selectedApp.session_id}</span>
-                        {selectedApp.travelers.length > 1 && (
-                          <span className="ml-4">
-                            Traveler {currentTravelerIndex + 1} of {selectedApp.travelers.length}
-                          </span>
-                        )}
                       </CardDescription>
                     </div>
                     <Button
@@ -852,12 +850,20 @@ const AdminPanel = () => {
                     <h3 className="text-lg font-semibold mb-3 text-slate-800">Payment Information</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                       <div>
-                        <span className="text-slate-600 font-medium">Reference Number:</span>
+                        <span className="text-slate-600 font-medium">Session ID:</span>
                         <span className="ml-2 font-mono font-semibold">{selectedApp.session_id}</span>
                       </div>
                       <div>
                         <span className="text-slate-600 font-medium">Order Time:</span>
                         <span className="ml-2 font-semibold">{formatDate(selectedApp.created_at)}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-600 font-medium">Payment Status:</span>
+                        <span className="ml-2 font-semibold">{selectedApp.payment_status || 'N/A'}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-600 font-medium">Payment Method:</span>
+                        <span className="ml-2 font-semibold">{selectedApp.payment_method || 'N/A'}</span>
                       </div>
                       <div>
                         <span className="text-slate-600 font-medium">Transaction ID:</span>
@@ -866,6 +872,14 @@ const AdminPanel = () => {
                       <div>
                         <span className="text-slate-600 font-medium">PayPal Order ID:</span>
                         <span className="ml-2 font-mono font-semibold">{selectedApp.payment_order_id || 'N/A'}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-600 font-medium">Amount Paid:</span>
+                        <span className="ml-2 font-semibold">{selectedApp.amount_paid ? `$${selectedApp.amount_paid.toFixed(2)} USD` : 'N/A'}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-600 font-medium">Processing Option:</span>
+                        <span className="ml-2">{getProcessingBadge(selectedApp.processing_option)}</span>
                       </div>
                     </div>
 
@@ -938,223 +952,245 @@ const AdminPanel = () => {
                     )}
                   </div>
 
-                  {(() => {
-                    const traveler = selectedApp.travelers[currentTravelerIndex];
-                    return (
-                      <>
-                        {/* Section 1: Travel Information — matches DI Card form Section 1 */}
+                  {/* Applicant Information */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Applicant Information</h3>
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <h3 className="text-lg font-semibold mb-4">Section 1: Travel Information</h3>
-                          <div className="space-y-3">
-                            {/* Travel Dates */}
-                            <div className="grid grid-cols-1 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Travel Dates:</span>
-                                <span className="ml-2 font-semibold">
-                                  {selectedApp.arrival_date ? formatSimpleDate(selectedApp.arrival_date) : 'N/A'}
-                                  {' — '}
-                                  {selectedApp.departure_date ? formatSimpleDate(selectedApp.departure_date) : 'N/A'}
-                                </span>
-                              </div>
-                            </div>
+                          <span className="text-slate-600 font-medium">Applying On Behalf:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.applying_on_behalf || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Travel Document Type:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.travel_document_type || 'N/A'}</span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Surname:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.surname || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Given Names:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.given_names || 'N/A'}</span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Date of Birth:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.date_of_birth || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Gender:</span>
+                          <span className="ml-2 font-semibold capitalize">{selectedApp.gender || 'N/A'}</span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Country of Birth:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.country_of_birth || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">City of Birth:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.city_of_birth || 'N/A'}</span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Nationality:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.nationality || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Email:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.email || 'N/A'}</span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Language Preference:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.language_preference || 'N/A'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-                            {/* Flight Number | Carrier Name */}
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Flight Number:</span>
-                                <span className="ml-2 font-semibold">{selectedApp.flight_number || 'N/A'}</span>
-                              </div>
-                              <div>
-                                <span className="text-slate-600 font-medium">Carrier Name:</span>
-                                <span className="ml-2 font-semibold">{selectedApp.airline_name || 'N/A'}</span>
-                              </div>
-                            </div>
-
-                            {/* Port of Embarkation | Purpose of Visit */}
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Port of Embarkation:</span>
-                                <span className="ml-2 font-semibold">{selectedApp.embarkation_port || selectedApp.departure_country || 'N/A'}</span>
-                              </div>
-                              <div>
-                                <span className="text-slate-600 font-medium">Purpose of Visit:</span>
-                                <span className="ml-2 font-semibold capitalize">{selectedApp.travel_purpose || 'N/A'}</span>
-                              </div>
-                            </div>
-
-                            {/* Intended Place of Stay (full width) */}
-                            <div className="grid grid-cols-1 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Intended Place of Stay:</span>
-                                <span className="ml-2 font-semibold">{selectedApp.accommodation_details || 'N/A'}</span>
-                              </div>
-                            </div>
+                  {/* Passport Information */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Passport Information</h3>
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Passport Country Code:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.passport_country_code || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Passport Number:</span>
+                          <span className="ml-2 font-semibold font-mono">{selectedApp.passport_number || 'N/A'}</span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Passport Issue Date:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.passport_issue_date || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Passport Expiry Date:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.passport_expiry_date || 'N/A'}</span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Previous Canada Visa:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.previous_canada_visa || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">UCI Number:</span>
+                          <span className="ml-2 font-semibold font-mono">{selectedApp.uci_number || 'N/A'}</span>
+                        </div>
+                      </div>
+                      {selectedApp.additional_nationalities && selectedApp.additional_nationalities.length > 0 && (
+                        <div className="grid grid-cols-1 gap-4">
+                          <div>
+                            <span className="text-slate-600 font-medium">Additional Nationalities:</span>
+                            <span className="ml-2 font-semibold">{selectedApp.additional_nationalities.join(', ')}</span>
                           </div>
                         </div>
-
-                        {/* Section 2: Passport Information — matches DI Card form Section 2 */}
-                        <div>
-                          <h3 className="text-lg font-semibold mb-4">Section 2: Passport Information</h3>
-                          <div className="space-y-3">
-                            {/* First Name | Last Name */}
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">First Name:</span>
-                                <span className="ml-2 font-semibold">{traveler.first_name}</span>
-                              </div>
-                              <div>
-                                <span className="text-slate-600 font-medium">Last Name:</span>
-                                <span className="ml-2 font-semibold">{traveler.last_name}</span>
-                              </div>
-                            </div>
-
-                            {/* Gender | Date of Birth */}
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Gender:</span>
-                                <span className="ml-2 font-semibold capitalize">{traveler.gender}</span>
-                              </div>
-                              <div>
-                                <span className="text-slate-600 font-medium">Date of Birth:</span>
-                                <span className="ml-2 font-semibold">{traveler.date_of_birth || 'N/A'}</span>
-                              </div>
-                            </div>
-
-                            {/* Passport Number | Expiration Date */}
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Passport Number:</span>
-                                <span className="ml-2 font-semibold font-mono">{traveler.passport_number}</span>
-                              </div>
-                              <div>
-                                <span className="text-slate-600 font-medium">Expiration Date:</span>
-                                <span className="ml-2 font-semibold">{traveler.passport_expiry_date || 'N/A'}</span>
-                              </div>
-                            </div>
-
-                            {/* Nationality (full width) */}
-                            <div className="grid grid-cols-1 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Nationality:</span>
-                                <span className="ml-2 font-semibold">{traveler.nationality}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Section 3: Personal Information — matches DI Card form Section 3 */}
-                        <div>
-                          <h3 className="text-lg font-semibold mb-4">Section 3: Personal Information</h3>
-                          <div className="space-y-3">
-                            {/* City of Residence | State/Province */}
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">City of Residence:</span>
-                                <span className="ml-2 font-semibold">{traveler.city || 'N/A'}</span>
-                              </div>
-                              <div>
-                                <span className="text-slate-600 font-medium">State/Province of Residence:</span>
-                                <span className="ml-2 font-semibold">{traveler.state_province || 'N/A'}</span>
-                              </div>
-                            </div>
-
-                            {/* Country of Residence | Country of Birth */}
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Country of Residence:</span>
-                                <span className="ml-2 font-semibold">{traveler.country_of_residence || 'N/A'}</span>
-                              </div>
-                              <div>
-                                <span className="text-slate-600 font-medium">Country of Birth:</span>
-                                <span className="ml-2 font-semibold">{traveler.place_of_birth || 'N/A'}</span>
-                              </div>
-                            </div>
-
-                            {/* Email | Confirm Email */}
-                            <div className="grid grid-cols-2 gap-4">
-                              <div>
-                                <span className="text-slate-600 font-medium">Email:</span>
-                                <span className="ml-2 font-semibold">{traveler.email || 'N/A'}</span>
-                              </div>
-                              <div>
-                                <span className="text-slate-600 font-medium">Confirm Email:</span>
-                                <span className="ml-2 font-semibold">{traveler.email || 'N/A'}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    );
-                  })()}
-
-                  {/* Navigation and Actions */}
-                  <div className="flex justify-between items-center">
-                    <div className="flex gap-2">
-                      {selectedApp.travelers.length > 1 && (
-                        <>
-                          <Button
-                            variant="outline"
-                            onClick={() => setCurrentTravelerIndex(Math.max(0, currentTravelerIndex - 1))}
-                            disabled={currentTravelerIndex === 0}
-                          >
-                            Previous Traveler
-                          </Button>
-                          <Button
-                            variant="outline"
-                            onClick={() => setCurrentTravelerIndex(Math.min(selectedApp.travelers.length - 1, currentTravelerIndex + 1))}
-                            disabled={currentTravelerIndex === selectedApp.travelers.length - 1}
-                          >
-                            Next Traveler
-                          </Button>
-                        </>
                       )}
                     </div>
-                    <div className="flex gap-2">
-                      <Button
-                        onClick={handleExportPDF}
-                        disabled={exportingPDF}
-                        variant="outline"
-                      >
-                        {exportingPDF ? (
-                          <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Exporting...
-                          </>
-                        ) : (
-                          <>
-                            <FileText className="mr-2 h-4 w-4" />
-                            Export PDF
-                          </>
-                        )}
-                      </Button>
-                      <Button
-                        onClick={handleToggleFulfillmentStatus}
-                        disabled={markingDelivered}
-                        className={selectedApp.fulfillment_status === 'pending'
-                          ? "bg-green-600 hover:bg-green-700"
-                          : "bg-yellow-600 hover:bg-yellow-700"}
-                      >
-                        {markingDelivered ? (
-                          <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Updating...
-                          </>
-                        ) : selectedApp.fulfillment_status === 'pending' ? (
-                          <>
-                            <CheckCircle className="mr-2 h-4 w-4" />
-                            Mark as Delivered
-                          </>
-                        ) : (
-                          <>
-                            <Clock className="mr-2 h-4 w-4" />
-                            Mark as Pending
-                          </>
-                        )}
-                      </Button>
-                      <Button onClick={() => { setSelectedApp(null);}} variant="outline">
-                        Close
-                      </Button>
+                  </div>
+
+                  {/* Address Information */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Address Information</h3>
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Apartment/Unit:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.apartment_unit || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Street Address:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.street_address || 'N/A'}</span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">City:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.city || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Country of Residence:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.country_residence || 'N/A'}</span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">District/Region:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.district_region || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Postal Code:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.postal_code || 'N/A'}</span>
+                        </div>
+                      </div>
                     </div>
+                  </div>
+
+                  {/* Travel Details */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Travel Details</h3>
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Travel Date Known:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.travel_date_known || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Travel Date:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.travel_date || 'N/A'}</span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Travel Time:</span>
+                          <span className="ml-2 font-semibold">
+                            {selectedApp.travel_hour && selectedApp.travel_minute
+                              ? `${selectedApp.travel_hour}:${selectedApp.travel_minute}`
+                              : 'N/A'}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Travel Timezone:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.travel_timezone || 'N/A'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Consent & Signature */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Consent & Signature</h3>
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Consent Agreed:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.consent_agreed ? 'Yes' : 'No'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Signature:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.signature || 'N/A'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex justify-end items-center gap-2">
+                    <Button
+                      onClick={handleExportPDF}
+                      disabled={exportingPDF}
+                      variant="outline"
+                    >
+                      {exportingPDF ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Exporting...
+                        </>
+                      ) : (
+                        <>
+                          <FileText className="mr-2 h-4 w-4" />
+                          Export PDF
+                        </>
+                      )}
+                    </Button>
+                    <Button
+                      onClick={handleToggleFulfillmentStatus}
+                      disabled={markingDelivered}
+                      className={selectedApp.fulfillment_status === 'pending'
+                        ? "bg-green-600 hover:bg-green-700"
+                        : "bg-yellow-600 hover:bg-yellow-700"}
+                    >
+                      {markingDelivered ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Updating...
+                        </>
+                      ) : selectedApp.fulfillment_status === 'pending' ? (
+                        <>
+                          <CheckCircle className="mr-2 h-4 w-4" />
+                          Mark as Delivered
+                        </>
+                      ) : (
+                        <>
+                          <Clock className="mr-2 h-4 w-4" />
+                          Mark as Pending
+                        </>
+                      )}
+                    </Button>
+                    <Button onClick={() => { setSelectedApp(null);}} variant="outline">
+                      Close
+                    </Button>
                   </div>
                 </CardContent>
               </Card>

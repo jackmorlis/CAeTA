@@ -12,7 +12,7 @@ const SimpleCTASection = () => {
           Ready to Apply?
         </h2>
         <p className="text-white/90 mb-8 max-w-2xl mx-auto text-lg">
-          Complete your Curaçao Digital Immigration Card application in minutes.
+          Complete your Canada eTA application in minutes.
           Fast, secure, and hassle-free.
         </p>
         <Button

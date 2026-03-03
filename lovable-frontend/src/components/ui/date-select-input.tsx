@@ -37,6 +37,23 @@ const daysInMonth = (year: number, month1to12: number) => {
   return new Date(year, month1to12, 0).getDate();
 };
 
+/** Clamp day to valid range for given year/month and min/max constraints */
+const clampDay = (
+  day: number,
+  year: number,
+  month: number,
+  min: { y: number; m: number; d: number } | null,
+  max: { y: number; m: number; d: number } | null
+): number => {
+  if (!year || !month) return day;
+  const maxDay = daysInMonth(year, month);
+  let lo = 1;
+  let hi = maxDay;
+  if (min && year === min.y && month === min.m) lo = Math.max(lo, min.d);
+  if (max && year === max.y && month === max.m) hi = Math.min(hi, max.d);
+  return Math.max(lo, Math.min(hi, day));
+};
+
 export function DateSelectInput({
   date,
   onDateChange,
@@ -53,17 +70,56 @@ export function DateSelectInput({
   const min = React.useMemo(() => parseYMD(minDate), [minDate]);
   const max = React.useMemo(() => parseYMD(maxDate), [maxDate]);
 
-  // Sync internal state with external date prop.
+  // Stable ref for onDateChange to avoid stale closures
+  const onDateChangeRef = React.useRef(onDateChange);
+  onDateChangeRef.current = onDateChange;
+
+  // Track last emitted value to deduplicate
+  const lastEmittedRef = React.useRef(date);
+
+  // Emit helper — only calls onDateChange if the value actually changed
+  const emit = React.useCallback(
+    (y: string, m: string, d: string) => {
+      if (y && m && d) {
+        const yStr = y.trim();
+        const mStr = m.trim().padStart(2, "0");
+        const dStr = d.trim().padStart(2, "0");
+        const dateString = `${yStr}-${mStr}-${dStr}`;
+
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(dateString)) return;
+        if (minDate && dateString < minDate) return;
+        if (maxDate && dateString > maxDate) return;
+
+        if (lastEmittedRef.current !== dateString) {
+          lastEmittedRef.current = dateString;
+          onDateChangeRef.current(dateString);
+        }
+      } else {
+        if (lastEmittedRef.current !== undefined) {
+          lastEmittedRef.current = undefined;
+          onDateChangeRef.current(undefined);
+        }
+      }
+    },
+    [minDate, maxDate]
+  );
+
+  // Sync internal state with external date prop (one-way, from parent).
   React.useEffect(() => {
     const parsed = parseYMD(date);
     if (parsed) {
-      setYear(String(parsed.y));
-      setMonth(String(parsed.m).padStart(2, "0"));
-      setDay(String(parsed.d).padStart(2, "0"));
-    } else {
+      const yStr = String(parsed.y);
+      const mStr = String(parsed.m).padStart(2, "0");
+      const dStr = String(parsed.d).padStart(2, "0");
+      setYear(yStr);
+      setMonth(mStr);
+      setDay(dStr);
+      lastEmittedRef.current = date;
+    } else if (!date) {
       setYear(defaultYear ? String(defaultYear) : "");
       setMonth("");
       setDay("");
+      lastEmittedRef.current = undefined;
     }
   }, [date, defaultYear]);
 
@@ -74,10 +130,6 @@ export function DateSelectInput({
   const years = React.useMemo(() => {
     const ys: number[] = [];
     for (let y = minYear; y <= maxYear; y++) ys.push(y);
-
-    // Match Zanzibar behavior:
-    // - DOB-like pickers typically pass maxDate and minDate="1900-01-01" → descending (current/max year → 1900)
-    // - Travel dates use minDate (optionally with a maxDate range) → ascending
     const isDobStylePastPicker = !!max && (!minDate || minDate === "1900-01-01");
     return isDobStylePastPicker ? ys.reverse() : ys;
   }, [minYear, maxYear, minDate, max]);
@@ -112,45 +164,62 @@ export function DateSelectInput({
     return { start, end };
   }, [min, max, year, month, selectedYearNum, selectedMonthNum]);
 
-  // If year changes and current month/day become invalid, reset them.
-  React.useEffect(() => {
-    if (!year) return;
+  // --- onChange handlers that clamp first, then emit ---
+
+  const handleYearChange = (newYear: string) => {
+    const yNum = parseInt(newYear, 10);
+    setYear(newYear);
+
+    // Check if current month is still valid for new year
+    let newMonth = month;
     if (month) {
-      const m = parseInt(month, 10);
-      if (m < monthRange.start || m > monthRange.end) {
+      const mNum = parseInt(month, 10);
+      let mStart = 1;
+      let mEnd = 12;
+      if (min && yNum === min.y) mStart = Math.max(mStart, min.m);
+      if (max && yNum === max.y) mEnd = Math.min(mEnd, max.m);
+      if (mNum < mStart || mNum > mEnd) {
+        newMonth = "";
         setMonth("");
         setDay("");
+        emit(newYear, "", "");
+        return;
       }
     }
-  }, [year, month, monthRange.start, monthRange.end]);
 
-  React.useEffect(() => {
-    if (!year || !month || !day) return;
-    const d = parseInt(day, 10);
-    if (d < dayRange.start) setDay(String(dayRange.start).padStart(2, "0"));
-    else if (d > dayRange.end) setDay(String(dayRange.end).padStart(2, "0"));
-  }, [year, month, day, dayRange.start, dayRange.end]);
-
-  // Emit combined YYYY-MM-DD when complete and within min/max.
-  React.useEffect(() => {
-    if (year && month && day) {
-      const y = year.trim();
-      const m = month.trim().padStart(2, "0");
-      const d = day.trim().padStart(2, "0");
-      const dateString = `${y}-${m}-${d}`;
-
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(dateString)) return;
-      if (minDate && dateString < minDate) return;
-      if (maxDate && dateString > maxDate) return;
-
-      onDateChange(dateString);
-    } else if (!year && !month && !day) {
-      onDateChange(undefined);
-    } else {
-      // Incomplete date -> clear value so validation catches it
-      onDateChange(undefined);
+    // Clamp day
+    let newDay = day;
+    if (newMonth && day) {
+      const mNum = parseInt(newMonth, 10);
+      const dNum = parseInt(day, 10);
+      const clamped = clampDay(dNum, yNum, mNum, min, max);
+      newDay = String(clamped).padStart(2, "0");
+      if (newDay !== day) setDay(newDay);
     }
-  }, [year, month, day, minDate, maxDate, onDateChange]);
+
+    emit(newYear, newMonth, newDay);
+  };
+
+  const handleMonthChange = (newMonth: string) => {
+    setMonth(newMonth);
+
+    let newDay = day;
+    if (year && day) {
+      const yNum = parseInt(year, 10);
+      const mNum = parseInt(newMonth, 10);
+      const dNum = parseInt(day, 10);
+      const clamped = clampDay(dNum, yNum, mNum, min, max);
+      newDay = String(clamped).padStart(2, "0");
+      if (newDay !== day) setDay(newDay);
+    }
+
+    emit(year, newMonth, newDay);
+  };
+
+  const handleDayChange = (newDay: string) => {
+    setDay(newDay);
+    emit(year, month, newDay);
+  };
 
   const baseSelectClass =
     "h-12 w-full rounded-md border-2 border-gray-200 bg-background px-2 py-2 text-sm ring-offset-background hover:border-primary focus:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
@@ -160,7 +229,7 @@ export function DateSelectInput({
       {/* Day */}
       <select
         value={day}
-        onChange={(e) => setDay(e.target.value)}
+        onChange={(e) => handleDayChange(e.target.value)}
         disabled={disabled}
         className={cn(baseSelectClass, "min-w-0 flex-1")}
       >
@@ -180,7 +249,7 @@ export function DateSelectInput({
       {/* Month */}
       <select
         value={month}
-        onChange={(e) => setMonth(e.target.value)}
+        onChange={(e) => handleMonthChange(e.target.value)}
         disabled={disabled}
         className={cn(baseSelectClass, "min-w-0 flex-1")}
       >
@@ -200,7 +269,7 @@ export function DateSelectInput({
       {/* Year */}
       <select
         value={year}
-        onChange={(e) => setYear(e.target.value)}
+        onChange={(e) => handleYearChange(e.target.value)}
         disabled={disabled}
         className={cn(baseSelectClass, "min-w-0 flex-1")}
       >

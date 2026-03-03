@@ -6,61 +6,39 @@ if (!API_URL) {
   throw new Error('VITE_API_URL environment variable is required');
 }
 
-export interface Traveler {
-  first_name: string;
-  last_name: string;
-  date_of_birth: string;
-  gender: string;
-  place_of_birth?: string;
-  nationality: string;
-  civil_status?: string;
-  occupation?: string;
-  passport_number: string;
-  passport_expiry_date?: string;
-  email?: string;
-  phone_code?: string;
-  phone?: string;
-  residential_address?: string;
-  country_of_residence?: string;
-  city?: string;
-  state_province?: string;
-}
-
 export interface ApplicationCreate {
-  permanent_address?: string;
-  country_of_residence?: string;
-  city_of_residence?: string;
-  departure_country?: string;
-  embarkation_port?: string;
-  disembarkation_port?: string;
-  airline_name?: string;
-  flight_number?: string;
-  arrival_date?: string;
-  departure_date?: string;
-  travel_purpose?: string;
-  // Return / Departure flight
-  return_departure_airport?: string;
-  return_destination_airport?: string;
-  return_airline_name?: string;
-  return_flight_date?: string;
-  return_flight_number?: string;
-  // Accommodation
-  accommodation_type?: string;
-  accommodation_details?: string;
-  // Customs
-  exceeds_money_limit?: string;
-  currency_amount?: number;
-  currency_type?: string;
-  currency_origin?: string;
-  is_values_owner?: string;
-  has_animals_or_food?: string;
-  has_taxable_goods?: string;
-  taxable_value?: number;
-  taxable_currency?: string;
-  taxable_description?: string;
-  taxable_value_usd?: string;
+  applying_on_behalf?: string;
+  travel_document_type?: string;
+  passport_country_code?: string;
+  nationality?: string;
+  passport_number?: string;
+  surname?: string;
+  given_names?: string;
+  date_of_birth?: string;
+  gender?: string;
+  country_of_birth?: string;
+  city_of_birth?: string;
+  passport_issue_date?: string;
+  passport_expiry_date?: string;
+  additional_nationalities?: string[];
+  previous_canada_visa?: string;
+  uci_number?: string;
+  language_preference?: string;
+  email?: string;
+  apartment_unit?: string;
+  street_address?: string;
+  city?: string;
+  country_residence?: string;
+  district_region?: string;
+  postal_code?: string;
+  travel_date_known?: string;
+  travel_date?: string;
+  travel_hour?: string;
+  travel_minute?: string;
+  travel_timezone?: string;
+  consent_agreed?: boolean;
+  signature?: string;
   processing_option?: string;
-  travelers: Traveler[];
   // Payment fields (optional - filled after payment)
   payment_method?: string;
   payment_status?: string;
@@ -73,45 +51,42 @@ export interface ApplicationResponse {
   id: string;
   session_id: string;
   status: string;
-  // General Information
-  permanent_address?: string;
-  country_of_residence?: string;
-  city_of_residence?: string;
-  direction?: string;
-  stops_other_countries?: string;
-  // Travel / Flight
-  departure_country?: string;
-  embarkation_port?: string;
-  disembarkation_port?: string;
-  airline_name?: string;
-  flight_number?: string;
-  flight_date?: string;
-  arrival_date?: string;
-  departure_date?: string;
-  // Trip details
-  travel_purpose?: string;
-  sports_during_stay?: string;
-  // Return / Departure flight
-  return_departure_airport?: string;
-  return_destination_airport?: string;
-  return_airline_name?: string;
-  return_flight_date?: string;
-  return_flight_number?: string;
-  // Accommodation
-  accommodation_type?: string;
-  accommodation_details?: string;
-  // Customs
-  exceeds_money_limit?: string;
-  currency_amount?: number;
-  currency_type?: string;
-  currency_origin?: string;
-  is_values_owner?: string;
-  has_animals_or_food?: string;
-  has_taxable_goods?: string;
-  taxable_value?: number;
-  taxable_currency?: string;
-  taxable_description?: string;
-  taxable_value_usd?: string;
+  // Applicant Information
+  applying_on_behalf?: string;
+  travel_document_type?: string;
+  passport_country_code?: string;
+  nationality?: string;
+  passport_number?: string;
+  surname?: string;
+  given_names?: string;
+  date_of_birth?: string;
+  gender?: string;
+  country_of_birth?: string;
+  city_of_birth?: string;
+  passport_issue_date?: string;
+  passport_expiry_date?: string;
+  additional_nationalities?: string[];
+  previous_canada_visa?: string;
+  uci_number?: string;
+  language_preference?: string;
+  email?: string;
+  // Address
+  apartment_unit?: string;
+  street_address?: string;
+  city?: string;
+  country_residence?: string;
+  district_region?: string;
+  postal_code?: string;
+  // Travel
+  travel_date_known?: string;
+  travel_date?: string;
+  travel_hour?: string;
+  travel_minute?: string;
+  travel_timezone?: string;
+  // Consent
+  consent_agreed?: boolean;
+  signature?: string;
+  // Processing & Payment
   processing_option?: string;
   created_at: string;
   updated_at: string;
@@ -131,7 +106,6 @@ export interface ApplicationResponse {
   fulfillment_delivered_at?: string;
   delivery_email_sent_at?: string;
   device_fingerprint?: Record<string, any>;
-  travelers: (Traveler & { id: string; application_id: string; created_at: string })[];
 }
 
 export interface ContactCreate {
@@ -417,7 +391,7 @@ class ApiClient {
   }
 
   // PayPal Methods
-  async createPayPalOrder(amount: string, currency: string = 'USD', description: string = 'DAC Assistance — Service Fee'): Promise<{
+  async createPayPalOrder(amount: string, currency: string = 'USD', description: string = 'Canada eTA — Service Fee'): Promise<{
     order_id: string;
     approval_url?: string;
     status: string;
@@ -730,7 +704,7 @@ export interface AuthorizationSummary {
   fulfillment_status: string;
   fulfillment_delivered_at?: string;
   created_at: string;
-  first_traveler_email?: string;
+  applicant_email?: string;
 }
 
 export interface AuthorizationStatsResponse {
@@ -748,7 +722,6 @@ export interface ApplicationLookupResponse {
   session_id: string;
   customer_email: string | null;
   customer_name: string | null;
-  traveler_count: number;
   amount_paid: number;
   authorization_id: string | null;
   authorization_status: string | null;

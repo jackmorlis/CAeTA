@@ -1,11 +1,11 @@
 services:
   db:
     image: postgres:15-alpine
-    container_name: dret_postgres_db
+    container_name: canadaeta_postgres_db
     env_file:
       - ./backend/.env
     volumes:
-      - dret_postgres_data:/var/lib/postgresql/data
+      - canadaeta_postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
@@ -15,7 +15,7 @@ services:
 
   backend:
     build: ./backend
-    container_name: dret_backend
+    container_name: canadaeta_backend
     ports:
       - "127.0.0.1:8000:8000"
     env_file:
@@ -32,7 +32,7 @@ services:
       context: ./lovable-frontend
       args:
         - VITE_API_URL=${VITE_API_URL}
-    container_name: dret_frontend
+    container_name: canadaeta_frontend
     ports:
       - "127.0.0.1:3000:80"
     depends_on:
@@ -45,7 +45,7 @@ services:
       args:
         - VITE_API_URL=${VITE_API_URL}
         - VITE_BASE_PATH=${VITE_BASE_PATH:-/}
-    container_name: dret_admin_frontend
+    container_name: canadaeta_admin_frontend
     ports:
       - "127.0.0.1:3001:80"
     depends_on:
@@ -53,4 +53,4 @@ services:
     restart: unless-stopped
 
 volumes:
-  dret_postgres_data:
+  canadaeta_postgres_data:

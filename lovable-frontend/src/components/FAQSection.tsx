@@ -2,36 +2,36 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 const faqData = [
   {
-    question: "What is the Curaçao Digital Immigration Card?",
-    answer: "The Curaçao Digital Immigration Card is the electronic entry and exit form required by Curaçao Immigration for all travelers. It replaces the old paper-based customs and immigration forms and must be completed online before arrival or departure."
+    question: "What is a Canada eTA?",
+    answer: "A Canada eTA (Electronic Travel Authorization) is an entry requirement for visa-exempt foreign nationals who are travelling to Canada by air. It is electronically linked to your passport and is valid for up to five years or until your passport expires, whichever comes first."
   },
   {
-    question: "Who needs to fill out the Immigration Card?",
-    answer: "All travelers entering or departing Curaçao are required to complete the Curaçao Digital Immigration Card, including tourists, residents, and minors. Parents or guardians must fill out the form on behalf of children."
+    question: "Who needs a Canada eTA?",
+    answer: "Citizens of visa-exempt countries (excluding the United States) who are flying to or transiting through a Canadian airport need an eTA. U.S. citizens do not need an eTA — they are exempt. Canadian citizens cannot apply for an eTA."
   },
   {
-    question: "When should I fill out the Immigration Card?",
-    answer: "You should complete your Curaçao Digital Immigration Card before traveling, ideally 72 hours before your departure date. Having it ready in advance ensures a smoother experience at immigration and helps avoid delays at the airport."
+    question: "When should I apply for my eTA?",
+    answer: "You should apply for your Canada eTA before booking your flight, ideally at least 72 hours before your travel date. Most eTAs are approved within minutes, but some applications may take several days if additional documentation is required."
   },
   {
-    question: "What information do I need?",
-    answer: "You will need your passport details, flight information, accommodation details in Curaçao, and customs declarations. Make sure all information matches your travel documents exactly."
+    question: "What information do I need to apply?",
+    answer: "You will need your valid passport, personal details (name, date of birth, gender), contact information (email address), residential address, and travel details. The passport you use to apply must be the same one you use to travel."
   },
   {
-    question: "Is the Curaçao Digital Immigration Card mandatory?",
-    answer: "Yes. The Curaçao Digital Immigration Card is required for all travelers entering and leaving Curaçao. It consolidates the immigration, customs, and public health forms into a single digital document."
+    question: "How long is a Canada eTA valid?",
+    answer: "An approved Canada eTA is valid for up to five years or until your passport expires, whichever comes first. During that time, you can travel to Canada multiple times for short stays of up to six months at a time."
   },
   {
-    question: "How long is the Immigration Card valid?",
-    answer: "The Curaçao Digital Immigration Card is valid for one entry and must be completed for each trip. If you are visiting Curaçao multiple times, you will need to fill out a new Immigration Card for every journey."
+    question: "What if I make a mistake on my application?",
+    answer: "If you notice an error in your application, contact our support team as soon as possible for corrections. Using our guided service helps minimize errors and ensures accurate completion of all required fields."
   },
   {
-    question: "What if I make a mistake?",
-    answer: "If you notice an error in your application, contact our support team as soon as possible for corrections before your travel date. Using our guided service helps minimize errors and ensures accurate completion."
+    question: "Do I need an eTA if I'm driving to Canada?",
+    answer: "No. An eTA is only required for air travel to Canada. If you are arriving by land or sea, you do not need an eTA, though you may need other travel documents depending on your nationality."
   },
   {
-    question: "How will I receive my Immigration Card?",
-    answer: "Once your application is processed, you will receive your Curaçao Digital Immigration Card via email as a PDF with a QR code. Present this QR code to immigration officers upon arrival in Curaçao, either printed or on your mobile device."
+    question: "How will I receive my eTA confirmation?",
+    answer: "Once your eTA application is approved, you will receive a confirmation via email. The eTA is electronically linked to your passport — there is no physical document or stamp. Simply travel with the same passport you used to apply."
   }
 ];
 

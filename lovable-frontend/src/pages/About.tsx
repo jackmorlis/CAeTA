@@ -27,7 +27,7 @@ const About = () => {
         <section className="py-10">
           <div className="container mx-auto px-4 max-w-4xl text-center">
             <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-              Curaçao Digital Immigration Card Service is a private platform, not affiliated with any government or embassy. The
+              Canada eTA Service is a private platform, not affiliated with any government or embassy. The
               document fee is $49.99. We charge an additional service fee for our application support and expedited processing.
             </p>
             <p className="text-sm md:text-base text-muted-foreground leading-relaxed mt-4">
@@ -43,7 +43,7 @@ const About = () => {
         <section className="py-12">
           <div className="container mx-auto px-4 max-w-6xl">
             <h2 className="text-xl md:text-2xl font-bold text-foreground text-center mb-6">
-              Service Options for Curaçao Digital Immigration Card
+              Service Options for Canada eTA Application
             </h2>
 
             <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
@@ -117,7 +117,7 @@ const About = () => {
                   <Clock className="w-6 h-6 text-primary" />
                   <div>
                     <h3 className="font-bold text-primary mb-1">Priority Options</h3>
-                    <p className="text-sm text-muted-foreground">We process your Curaçao Digital Immigration Card quickly, with Ultra-Fast options available for last-minute travel needs.</p>
+                    <p className="text-sm text-muted-foreground">We process your Canada eTA quickly, with Ultra-Fast options available for last-minute travel needs.</p>
                   </div>
                 </div>
               </Card>
@@ -144,7 +144,7 @@ const About = () => {
                   <Sparkles className="w-6 h-6 text-primary" />
                   <div>
                     <h3 className="font-bold text-primary mb-1">Trusted Worldwide</h3>
-                    <p className="text-sm text-muted-foreground">Thousands of travelers trust us to help them prepare their Curaçao Digital Immigration Card applications successfully.</p>
+                    <p className="text-sm text-muted-foreground">Thousands of travelers trust us to help them prepare their Canada eTA applications successfully.</p>
                   </div>
                 </div>
               </Card>
@@ -168,7 +168,7 @@ const About = () => {
               How We Charge for Your Application
             </h2>
             <p className="text-sm md:text-base text-muted-foreground mb-6">
-              Our mission is to make it quick and easy to complete your Curaçao Digital Immigration Card. We combine the base document fee and our service fee into one single payment.
+              Our mission is to make it quick and easy to complete your Canada eTA. We combine the base document fee and our service fee into one single payment.
             </p>
 
               <div className="grid md:grid-cols-3 gap-4 mb-8">
@@ -208,7 +208,7 @@ const About = () => {
           <div className="container mx-auto px-4 max-w-4xl text-center">
             <h2 className="text-xl md:text-2xl font-bold text-foreground mb-3">Ready to Apply?</h2>
             <p className="text-sm md:text-base text-muted-foreground mb-6">
-              Start your Curaçao Digital Immigration Card application today and travel with peace of mind.
+              Start your Canada eTA application today and travel with peace of mind.
             </p>
             <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-8 py-3 text-base" onClick={() => navigate("/apply")}>
               Start Application

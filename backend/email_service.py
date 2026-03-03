@@ -20,9 +20,8 @@ def send_payment_confirmation_email(
     customer_name: str,
     reference_number: str,
     amount_paid: float = None,
-    num_travelers: int = None,
     processing_option: str = None,
-    earliest_arrival_date: date = None
+    travel_date: date = None
 ) -> bool:
     """
     Send payment confirmation email to customer
@@ -30,11 +29,10 @@ def send_payment_confirmation_email(
     Args:
         to_email: Customer's email address
         customer_name: Customer's name
-        reference_number: Application reference number (TDAC-XXXXXX)
+        reference_number: Application reference number (CETA-XXXXXX)
         amount_paid: Total amount paid for the application
-        num_travelers: Number of travelers in the application
         processing_option: Processing option selected (standard, fast, ultra)
-        earliest_arrival_date: Earliest arrival date among all travelers (for delivery tracker)
+        travel_date: Planned travel date (for delivery tracker)
 
     Returns:
         bool: True if email sent successfully, False otherwise
@@ -45,18 +43,14 @@ def send_payment_confirmation_email(
         return False
 
     # Email subject
-    subject = "Thank you for using Curaçao eArrival Form"
+    subject = "Thank you for your Canada eTA Application"
 
     # Format amount for display
     amount_display = f"${amount_paid:.2f}" if amount_paid else "Amount not available"
 
     # Calculate order breakdown
-    base_price_per_person = 49.99
-    num_travelers = num_travelers or 1  # Default to 1 if not provided
+    base_price = 49.99
     processing_option = processing_option or "standard"
-
-    # Calculate fees
-    base_total = base_price_per_person * num_travelers
 
     # Determine processing fee based on option
     processing_fees = {
@@ -70,19 +64,19 @@ def send_payment_confirmation_email(
     processing_fee = processing_info["fee"]
 
     # Calculate total (or use the provided amount)
-    calculated_total = base_total + processing_fee
+    calculated_total = base_price + processing_fee
     final_total = amount_paid if amount_paid else calculated_total
 
-    # Calculate delivery tracker if arrival is more than 2 days away
+    # Calculate delivery tracker if travel date is more than 7 days away
     delivery_tracker_text = ""
     delivery_tracker_html = ""
 
-    if earliest_arrival_date:
-        today = datetime.now(ZoneInfo('America/Curacao')).date()
-        days_until_arrival = (earliest_arrival_date - today).days
+    if travel_date:
+        today = datetime.now(ZoneInfo('America/Toronto')).date()
+        days_until_travel = (travel_date - today).days
 
-        if days_until_arrival > 7:
-            delivery_date = earliest_arrival_date - timedelta(days=7)
+        if days_until_travel > 7:
+            delivery_date = travel_date - timedelta(days=7)
             delivery_date_formatted = delivery_date.strftime("%A, %b %d, %Y")
             delivery_day = delivery_date.strftime("%d")
             delivery_month = delivery_date.strftime("%b")
@@ -93,9 +87,9 @@ Est. delivery: {delivery_month} {delivery_day}, 07:00 AM
 
 [✓] Application → [2] Waiting → [ ] Delivered
 
-We've received your Curaçao eArrival Form application and are currently reviewing it. Your document will be delivered on {delivery_date_formatted}.
+We've received your Canada eTA (Electronic Travel Authorization) application and are currently reviewing it. Your document will be delivered on {delivery_date_formatted}.
 
-The estimated delivery date ensures that your Curaçao eArrival Form will be valid on the date of your trip.
+The estimated delivery date ensures that your Canada eTA will be valid on the date of your trip.
 ======================================================
 """
 
@@ -112,7 +106,7 @@ The estimated delivery date ensures that your Curaçao eArrival Form will be val
                                 </div>
                             </td>
                             <td style="width: 10%; text-align: center; vertical-align: middle;">
-                                <img src="https://flagcdn.com/w40/cw.png" alt="CW" style="width: 28px; height: 18px; border-radius: 2px;">
+                                <img src="https://flagcdn.com/w40/ca.png" alt="CA" style="width: 28px; height: 18px; border-radius: 2px;">
                             </td>
                             <td style="width: 30%; text-align: right; vertical-align: middle;">
                                 <div style="border: 2px solid #1f2937; border-radius: 8px; padding: 8px 12px; display: inline-block; text-align: center;">
@@ -150,8 +144,8 @@ The estimated delivery date ensures that your Curaçao eArrival Form will be val
 
                 <!-- Message -->
                 <div style="padding: 15px; font-size: 14px; color: #374151; line-height: 1.5;">
-                    <p style="margin: 0 0 8px 0;">We've received your <strong>Curaçao eArrival Form</strong> application and are currently reviewing it. Your document will be delivered on <strong>{delivery_date_formatted}</strong>.</p>
-                    <p style="margin: 0; font-size: 12px; color: #6b7280;">The estimated delivery date ensures that your Curaçao eArrival Form will be valid on the date of your trip.</p>
+                    <p style="margin: 0 0 8px 0;">We've received your <strong>Canada eTA</strong> (Electronic Travel Authorization) application and are currently reviewing it. Your document will be delivered on <strong>{delivery_date_formatted}</strong>.</p>
+                    <p style="margin: 0; font-size: 12px; color: #6b7280;">The estimated delivery date ensures that your Canada eTA will be valid on the date of your trip.</p>
                 </div>
             </div>
 """
@@ -159,31 +153,31 @@ The estimated delivery date ensures that your Curaçao eArrival Form will be val
     # Plain text version
     text_content = f"""Hello {customer_name}
 
-Your application has been received successfully.
+Your Canada eTA application has been received successfully.
 {delivery_tracker_text}
 REFERENCE NUMBER:
 {reference_number}
 
 ORDER SUMMARY:
 ===============================================
-Arrival Submission Service Fee x {num_travelers} Travelers: ${base_total:.2f}
+eTA Application Service Fee: ${base_price:.2f}
 {processing_name}: ${processing_fee:.2f}
 -----------------------------------------------
 TOTAL AMOUNT PAID: {amount_display}
 ===============================================
 
-You will receive your Curaçao eArrival Form via email as a PDF with a QR code. Present this QR code to immigration upon arrival in Curaçao.
+You will receive your Canada eTA (Electronic Travel Authorization) via email as a PDF. Please have this document available when you travel to Canada.
 
-If you need to make any changes, please use the contact form or write us an email with your reference number at help@earrival-support.com.
+If you need to make any changes, please use the contact form or write us an email with your reference number at help@canadaeta-support.com.
 
 Payment:
-Your transaction was successful. You will see a charge from *EARRIVAL* on your bank statement.
+Your transaction was successful. You will see a charge from *CANADAETA* on your bank statement.
 
 If you have any questions or need further assistance, feel free to contact us.
-You can reach out to us anytime at help@earrival-support.com
+You can reach out to us anytime at help@canadaeta-support.com
 
 Wishing you a wonderful trip,
-The CDIC Service Team
+The Canada eTA Service Team
 """
 
     # HTML version
@@ -264,13 +258,13 @@ The CDIC Service Team
 <body>
     <div class="container">
         <div class="header">
-            <h1>🇨🇼 Curaçao eArrival Form</h1>
+            <h1>\U0001f1e8\U0001f1e6 Canada eTA</h1>
         </div>
 
         <div class="content">
             <p>Hello {customer_name}</p>
 
-            <p>Your application has been received successfully.</p>
+            <p>Your Canada eTA application has been received successfully.</p>
 
             {delivery_tracker_html}
 
@@ -283,8 +277,8 @@ The CDIC Service Team
                 <h3 style="margin: 0 0 15px 0; color: #333;">Order Summary</h3>
                 <table style="width: 100%; border-collapse: collapse;">
                     <tr style="border-bottom: 1px solid #ddd;">
-                        <td style="padding: 10px 0; color: #555;">Arrival Submission Service Fee x {num_travelers} Travelers</td>
-                        <td style="padding: 10px 0; text-align: right; font-weight: bold;">${base_total:.2f}</td>
+                        <td style="padding: 10px 0; color: #555;">eTA Application Service Fee</td>
+                        <td style="padding: 10px 0; text-align: right; font-weight: bold;">${base_price:.2f}</td>
                     </tr>
                     <tr style="border-bottom: 2px solid #ddd;">
                         <td style="padding: 10px 0; color: #555;">{processing_name}</td>
@@ -297,20 +291,20 @@ The CDIC Service Team
                 </table>
             </div>
 
-            <p><strong>You will receive your Curaçao eArrival Form via email as a PDF with a QR code. Present this QR code to immigration upon arrival in Curaçao.</strong></p>
+            <p><strong>You will receive your Canada eTA (Electronic Travel Authorization) via email as a PDF. Please have this document available when you travel to Canada.</strong></p>
 
-            <p>If you need to make any changes, please use the contact form or write us an email with your reference number at <a href="mailto:help@earrival-support.com">help@earrival-support.com</a>.</p>
+            <p>If you need to make any changes, please use the contact form or write us an email with your reference number at <a href="mailto:help@canadaeta-support.com">help@canadaeta-support.com</a>.</p>
 
             <p><strong>Payment:</strong><br>
-            Your transaction was successful. You will see a charge from <strong>*EARRIVAL*</strong> on your bank statement.</p>
+            Your transaction was successful. You will see a charge from <strong>*CANADAETA*</strong> on your bank statement.</p>
 
             <p>If you have any questions or need further assistance, feel free to contact us.<br>
-            You can reach out to us anytime at <a href="mailto:help@earrival-support.com">help@earrival-support.com</a></p>
+            You can reach out to us anytime at <a href="mailto:help@canadaeta-support.com">help@canadaeta-support.com</a></p>
         </div>
 
         <div class="footer">
             <p>Wishing you a wonderful trip,<br>
-            <strong>The CDIC Service Team</strong></p>
+            <strong>The Canada eTA Service Team</strong></p>
         </div>
     </div>
 </body>
@@ -323,12 +317,12 @@ The CDIC Service Team
             MAILGUN_API_URL,
             auth=("api", MAILGUN_API_KEY),
             data={
-                "from": f"Curaçao eArrival Form <{MAILGUN_FROM_EMAIL}>",
+                "from": f"Canada eTA <{MAILGUN_FROM_EMAIL}>",
                 "to": [to_email],
                 "subject": subject,
                 "text": text_content,
                 "html": html_content,
-                "h:Reply-To": "Earrival Support <help@earrival-support.com>"  # Reply-to header with name for better compatibility
+                "h:Reply-To": "Canada eTA Support <help@canadaeta-support.com>"
             },
             timeout=10
         )
@@ -349,16 +343,14 @@ The CDIC Service Team
 def send_internal_order_notification(
     reference_number: str,
     application_data: dict,
-    travelers_data: list,
     payment_data: dict
 ) -> bool:
     """
     Send internal order notification to team with all application details
 
     Args:
-        reference_number: Application reference number (TDAC-XXXXXX)
-        application_data: Dictionary with application details
-        travelers_data: List of traveler dictionaries
+        reference_number: Application reference number (CETA-XXXXXX)
+        application_data: Dictionary with application details (flat structure with applicant fields)
         payment_data: Dictionary with payment information
 
     Returns:
@@ -369,89 +361,30 @@ def send_internal_order_notification(
         print("❌ Mailgun not configured. Skipping internal notification.")
         return False
 
-    internal_emails = ["1-octo-orders-cw-aaaateg4deshixeowf5uwcji2e@octo-services.slack.com"]
-    subject = f"New Order: {reference_number}"
-
-    # Build travelers section
-    travelers_html = ""
-    travelers_text = ""
-
-    for idx, traveler in enumerate(travelers_data, 1):
-        travelers_text += f"""
---- Traveler {idx} ---
-Name: {traveler.get('first_name', 'N/A')} {traveler.get('last_name', 'N/A')}
-Passport: {traveler.get('passport_number', 'N/A')}
-Date of Birth: {traveler.get('date_of_birth', 'N/A')}
-Gender: {traveler.get('gender', 'N/A')}
-Nationality: {traveler.get('nationality', 'N/A')}
-Arrival Date: {traveler.get('arrival_date', 'N/A')}
-Email: {traveler.get('email', 'N/A')}
-Phone: {traveler.get('phone_code', '')} {traveler.get('phone', 'N/A')}
-"""
-
-        travelers_html += f"""
-        <div style="background-color: #f8f9fa; padding: 15px; margin: 10px 0; border-radius: 5px;">
-            <h3 style="margin-top: 0; color: #0066cc;">Traveler {idx}</h3>
-            <table style="width: 100%; border-collapse: collapse;">
-                <tr>
-                    <td style="padding: 5px 10px; font-weight: bold; width: 200px;">Name:</td>
-                    <td style="padding: 5px 10px;">{traveler.get('first_name', 'N/A')} {traveler.get('last_name', 'N/A')}</td>
-                </tr>
-                <tr>
-                    <td style="padding: 5px 10px; font-weight: bold;">Passport Number:</td>
-                    <td style="padding: 5px 10px;">{traveler.get('passport_number', 'N/A')}</td>
-                </tr>
-                <tr>
-                    <td style="padding: 5px 10px; font-weight: bold;">Date of Birth:</td>
-                    <td style="padding: 5px 10px;">{traveler.get('date_of_birth', 'N/A')}</td>
-                </tr>
-                <tr>
-                    <td style="padding: 5px 10px; font-weight: bold;">Gender:</td>
-                    <td style="padding: 5px 10px;">{traveler.get('gender', 'N/A').capitalize()}</td>
-                </tr>
-                <tr>
-                    <td style="padding: 5px 10px; font-weight: bold;">Nationality:</td>
-                    <td style="padding: 5px 10px;">{traveler.get('nationality', 'N/A')}</td>
-                </tr>
-                <tr>
-                    <td style="padding: 5px 10px; font-weight: bold;">Arrival Date:</td>
-                    <td style="padding: 5px 10px;">{traveler.get('arrival_date', 'N/A')}</td>
-                </tr>
-                <tr>
-                    <td style="padding: 5px 10px; font-weight: bold;">Email:</td>
-                    <td style="padding: 5px 10px;">{traveler.get('email', 'N/A')}</td>
-                </tr>
-                <tr>
-                    <td style="padding: 5px 10px; font-weight: bold;">Phone:</td>
-                    <td style="padding: 5px 10px;">{traveler.get('phone_code', '')} {traveler.get('phone', 'N/A')}</td>
-                </tr>
-            </table>
-        </div>
-        """
+    internal_emails = [os.getenv("ORDER_NOTIFICATION_EMAIL", "1-octo-orders-ca-eta-aaaatlhsks4fajo33pbbq4m2ym@octo-services.slack.com")]
+    subject = f"New Canada eTA Order: {reference_number}"
 
     # Plain text version
-    text_content = f"""NEW ORDER NOTIFICATION
+    text_content = f"""NEW CANADA eTA ORDER NOTIFICATION
 
 Reference Number: {reference_number}
 
-=== APPLICATION DETAILS ===
-Departure Country: {application_data.get('departure_country', 'N/A')}
-Departure City: {application_data.get('departure_city', 'N/A')}
-Departure Date: {application_data.get('departure_date', 'N/A')}
-Mode of Travel: {application_data.get('mode_of_travel', 'N/A')}
-Flight Number: {application_data.get('flight_number', 'N/A')}
-Accommodation Type: {application_data.get('accommodation_type', 'N/A')}
-Accommodation Province: {application_data.get('accommodation_province', 'N/A')}
-Accommodation Details: {application_data.get('accommodation_details', 'N/A')}
+=== APPLICANT DETAILS ===
+Surname: {application_data.get('surname', 'N/A')}
+Given Names: {application_data.get('given_names', 'N/A')}
+Email: {application_data.get('email', 'N/A')}
+Nationality: {application_data.get('nationality', 'N/A')}
+Passport Number: {application_data.get('passport_number', 'N/A')}
+Passport Country: {application_data.get('passport_country_code', 'N/A')}
+Date of Birth: {application_data.get('date_of_birth', 'N/A')}
+Gender: {application_data.get('gender', 'N/A')}
+Travel Date: {application_data.get('travel_date', 'N/A')}
 
 === PAYMENT DETAILS ===
 Amount Paid: ${payment_data.get('amount_paid', 'N/A')}
 Payment Method: {payment_data.get('payment_method', 'N/A')}
 Transaction ID: {payment_data.get('transaction_id', 'N/A')}
 Payment Status: {payment_data.get('payment_status', 'N/A')}
-
-=== TRAVELERS ({len(travelers_data)}) ===
-{travelers_text}
 """
 
     # HTML version
@@ -542,44 +475,48 @@ Payment Status: {payment_data.get('payment_status', 'N/A')}
 <body>
     <div class="container">
         <div class="header">
-            <h1>🆕 New Order Received</h1>
+            <h1>\U0001f195 New Canada eTA Order</h1>
             <div class="reference">Reference: {reference_number}</div>
         </div>
 
         <div class="section">
-            <h2>Application Details</h2>
+            <h2>Applicant Details</h2>
             <table>
                 <tr>
-                    <td>Departure Country:</td>
-                    <td>{application_data.get('departure_country', 'N/A')}</td>
+                    <td>Surname:</td>
+                    <td>{application_data.get('surname', 'N/A')}</td>
                 </tr>
                 <tr>
-                    <td>Departure City:</td>
-                    <td>{application_data.get('departure_city', 'N/A')}</td>
+                    <td>Given Names:</td>
+                    <td>{application_data.get('given_names', 'N/A')}</td>
                 </tr>
                 <tr>
-                    <td>Departure Date:</td>
-                    <td>{application_data.get('departure_date', 'N/A')}</td>
+                    <td>Email:</td>
+                    <td>{application_data.get('email', 'N/A')}</td>
                 </tr>
                 <tr>
-                    <td>Mode of Travel:</td>
-                    <td>{application_data.get('mode_of_travel', 'N/A')}</td>
+                    <td>Nationality:</td>
+                    <td>{application_data.get('nationality', 'N/A')}</td>
                 </tr>
                 <tr>
-                    <td>Flight Number:</td>
-                    <td>{application_data.get('flight_number', 'N/A')}</td>
+                    <td>Passport Number:</td>
+                    <td>{application_data.get('passport_number', 'N/A')}</td>
                 </tr>
                 <tr>
-                    <td>Accommodation Type:</td>
-                    <td>{application_data.get('accommodation_type', 'N/A')}</td>
+                    <td>Passport Country:</td>
+                    <td>{application_data.get('passport_country_code', 'N/A')}</td>
                 </tr>
                 <tr>
-                    <td>Accommodation Province:</td>
-                    <td>{application_data.get('accommodation_province', 'N/A')}</td>
+                    <td>Date of Birth:</td>
+                    <td>{application_data.get('date_of_birth', 'N/A')}</td>
                 </tr>
                 <tr>
-                    <td>Accommodation Details:</td>
-                    <td>{application_data.get('accommodation_details', 'N/A')}</td>
+                    <td>Gender:</td>
+                    <td>{application_data.get('gender', 'N/A')}</td>
+                </tr>
+                <tr>
+                    <td>Travel Date:</td>
+                    <td>{application_data.get('travel_date', 'N/A')}</td>
                 </tr>
             </table>
         </div>
@@ -606,13 +543,8 @@ Payment Status: {payment_data.get('payment_status', 'N/A')}
             </table>
         </div>
 
-        <div class="section">
-            <h2>Travelers ({len(travelers_data)})</h2>
-            {travelers_html}
-        </div>
-
         <div class="footer">
-            <p>This is an automated notification from Curaçao eArrival Form system.</p>
+            <p>This is an automated notification from the Canada eTA system.</p>
         </div>
     </div>
 </body>
@@ -625,7 +557,7 @@ Payment Status: {payment_data.get('payment_status', 'N/A')}
             MAILGUN_API_URL,
             auth=("api", MAILGUN_API_KEY),
             data={
-                "from": f"CDIC Service <{MAILGUN_FROM_EMAIL}>",
+                "from": f"Canada eTA Service <{MAILGUN_FROM_EMAIL}>",
                 "to": internal_emails,
                 "subject": subject,
                 "text": text_content,
@@ -669,7 +601,7 @@ def send_contact_form_notification(
         print("❌ Mailgun not configured. Skipping contact form notification.")
         return False
 
-    internal_emails = ["contact@octoservicesinc.com", "help@earrival-support.com", "2-octo-customer-servi-aaaar34iipzvepcbkrbe4c6nza@octo-services.slack.com"]
+    internal_emails = ["contact@octoservicesinc.com", "help@canadaeta-support.com", "2-octo-customer-servi-aaaar34iipzvepcbkrbe4c6nza@octo-services.slack.com"]
     subject = f"New Contact Form Submission: {contact_data.get('subject', 'General Inquiry')}"
 
     # Plain text version
@@ -780,7 +712,7 @@ Submitted at: {contact_data.get('created_at', 'N/A')}
 <body>
     <div class="container">
         <div class="header">
-            <h1>📧 New Contact Form Submission</h1>
+            <h1>\U0001f4e7 New Contact Form Submission</h1>
         </div>
 
         <div class="section">
@@ -813,7 +745,7 @@ Submitted at: {contact_data.get('created_at', 'N/A')}
         </div>
 
         <div class="footer">
-            <p>This is an automated notification from Curaçao eArrival Form system.</p>
+            <p>This is an automated notification from the Canada eTA system.</p>
         </div>
     </div>
 </body>
@@ -826,7 +758,7 @@ Submitted at: {contact_data.get('created_at', 'N/A')}
             MAILGUN_API_URL,
             auth=("api", MAILGUN_API_KEY),
             data={
-                "from": f"CDIC Service Contact <{MAILGUN_FROM_EMAIL}>",
+                "from": f"Canada eTA Service Contact <{MAILGUN_FROM_EMAIL}>",
                 "to": internal_emails,
                 "subject": subject,
                 "text": text_content,
@@ -868,7 +800,7 @@ def send_contact_form_confirmation(
         return False
 
     # Email subject
-    subject = "We've received your inquiry - Curaçao eArrival Form"
+    subject = "We've received your inquiry - Canada eTA"
 
     # Plain text version
     text_content = f"""Hi {customer_name},
@@ -877,7 +809,7 @@ Thanks for reaching out! We've received your inquiry and will get back to you sh
 Our team is on it, and we aim to respond within 0-6 business hours.
 
 Best Regards,
-The CDIC Service Team
+The Canada eTA Service Team
 """
 
     # HTML version
@@ -931,7 +863,7 @@ The CDIC Service Team
 <body>
     <div class="container">
         <div class="header">
-            <h1>🇨🇼 Curaçao eArrival Form</h1>
+            <h1>\U0001f1e8\U0001f1e6 Canada eTA</h1>
         </div>
 
         <div class="content">
@@ -943,7 +875,7 @@ The CDIC Service Team
 
         <div class="footer">
             <p>Best Regards,<br>
-            <strong>The CDIC Service Team</strong></p>
+            <strong>The Canada eTA Service Team</strong></p>
         </div>
     </div>
 </body>
@@ -956,7 +888,7 @@ The CDIC Service Team
             MAILGUN_API_URL,
             auth=("api", MAILGUN_API_KEY),
             data={
-                "from": f"Curaçao eArrival Form <{MAILGUN_FROM_EMAIL}>",
+                "from": f"Canada eTA <{MAILGUN_FROM_EMAIL}>",
                 "to": [to_email],
                 "subject": subject,
                 "text": text_content,
@@ -1035,7 +967,7 @@ Failed: {job_result.get('failed', 0)}
             MAILGUN_API_URL,
             auth=("api", MAILGUN_API_KEY),
             data={
-                "from": f"CDIC Service <{MAILGUN_FROM_EMAIL}>",
+                "from": f"Canada eTA Service <{MAILGUN_FROM_EMAIL}>",
                 "to": admin_email,
                 "subject": subject,
                 "text": report
@@ -1067,7 +999,7 @@ def send_refund_confirmation_email(
     Args:
         to_email: Customer's email address
         customer_name: Customer's name
-        reference_number: Application reference number (TDAC-XXXXXX)
+        reference_number: Application reference number (CETA-XXXXXX)
         amount_refunded: Amount that was refunded/voided
 
     Returns:
@@ -1095,10 +1027,10 @@ This will appear on your statement as either:
 
 Please note: It may take 3-5 business days for this to reflect in your account, depending on your bank or card issuer.
 
-If you have any questions, please contact our support team at help@earrival-support.com
+If you have any questions, please contact our support team at help@canadaeta-support.com
 
 Best regards,
-The CDIC Service Team
+The Canada eTA Service Team
 """
 
     # HTML version
@@ -1219,12 +1151,12 @@ The CDIC Service Team
                 </p>
             </div>
 
-            <p>If you have any questions, please contact our support team at <a href="mailto:help@earrival-support.com">help@earrival-support.com</a>.</p>
+            <p>If you have any questions, please contact our support team at <a href="mailto:help@canadaeta-support.com">help@canadaeta-support.com</a>.</p>
         </div>
 
         <div class="footer">
             <p>Best regards,<br>
-            <strong>The CDIC Service Team</strong></p>
+            <strong>The Canada eTA Service Team</strong></p>
         </div>
     </div>
 </body>
@@ -1236,12 +1168,12 @@ The CDIC Service Team
             MAILGUN_API_URL,
             auth=("api", MAILGUN_API_KEY),
             data={
-                "from": f"Curaçao eArrival Form <{MAILGUN_FROM_EMAIL}>",
+                "from": f"Canada eTA <{MAILGUN_FROM_EMAIL}>",
                 "to": [to_email],
                 "subject": subject,
                 "text": text_content,
                 "html": html_content,
-                "h:Reply-To": "Earrival Support <help@earrival-support.com>"
+                "h:Reply-To": "Canada eTA Support <help@canadaeta-support.com>"
             },
             timeout=10
         )
@@ -1257,5 +1189,3 @@ The CDIC Service Team
     except Exception as e:
         print(f"❌ Error sending refund confirmation email: {str(e)}")
         return False
-
-

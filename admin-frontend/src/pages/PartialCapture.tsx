@@ -239,7 +239,7 @@ const PartialCapture = () => {
               <div className="flex-1 flex gap-2">
                 <Input
                   placeholder={
-                    searchType === 'session_id' ? 'CDIC-XXXXXX' :
+                    searchType === 'session_id' ? 'CETA-XXXXXX' :
                     searchType === 'email' ? 'customer@example.com' :
                     'Authorization ID'
                   }

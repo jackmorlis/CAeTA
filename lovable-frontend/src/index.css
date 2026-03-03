@@ -17,11 +17,11 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    /* Blue theme based on #0167d7 */
-    --primary: 211 99% 42%;
+    /* Navy blue theme matching Canada eTA logo */
+    --primary: 213 66% 42%;
     --primary-foreground: 0 0% 100%;
-    --primary-light: 211 99% 52%;
-    --primary-dark: 211 99% 32%;
+    --primary-light: 213 66% 52%;
+    --primary-dark: 213 66% 32%;
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 213 81% 15%;
@@ -74,10 +74,10 @@ All colors MUST be HSL.
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 211 99% 42%;
+    --primary: 213 66% 42%;
     --primary-foreground: 0 0% 100%;
-    --primary-light: 211 99% 52%;
-    --primary-dark: 211 99% 32%;
+    --primary-light: 213 66% 52%;
+    --primary-dark: 213 66% 32%;
 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;

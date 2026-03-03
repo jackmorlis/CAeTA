@@ -5,9 +5,9 @@ from fastapi.responses import JSONResponse, StreamingResponse
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from pydantic import BaseModel, EmailStr, Field, validator, ValidationError
-from sqlalchemy import create_engine, Column, String, DateTime, Date, Numeric, ForeignKey, Text, JSON, func, event
+from sqlalchemy import create_engine, Column, String, DateTime, Date, Boolean, Numeric, ForeignKey, Text, JSON, func, event
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session, relationship
+from sqlalchemy.orm import sessionmaker, Session
 from datetime import datetime, date
 from contextlib import asynccontextmanager
 from typing import List, Optional
@@ -89,60 +89,38 @@ class Application(Base):
     session_id = Column(String, unique=True, nullable=False, index=True)
     status = Column(String, nullable=False, default="pending")  # pending, paid, submitted, completed
 
-    # General Information (Step 1 equivalent)
-    permanent_address = Column(String, nullable=True)  # Permanent address
-    country_of_residence = Column(String, nullable=True)  # Country of residence
-    city_of_residence = Column(String, nullable=True)  # City of residence
-    direction = Column(String(50), nullable=True)  # 'arrival' or 'departure'
-    stops_other_countries = Column(String(10), nullable=True)  # 'yes' or 'no'
-
-    # Travel / Flight Information
-    departure_country = Column(String, nullable=True)  # Embarkation country
-    embarkation_port = Column(String, nullable=True)  # Airport/port of departure (free-text)
-    disembarkation_port = Column(String, nullable=True)  # DR airport (IATA code or name)
-    airline_name = Column(String, nullable=True)  # Airline name (free-text)
-    flight_number = Column(String, nullable=True)  # Flight number
-    flight_date = Column(Date, nullable=True)  # Flight date
-    arrival_date = Column(Date, nullable=True)  # Arrival date
-    departure_date = Column(Date, nullable=True)  # Departure date
-
-    # Trip details
-    travel_purpose = Column(String, nullable=True)  # Purpose of travel
-    sports_during_stay = Column(String, nullable=True)  # Sports during stay (legacy — removed from form)
-
-    # Return / Departure flight information
-    return_departure_airport = Column(String, nullable=True)  # DR airport for departure
-    return_destination_airport = Column(String, nullable=True)  # Destination airport (free-text)
-    return_airline_name = Column(String, nullable=True)  # Return airline name
-    return_flight_date = Column(Date, nullable=True)  # Return flight date
-    return_flight_number = Column(String, nullable=True)  # Return flight number
-
-    # Accommodation information
-    accommodation_type = Column(String, nullable=True)  # Accommodation type
-    accommodation_details = Column(Text, nullable=True)  # Full accommodation address (free-text)
-
-    # Customs — Currency Declaration
-    exceeds_money_limit = Column(String(10), nullable=True)  # 'yes' or 'no' — carrying >$10K USD
-    currency_amount = Column(Numeric(12, 2), nullable=True)  # Amount if exceeds limit
-    currency_type = Column(String(10), nullable=True)  # Currency code (USD, EUR, etc.)
-    currency_origin = Column(Text, nullable=True)  # Origin/source of securities
-    is_values_owner = Column(String(10), nullable=True)  # 'yes' or 'no'
-    sender_name = Column(String, nullable=True)  # If not owner
-    sender_last_name = Column(String, nullable=True)
-    receiver_name = Column(String, nullable=True)
-    receiver_last_name = Column(String, nullable=True)
-    relationship_sender = Column(String, nullable=True)  # Relationship with sender/receiver
-    money_use_destiny = Column(String, nullable=True)  # Use/destiny of money
-
-    # Customs — Animals/Food
-    has_animals_or_food = Column(String(10), nullable=True)  # 'yes' or 'no'
-
-    # Customs — Taxable Goods
-    has_taxable_goods = Column(String(10), nullable=True)  # 'yes' or 'no'
-    taxable_value = Column(Numeric(12, 2), nullable=True)  # Approximate value
-    taxable_currency = Column(String(10), nullable=True)  # Currency code
-    taxable_description = Column(Text, nullable=True)  # Merchandise description
-    taxable_value_usd = Column(String, nullable=True)  # Value in USD
+    # Canada eTA applicant fields
+    applying_on_behalf = Column(String, nullable=True)
+    travel_document_type = Column(String, nullable=True)
+    passport_country_code = Column(String, nullable=True)
+    nationality = Column(String, nullable=True)
+    passport_number = Column(String, nullable=True)
+    surname = Column(String, nullable=True)
+    given_names = Column(String, nullable=True)
+    date_of_birth = Column(String, nullable=True)
+    gender = Column(String, nullable=True)
+    country_of_birth = Column(String, nullable=True)
+    city_of_birth = Column(String, nullable=True)
+    passport_issue_date = Column(String, nullable=True)
+    passport_expiry_date = Column(String, nullable=True)
+    additional_nationalities = Column(JSON, nullable=True)  # array of strings, max 5
+    previous_canada_visa = Column(String, nullable=True)
+    uci_number = Column(String, nullable=True)
+    language_preference = Column(String, nullable=True)
+    email = Column(String, nullable=True)
+    apartment_unit = Column(String, nullable=True)
+    street_address = Column(String, nullable=True)
+    city = Column(String, nullable=True)
+    country_residence = Column(String, nullable=True)
+    district_region = Column(String, nullable=True)
+    postal_code = Column(String, nullable=True)
+    travel_date_known = Column(String, nullable=True)
+    travel_date = Column(String, nullable=True)
+    travel_hour = Column(String, nullable=True)
+    travel_minute = Column(String, nullable=True)
+    travel_timezone = Column(String, nullable=True)
+    consent_agreed = Column(Boolean, nullable=True)
+    signature = Column(String, nullable=True)
 
     processing_option = Column(String(50), nullable=True, default="standard")  # 'standard', 'fast', 'ultra'
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
@@ -173,46 +151,6 @@ class Application(Base):
 
     # Device fingerprint
     device_fingerprint = Column(JSON, nullable=True)  # Browser/device fingerprint data
-
-    # Relationship
-    travelers = relationship("Traveler", back_populates="application", cascade="all, delete-orphan")
-
-
-class Traveler(Base):
-    __tablename__ = "travelers"
-
-    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
-    application_id = Column(String, ForeignKey("applications.id", ondelete="CASCADE"), nullable=False)
-
-    # Personal information
-    first_name = Column(String, nullable=False)
-    last_name = Column(String, nullable=False)
-    date_of_birth = Column(Date, nullable=False)
-    gender = Column(String, nullable=False)  # male, female (masculine, feminine)
-    place_of_birth = Column(String, nullable=True)  # Country of birth
-    nationality = Column(String, nullable=False)  # Country of citizenship
-    civil_status = Column(String, nullable=True)  # Single, Married, Concubinage, Free Union, Others
-    occupation = Column(String, nullable=True)  # 9 options from official form
-
-    # Passport information
-    passport_number = Column(String, nullable=False)
-    passport_expiry_date = Column(Date, nullable=True)  # Passport expiry date
-
-    # Contact information (only required for primary traveler)
-    email = Column(String, nullable=True)
-    phone_code = Column(String, nullable=True)
-    phone = Column(String, nullable=True)
-
-    # Address (per-traveler for group travel)
-    residential_address = Column(String, nullable=True)  # Residential address (moved from application level)
-    country_of_residence = Column(String, nullable=True)
-    city = Column(String, nullable=True)
-    state_province = Column(String, nullable=True)
-
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
-
-    # Relationship
-    application = relationship("Application", back_populates="travelers")
 
 
 class ContactSubmission(Base):
@@ -273,123 +211,41 @@ class PaymentLog(Base):
 
 # ===== Pydantic Schemas =====
 
-class TravelerCreate(BaseModel):
-    # Personal information
-    first_name: str
-    last_name: str
-    date_of_birth: date
-    gender: str  # male, female
-    place_of_birth: Optional[str] = None  # Country of birth
-    nationality: str
-    civil_status: Optional[str] = None  # Single, Married, Concubinage, Free Union, Others
-    occupation: Optional[str] = None  # 9 options from official form
-
-    # Passport
-    passport_number: str
-    passport_expiry_date: Optional[date] = None
-
-    # Contact (only required for primary traveler, optional for additional travelers)
-    email: Optional[EmailStr] = None
-    phone_code: Optional[str] = None
-    phone: Optional[str] = None
-
-    # Address
-    country_of_residence: Optional[str] = None
-    city: Optional[str] = None
-    state_province: Optional[str] = None
-    residential_address: Optional[str] = None  # Moved from application level
-
-    @validator('gender')
-    def validate_gender(cls, v):
-        if v not in ['male', 'female']:
-            raise ValueError('Gender must be either "male" or "female"')
-        return v
-
-
-class TravelerResponse(BaseModel):
-    id: uuid.UUID
-    application_id: uuid.UUID
-    first_name: str
-    last_name: str
-    date_of_birth: date
-    gender: str
-    place_of_birth: Optional[str]
-    nationality: str
-    civil_status: Optional[str]
-    occupation: Optional[str]
-    passport_number: str
-    passport_expiry_date: Optional[date]
-    email: Optional[str]
-    phone_code: Optional[str]
-    phone: Optional[str]
-    country_of_residence: Optional[str]
-    city: Optional[str]
-    state_province: Optional[str]
-    residential_address: Optional[str]
-    created_at: datetime
-
-    class Config:
-        from_attributes = True
-
-
 class ApplicationCreate(BaseModel):
-    # General Information
-    permanent_address: Optional[str] = None
-    country_of_residence: Optional[str] = None
-    city_of_residence: Optional[str] = None
-    direction: Optional[str] = None  # 'arrival' or 'departure'
-    stops_other_countries: Optional[str] = None  # 'yes' or 'no'
-
-    # Travel / Flight Information
-    departure_country: Optional[str] = None  # Embarkation country
-    embarkation_port: Optional[str] = None  # Airport/port (free-text)
-    disembarkation_port: Optional[str] = None  # DR airport
-    airline_name: Optional[str] = None  # Airline (free-text)
-    flight_number: Optional[str] = None
-    flight_date: Optional[date] = None
-    arrival_date: Optional[date] = None
-    departure_date: Optional[date] = None
-
-    # Trip details
-    travel_purpose: Optional[str] = None
-    sports_during_stay: Optional[str] = None  # Legacy — removed from form
-
-    # Return / Departure flight information
-    return_departure_airport: Optional[str] = None
-    return_destination_airport: Optional[str] = None
-    return_airline_name: Optional[str] = None
-    return_flight_date: Optional[date] = None
-    return_flight_number: Optional[str] = None
-
-    # Accommodation
-    accommodation_type: Optional[str] = None
-    accommodation_details: Optional[str] = None  # Full address (free-text)
-
-    # Customs — Currency
-    exceeds_money_limit: Optional[str] = None  # 'yes' or 'no'
-    currency_amount: Optional[float] = None
-    currency_type: Optional[str] = None
-    currency_origin: Optional[str] = None
-    is_values_owner: Optional[str] = None  # 'yes' or 'no'
-    sender_name: Optional[str] = None
-    sender_last_name: Optional[str] = None
-    receiver_name: Optional[str] = None
-    receiver_last_name: Optional[str] = None
-    relationship_sender: Optional[str] = None
-    money_use_destiny: Optional[str] = None
-
-    # Customs — Animals/Food
-    has_animals_or_food: Optional[str] = None  # 'yes' or 'no'
-
-    # Customs — Taxable Goods
-    has_taxable_goods: Optional[str] = None  # 'yes' or 'no'
-    taxable_value: Optional[float] = None
-    taxable_currency: Optional[str] = None
-    taxable_description: Optional[str] = None
-    taxable_value_usd: Optional[str] = None
+    # Canada eTA applicant fields
+    applying_on_behalf: Optional[str] = None
+    travel_document_type: Optional[str] = None
+    passport_country_code: Optional[str] = None
+    nationality: Optional[str] = None
+    passport_number: Optional[str] = None
+    surname: Optional[str] = None
+    given_names: Optional[str] = None
+    date_of_birth: Optional[str] = None
+    gender: Optional[str] = None
+    country_of_birth: Optional[str] = None
+    city_of_birth: Optional[str] = None
+    passport_issue_date: Optional[str] = None
+    passport_expiry_date: Optional[str] = None
+    additional_nationalities: Optional[List[str]] = None  # array of strings, max 5
+    previous_canada_visa: Optional[str] = None
+    uci_number: Optional[str] = None
+    language_preference: Optional[str] = None
+    email: Optional[str] = None
+    apartment_unit: Optional[str] = None
+    street_address: Optional[str] = None
+    city: Optional[str] = None
+    country_residence: Optional[str] = None
+    district_region: Optional[str] = None
+    postal_code: Optional[str] = None
+    travel_date_known: Optional[str] = None
+    travel_date: Optional[str] = None
+    travel_hour: Optional[str] = None
+    travel_minute: Optional[str] = None
+    travel_timezone: Optional[str] = None
+    consent_agreed: Optional[bool] = None
+    signature: Optional[str] = None
 
     processing_option: Optional[str] = "standard"  # 'standard', 'fast', 'ultra'
-    travelers: List[TravelerCreate] = Field(..., min_items=1, max_items=5)
 
     # Payment fields (optional - filled after payment)
     payment_method: Optional[str] = None
@@ -408,10 +264,10 @@ class ApplicationCreate(BaseModel):
     # Device fingerprint
     device_fingerprint: Optional[dict] = None
 
-    @validator('travelers')
-    def validate_travelers_count(cls, v):
-        if len(v) < 1 or len(v) > 5:
-            raise ValueError('Must have between 1 and 5 travelers')
+    @validator('additional_nationalities')
+    def validate_additional_nationalities(cls, v):
+        if v is not None and len(v) > 5:
+            raise ValueError('Maximum 5 additional nationalities allowed')
         return v
 
 
@@ -420,60 +276,38 @@ class ApplicationResponse(BaseModel):
     session_id: str
     status: str
 
-    # General Information
-    permanent_address: Optional[str]
-    country_of_residence: Optional[str]
-    city_of_residence: Optional[str]
-    direction: Optional[str]
-    stops_other_countries: Optional[str]
-
-    # Travel / Flight
-    departure_country: Optional[str]
-    embarkation_port: Optional[str]
-    disembarkation_port: Optional[str]
-    airline_name: Optional[str]
-    flight_number: Optional[str]
-    flight_date: Optional[date]
-    arrival_date: Optional[date]
-    departure_date: Optional[date]
-
-    # Trip details
-    travel_purpose: Optional[str]
-    sports_during_stay: Optional[str]
-
-    # Return / Departure flight information
-    return_departure_airport: Optional[str]
-    return_destination_airport: Optional[str]
-    return_airline_name: Optional[str]
-    return_flight_date: Optional[date]
-    return_flight_number: Optional[str]
-
-    # Accommodation
-    accommodation_type: Optional[str]
-    accommodation_details: Optional[str]
-
-    # Customs — Currency
-    exceeds_money_limit: Optional[str]
-    currency_amount: Optional[float]
-    currency_type: Optional[str]
-    currency_origin: Optional[str]
-    is_values_owner: Optional[str]
-    sender_name: Optional[str]
-    sender_last_name: Optional[str]
-    receiver_name: Optional[str]
-    receiver_last_name: Optional[str]
-    relationship_sender: Optional[str]
-    money_use_destiny: Optional[str]
-
-    # Customs — Animals/Food
-    has_animals_or_food: Optional[str]
-
-    # Customs — Taxable Goods
-    has_taxable_goods: Optional[str]
-    taxable_value: Optional[float]
-    taxable_currency: Optional[str]
-    taxable_description: Optional[str]
-    taxable_value_usd: Optional[str]
+    # Canada eTA applicant fields
+    applying_on_behalf: Optional[str]
+    travel_document_type: Optional[str]
+    passport_country_code: Optional[str]
+    nationality: Optional[str]
+    passport_number: Optional[str]
+    surname: Optional[str]
+    given_names: Optional[str]
+    date_of_birth: Optional[str]
+    gender: Optional[str]
+    country_of_birth: Optional[str]
+    city_of_birth: Optional[str]
+    passport_issue_date: Optional[str]
+    passport_expiry_date: Optional[str]
+    additional_nationalities: Optional[List[str]]
+    previous_canada_visa: Optional[str]
+    uci_number: Optional[str]
+    language_preference: Optional[str]
+    email: Optional[str]
+    apartment_unit: Optional[str]
+    street_address: Optional[str]
+    city: Optional[str]
+    country_residence: Optional[str]
+    district_region: Optional[str]
+    postal_code: Optional[str]
+    travel_date_known: Optional[str]
+    travel_date: Optional[str]
+    travel_hour: Optional[str]
+    travel_minute: Optional[str]
+    travel_timezone: Optional[str]
+    consent_agreed: Optional[bool]
+    signature: Optional[str]
 
     processing_option: Optional[str]
     created_at: datetime
@@ -496,7 +330,6 @@ class ApplicationResponse(BaseModel):
     delivery_email_sent_at: Optional[datetime]
     redtrack_click_id: Optional[str]
     device_fingerprint: Optional[dict]
-    travelers: List[TravelerResponse]
 
     class Config:
         from_attributes = True
@@ -546,7 +379,7 @@ class ContactResponse(BaseModel):
 class CreateOrderRequest(BaseModel):
     amount: str
     currency: str = "USD"
-    description: str = "DAC Assistance — Service Fee"
+    description: str = "Canada eTA Assistance — Service Fee"
     return_url: Optional[str] = None
     cancel_url: Optional[str] = None
 
@@ -698,11 +531,11 @@ def verify_token(token: str) -> Optional[dict]:
         return None
 
 def generate_reference_number(db: Session) -> str:
-    """Generate a short, unique reference number in format CDIC-XXXXXX"""
+    """Generate a short, unique reference number in format CETA-XXXXXX"""
     while True:
         # Generate 6 random alphanumeric characters (uppercase)
         random_chars = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-        reference = f"CDIC-{random_chars}"
+        reference = f"CETA-{random_chars}"
 
         # Check if it already exists in database
         exists = db.query(Application).filter(Application.session_id == reference).first()
@@ -873,14 +706,12 @@ def log_payment_event(
         db.refresh(log_entry)
 
         # Optional: Print minimal debug line for real-time monitoring
-        emoji = "💳" if "create" in event_type else "💰" if "capture" in event_type else "🔍"
-        status_emoji = "✅" if "success" in event_type else "❌" if "error" in event_type else "⚠️" if "rejected" in event_type else "📥"
-        print(f"{emoji} {status_emoji} {event_type.upper()} - Order: {order_id or 'N/A'} - {datetime.utcnow().isoformat()}")
+        print(f"[PAYMENT] {event_type.upper()} - Order: {order_id or 'N/A'} - {datetime.utcnow().isoformat()}")
 
         return log_entry
 
     except Exception as e:
-        print(f"⚠️ Failed to log payment event: {str(e)}")
+        print(f"WARNING: Failed to log payment event: {str(e)}")
         db.rollback()
         # Don't fail the payment flow if logging fails
         return None
@@ -892,7 +723,7 @@ def log_payment_event(
 async def lifespan(app: FastAPI):
     # Startup: Create database tables
     Base.metadata.create_all(bind=engine)
-    print("✅ Database tables created successfully")
+    print("Database tables created successfully")
     yield
     # Shutdown: cleanup if needed
     pass
@@ -901,8 +732,8 @@ async def lifespan(app: FastAPI):
 # ===== FastAPI App =====
 
 app = FastAPI(
-    title="Curaçao Digital Immigration Card Service API",
-    description="API for Curaçao Digital Immigration Card form submission service",
+    title="Canada eTA Service API",
+    description="API for Canada Electronic Travel Authorization (eTA) application service",
     version="1.0.0",
     lifespan=lifespan
 )
@@ -913,7 +744,7 @@ def get_real_client_ip(request: Request) -> str:
     Get the real client IP address, accounting for Cloudflare and other proxies.
 
     Priority order:
-    1. CF-Connecting-IP (Cloudflare header) ← Most reliable when behind Cloudflare
+    1. CF-Connecting-IP (Cloudflare header) - Most reliable when behind Cloudflare
     2. X-Forwarded-For (standard proxy header, first IP in chain)
     3. X-Real-IP (nginx proxy header)
     4. request.client.host (fallback, direct connection)
@@ -963,7 +794,7 @@ async def custom_rate_limit_handler(request: Request, exc: RateLimitExceeded):
 
     # Structured logging
     print("=" * 80)
-    print(f"⚠️  RATE LIMIT EXCEEDED - {datetime.utcnow().isoformat()}")
+    print(f"RATE LIMIT EXCEEDED - {datetime.utcnow().isoformat()}")
     print(f"Real Client IP: {client_ip}")
     print(f"CF-Connecting-IP: {cf_ip}")
     print(f"X-Forwarded-For: {x_forwarded}")
@@ -1029,7 +860,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 @limiter.limit("100/minute")
 async def root(request: Request):
     return {
-        "message": "Curaçao Digital Immigration Card Service API",
+        "message": "Canada eTA Service API",
         "version": "1.0.0",
         "status": "running"
     }
@@ -1059,61 +890,46 @@ async def get_paypal_client_id(request: Request):
 @app.post("/api/applications", response_model=ApplicationResponse, status_code=201)
 @limiter.limit("20/minute")
 async def create_application(request: Request, application: ApplicationCreate, db: Session = Depends(get_db)):
-    """Create a new visa application with travelers"""
+    """Create a new Canada eTA application"""
     try:
-        # Generate unique reference number (short format: CDIC-XXXXXX)
+        # Generate unique reference number (short format: CETA-XXXXXX)
         session_id = generate_reference_number(db)
 
-        # Create application
+        # Create application with all flat applicant fields
         db_application = Application(
             session_id=session_id,
-            # General Information
-            permanent_address=application.permanent_address,
-            country_of_residence=application.country_of_residence,
-            city_of_residence=application.city_of_residence,
-            direction=application.direction,
-            stops_other_countries=application.stops_other_countries,
-            # Travel / Flight
-            departure_country=application.departure_country,
-            embarkation_port=application.embarkation_port,
-            disembarkation_port=application.disembarkation_port,
-            airline_name=application.airline_name,
-            flight_number=application.flight_number,
-            flight_date=application.flight_date,
-            arrival_date=application.arrival_date,
-            departure_date=application.departure_date,
-            # Trip details
-            travel_purpose=application.travel_purpose,
-            sports_during_stay=application.sports_during_stay,
-            # Return / Departure flight information
-            return_departure_airport=application.return_departure_airport,
-            return_destination_airport=application.return_destination_airport,
-            return_airline_name=application.return_airline_name,
-            return_flight_date=application.return_flight_date,
-            return_flight_number=application.return_flight_number,
-            # Accommodation
-            accommodation_type=application.accommodation_type,
-            accommodation_details=application.accommodation_details,
-            # Customs — Currency
-            exceeds_money_limit=application.exceeds_money_limit,
-            currency_amount=application.currency_amount,
-            currency_type=application.currency_type,
-            currency_origin=application.currency_origin,
-            is_values_owner=application.is_values_owner,
-            sender_name=application.sender_name,
-            sender_last_name=application.sender_last_name,
-            receiver_name=application.receiver_name,
-            receiver_last_name=application.receiver_last_name,
-            relationship_sender=application.relationship_sender,
-            money_use_destiny=application.money_use_destiny,
-            # Customs — Animals/Food
-            has_animals_or_food=application.has_animals_or_food,
-            # Customs — Taxable Goods
-            has_taxable_goods=application.has_taxable_goods,
-            taxable_value=application.taxable_value,
-            taxable_currency=application.taxable_currency,
-            taxable_description=application.taxable_description,
-            taxable_value_usd=application.taxable_value_usd,
+            # Canada eTA applicant fields
+            applying_on_behalf=application.applying_on_behalf,
+            travel_document_type=application.travel_document_type,
+            passport_country_code=application.passport_country_code,
+            nationality=application.nationality,
+            passport_number=application.passport_number,
+            surname=application.surname,
+            given_names=application.given_names,
+            date_of_birth=application.date_of_birth,
+            gender=application.gender,
+            country_of_birth=application.country_of_birth,
+            city_of_birth=application.city_of_birth,
+            passport_issue_date=application.passport_issue_date,
+            passport_expiry_date=application.passport_expiry_date,
+            additional_nationalities=application.additional_nationalities,
+            previous_canada_visa=application.previous_canada_visa,
+            uci_number=application.uci_number,
+            language_preference=application.language_preference,
+            email=application.email,
+            apartment_unit=application.apartment_unit,
+            street_address=application.street_address,
+            city=application.city,
+            country_residence=application.country_residence,
+            district_region=application.district_region,
+            postal_code=application.postal_code,
+            travel_date_known=application.travel_date_known,
+            travel_date=application.travel_date,
+            travel_hour=application.travel_hour,
+            travel_minute=application.travel_minute,
+            travel_timezone=application.travel_timezone,
+            consent_agreed=application.consent_agreed,
+            signature=application.signature,
             # Processing & Payment
             processing_option=application.processing_option or "standard",
             payment_method=application.payment_method,
@@ -1131,67 +947,49 @@ async def create_application(request: Request, application: ApplicationCreate, d
             authorized_at=datetime.utcnow() if application.authorization_id else None,
         )
         db.add(db_application)
-        db.flush()  # Get the application ID
-
-        # Create travelers
-        for traveler_data in application.travelers:
-            db_traveler = Traveler(
-                application_id=db_application.id,
-                **traveler_data.dict()
-            )
-            db.add(db_traveler)
-
         db.commit()
         db.refresh(db_application)
 
         # Send payment confirmation email and internal notification when payment is authorized (pre-auth)
         # Also trigger on 'pending' with authorization_id for backwards compatibility with cached frontend
-        if application.payment_status in ("authorized", "pending") and application.authorization_id and application.travelers:
+        if application.payment_status in ("authorized", "pending") and application.authorization_id:
             try:
-                first_traveler = application.travelers[0]
-                customer_name = f"{first_traveler.first_name} {first_traveler.last_name}"
-                customer_email = first_traveler.email
-
-                earliest_arrival_date = application.arrival_date
+                customer_name = f"{application.given_names or ''} {application.surname or ''}".strip() or "Applicant"
+                customer_email = application.email
 
                 # Send customer confirmation email with amount and order details
-                send_payment_confirmation_email(
-                    to_email=customer_email,
-                    customer_name=customer_name,
-                    reference_number=session_id,
-                    amount_paid=application.amount_paid,
-                    num_travelers=len(application.travelers),
-                    processing_option=application.processing_option,
-                    earliest_arrival_date=earliest_arrival_date
-                )
+                if customer_email:
+                    send_payment_confirmation_email(
+                        to_email=customer_email,
+                        customer_name=customer_name,
+                        reference_number=session_id,
+                        amount_paid=application.amount_paid,
+                        num_travelers=1,
+                        processing_option=application.processing_option,
+                        earliest_arrival_date=None
+                    )
 
                 # Send internal order notification
                 application_data = {
-                    'direction': application.direction or 'N/A',
-                    'departure_country': application.departure_country or 'N/A',
-                    'embarkation_port': application.embarkation_port or 'N/A',
-                    'disembarkation_port': application.disembarkation_port or 'N/A',
-                    'airline_name': application.airline_name or 'N/A',
-                    'flight_number': application.flight_number or 'N/A',
-                    'flight_date': str(application.flight_date) if application.flight_date else 'N/A',
-                    'travel_purpose': application.travel_purpose or 'N/A',
-                    'accommodation_type': application.accommodation_type or 'N/A',
-                    'accommodation_details': application.accommodation_details or 'N/A'
+                    'passport_country_code': application.passport_country_code or 'N/A',
+                    'nationality': application.nationality or 'N/A',
+                    'travel_document_type': application.travel_document_type or 'N/A',
+                    'travel_date': application.travel_date or 'N/A',
+                    'country_residence': application.country_residence or 'N/A',
                 }
 
                 travelers_data = [
                     {
-                        'first_name': t.first_name,
-                        'last_name': t.last_name,
-                        'passport_number': t.passport_number,
-                        'date_of_birth': str(t.date_of_birth),
-                        'gender': t.gender,
-                        'nationality': t.nationality,
-                        'email': t.email,
-                        'phone_code': t.phone_code,
-                        'phone': t.phone
+                        'first_name': application.given_names or '',
+                        'last_name': application.surname or '',
+                        'passport_number': application.passport_number or '',
+                        'date_of_birth': application.date_of_birth or '',
+                        'gender': application.gender or '',
+                        'nationality': application.nationality or '',
+                        'email': application.email or '',
+                        'phone_code': '',
+                        'phone': ''
                     }
-                    for t in application.travelers
                 ]
 
                 payment_data = {
@@ -1204,13 +1002,12 @@ async def create_application(request: Request, application: ApplicationCreate, d
                 send_internal_order_notification(
                     reference_number=session_id,
                     application_data=application_data,
-                    travelers_data=travelers_data,
                     payment_data=payment_data
                 )
 
             except Exception as email_error:
                 # Log but don't fail the request if email fails
-                print(f"⚠️ Failed to send emails: {str(email_error)}")
+                print(f"WARNING: Failed to send emails: {str(email_error)}")
 
         # Send RedTrack postback (after emails, before return) - fire on authorized (pre-auth)
         # Also trigger on 'pending' with authorization_id for backwards compatibility with cached frontend
@@ -1219,13 +1016,13 @@ async def create_application(request: Request, application: ApplicationCreate, d
                 postback_url = os.getenv("REDTRACK_POSTBACK_URL", "https://your-domain.rdtk.io/postback")
                 params = {
                     'clickid': application.redtrack_click_id,
-                    'campaign_id': '6991e8bb63c3c735141e609c',
+                    'campaign_id': os.getenv("REDTRACK_CAMPAIGN_ID", "69a554711137c5255e131055"),
                     'sum': f"{float(application.amount_paid):.2f}",
                 }
                 response = requests.get(postback_url, params=params, timeout=5)
-                print(f"✅ RedTrack postback sent: clickid={application.redtrack_click_id}, sum=${float(application.amount_paid):.2f}, status={response.status_code}")
+                print(f"RedTrack postback sent: clickid={application.redtrack_click_id}, sum=${float(application.amount_paid):.2f}, status={response.status_code}")
             except Exception as e:
-                print(f"⚠️ RedTrack postback failed (non-critical): {str(e)}")
+                print(f"WARNING: RedTrack postback failed (non-critical): {str(e)}")
 
         return db_application
 
@@ -1320,7 +1117,7 @@ async def create_contact_submission(request: Request, contact: ContactCreate, db
             )
         except Exception as email_error:
             # Log the error but don't fail the request
-            print(f"⚠️ Failed to send contact form emails: {str(email_error)}")
+            print(f"WARNING: Failed to send contact form emails: {str(email_error)}")
 
         return db_contact
 
@@ -1385,11 +1182,12 @@ async def get_all_applications(
 
     # Search by reference number, email, name, or payment IDs
     if search:
-        query = query.join(Traveler).filter(
+        query = query.filter(
             (Application.session_id.ilike(f"%{search}%")) |
-            (Traveler.email.ilike(f"%{search}%")) |
-            (Traveler.first_name.ilike(f"%{search}%")) |
-            (Traveler.last_name.ilike(f"%{search}%")) |
+            (Application.email.ilike(f"%{search}%")) |
+            (Application.given_names.ilike(f"%{search}%")) |
+            (Application.surname.ilike(f"%{search}%")) |
+            (Application.passport_number.ilike(f"%{search}%")) |
             (Application.authorization_id.ilike(f"%{search}%")) |
             (Application.capture_id.ilike(f"%{search}%")) |
             (Application.payment_order_id.ilike(f"%{search}%"))
@@ -1403,12 +1201,10 @@ async def get_all_applications(
     if fulfillment_status:
         query = query.filter(Application.fulfillment_status == fulfillment_status)
 
-    # Get total count before pagination (count distinct IDs to avoid JSON column comparison issues with DISTINCT)
+    # Get total count before pagination
     total = query.with_entities(func.count(func.distinct(Application.id))).scalar()
 
-    # Apply pagination — use group_by to deduplicate when search joins travelers
-    if search:
-        query = query.group_by(Application.id)
+    # Apply pagination
     applications = query.order_by(Application.created_at.desc()).offset(skip).limit(limit).all()
 
     return {"items": applications, "total": total}
@@ -1545,14 +1341,9 @@ async def lookup_application_for_capture(
             Application.session_id == search_value.strip()
         ).first()
     elif search_type == "email":
-        # Find application where any traveler has this email
-        traveler = db.query(Traveler).filter(
-            Traveler.email.ilike(search_value.strip())
+        application = db.query(Application).filter(
+            Application.email.ilike(search_value.strip())
         ).first()
-        if traveler:
-            application = db.query(Application).filter(
-                Application.id == traveler.application_id
-            ).first()
     elif search_type == "authorization_id":
         application = db.query(Application).filter(
             Application.authorization_id == search_value.strip()
@@ -1563,21 +1354,13 @@ async def lookup_application_for_capture(
     if not application:
         raise HTTPException(status_code=404, detail="Application not found")
 
-    # Get primary traveler email (first traveler)
-    primary_traveler = db.query(Traveler).filter(
-        Traveler.application_id == application.id
-    ).first()
-
-    traveler_count = db.query(Traveler).filter(
-        Traveler.application_id == application.id
-    ).count()
+    customer_name = f"{application.given_names or ''} {application.surname or ''}".strip() or None
 
     return {
         "id": str(application.id),
         "session_id": application.session_id,
-        "customer_email": primary_traveler.email if primary_traveler else None,
-        "customer_name": f"{primary_traveler.first_name} {primary_traveler.last_name}" if primary_traveler else None,
-        "traveler_count": traveler_count,
+        "customer_email": application.email,
+        "customer_name": customer_name,
         "amount_paid": float(application.amount_paid) if application.amount_paid else 0,
         "authorization_id": application.authorization_id,
         "authorization_status": application.authorization_status,
@@ -1651,12 +1434,12 @@ async def export_applications_csv(
     db: Session = Depends(get_db),
     _: dict = Depends(verify_admin_token)
 ):
-    """Export all applications to CSV (admin only - requires authentication)"""
+    """Export all Canada eTA applications to CSV (admin only - requires authentication)"""
     from fastapi.responses import StreamingResponse
     import csv
     import io
 
-    # Query all applications with travelers
+    # Query all applications
     applications = db.query(Application).order_by(Application.created_at.desc()).all()
 
     # Create CSV in memory
@@ -1668,40 +1451,38 @@ async def export_applications_csv(
         'Reference Number',
         'Application Date',
         'Status',
-        'Direction',
-        'Family/Last Name',
-        'First Name',
-        'Passport No.',
-        'Place of Birth',
-        'Nationality/Citizenship',
+        'Applying On Behalf',
+        'Travel Document Type',
+        'Passport Country Code',
+        'Nationality',
+        'Passport Number',
+        'Surname',
+        'Given Names',
         'Date of Birth',
         'Gender',
-        'Civil Status',
-        'Occupation',
-        'Phone No.',
+        'Country of Birth',
+        'City of Birth',
+        'Passport Issue Date',
+        'Passport Expiry Date',
+        'Additional Nationalities',
+        'Previous Canada Visa',
+        'UCI Number',
+        'Language Preference',
         'Email',
-        'Country of Residence',
+        'Apartment/Unit',
+        'Street Address',
         'City',
-        'Permanent Address',
-        'Embarkation Port',
-        'Disembarkation Port',
-        'Airline',
-        'Flight No.',
-        'Flight Date',
-        'Arrival Date',
-        'Departure Date',
-        'Travel Purpose',
-        'Return Departure Airport',
-        'Return Destination Airport',
-        'Return Airline',
-        'Return Flight Date',
-        'Return Flight No.',
-        'Accommodation Type',
-        'Accommodation Address',
-        'Residential Address',
-        'Currency >$10K',
-        'Animals/Food',
-        'Taxable Goods',
+        'Country of Residence',
+        'District/Region',
+        'Postal Code',
+        'Travel Date Known',
+        'Travel Date',
+        'Travel Hour',
+        'Travel Minute',
+        'Travel Timezone',
+        'Consent Agreed',
+        'Signature',
+        'Processing Option',
         'Amount Paid',
         'Payment Method',
         'Payment Status',
@@ -1712,69 +1493,69 @@ async def export_applications_csv(
         'Authorized At',
         'Capture ID',
         'Captured At',
-        'Passport Expiry Date'
+        'Fulfillment Status',
+        'Fulfillment Delivered At',
     ])
 
     # Write data
     for app in applications:
-        for traveler in app.travelers:
-            writer.writerow([
-                app.session_id,
-                app.created_at.strftime('%Y-%m-%d %H:%M:%S') if app.created_at else '',
-                app.status or '',
-                app.direction or '',
-                traveler.last_name or '',
-                traveler.first_name or '',
-                traveler.passport_number or '',
-                traveler.place_of_birth or '',
-                traveler.nationality or '',
-                traveler.date_of_birth.strftime('%Y-%m-%d') if traveler.date_of_birth else '',
-                traveler.gender.capitalize() if traveler.gender else '',
-                traveler.civil_status or '',
-                traveler.occupation or '',
-                f"{traveler.phone_code} {traveler.phone}" if traveler.phone_code and traveler.phone else '',
-                traveler.email or '',
-                traveler.country_of_residence or '',
-                traveler.city or '',
-                app.permanent_address or '',
-                app.embarkation_port or '',
-                app.disembarkation_port or '',
-                app.airline_name or '',
-                app.flight_number or 'N/A',
-                app.flight_date.strftime('%Y-%m-%d') if app.flight_date else '',
-                app.arrival_date.strftime('%Y-%m-%d') if app.arrival_date else '',
-                app.departure_date.strftime('%Y-%m-%d') if app.departure_date else '',
-                app.travel_purpose or '',
-                app.return_departure_airport or '',
-                app.return_destination_airport or '',
-                app.return_airline_name or '',
-                app.return_flight_date.strftime('%Y-%m-%d') if app.return_flight_date else '',
-                app.return_flight_number or '',
-                app.accommodation_type or '',
-                app.accommodation_details or 'N/A',
-                traveler.residential_address or '',
-                app.exceeds_money_limit or 'no',
-                app.has_animals_or_food or 'no',
-                app.has_taxable_goods or 'no',
-                f"${app.amount_paid:.2f}" if app.amount_paid else "N/A",
-                app.payment_method or "N/A",
-                app.payment_status or "N/A",
-                app.payment_transaction_id or "N/A",
-                app.payment_order_id or "N/A",
-                app.authorization_id or "N/A",
-                app.authorization_status or "N/A",
-                app.authorized_at.strftime('%Y-%m-%d %H:%M:%S') if app.authorized_at else "N/A",
-                app.capture_id or "N/A",
-                app.captured_at.strftime('%Y-%m-%d %H:%M:%S') if app.captured_at else "N/A",
-                traveler.passport_expiry_date.strftime('%Y-%m-%d') if traveler.passport_expiry_date else "N/A"
-            ])
+        additional_nats = ', '.join(app.additional_nationalities) if app.additional_nationalities else ''
+        writer.writerow([
+            app.session_id,
+            app.created_at.strftime('%Y-%m-%d %H:%M:%S') if app.created_at else '',
+            app.status or '',
+            app.applying_on_behalf or '',
+            app.travel_document_type or '',
+            app.passport_country_code or '',
+            app.nationality or '',
+            app.passport_number or '',
+            app.surname or '',
+            app.given_names or '',
+            app.date_of_birth or '',
+            app.gender or '',
+            app.country_of_birth or '',
+            app.city_of_birth or '',
+            app.passport_issue_date or '',
+            app.passport_expiry_date or '',
+            additional_nats,
+            app.previous_canada_visa or '',
+            app.uci_number or '',
+            app.language_preference or '',
+            app.email or '',
+            app.apartment_unit or '',
+            app.street_address or '',
+            app.city or '',
+            app.country_residence or '',
+            app.district_region or '',
+            app.postal_code or '',
+            app.travel_date_known or '',
+            app.travel_date or '',
+            app.travel_hour or '',
+            app.travel_minute or '',
+            app.travel_timezone or '',
+            'Yes' if app.consent_agreed else 'No',
+            app.signature or '',
+            app.processing_option or '',
+            f"${app.amount_paid:.2f}" if app.amount_paid else "N/A",
+            app.payment_method or "N/A",
+            app.payment_status or "N/A",
+            app.payment_transaction_id or "N/A",
+            app.payment_order_id or "N/A",
+            app.authorization_id or "N/A",
+            app.authorization_status or "N/A",
+            app.authorized_at.strftime('%Y-%m-%d %H:%M:%S') if app.authorized_at else "N/A",
+            app.capture_id or "N/A",
+            app.captured_at.strftime('%Y-%m-%d %H:%M:%S') if app.captured_at else "N/A",
+            app.fulfillment_status or "N/A",
+            app.fulfillment_delivered_at.strftime('%Y-%m-%d %H:%M:%S') if app.fulfillment_delivered_at else "N/A",
+        ])
 
     # Prepare response
     output.seek(0)
     return StreamingResponse(
         iter([output.getvalue()]),
         media_type="text/csv",
-        headers={"Content-Disposition": f"attachment; filename=dret_applications_{datetime.utcnow().strftime('%Y_%m_%d')}.csv"}
+        headers={"Content-Disposition": f"attachment; filename=canada_eta_applications_{datetime.utcnow().strftime('%Y_%m_%d')}.csv"}
     )
 
 
@@ -2234,7 +2015,7 @@ class AuthorizationSummary(BaseModel):
     fulfillment_status: str
     fulfillment_delivered_at: Optional[datetime]
     created_at: datetime
-    first_traveler_email: Optional[str]
+    applicant_email: Optional[str]
 
     class Config:
         from_attributes = True
@@ -2341,13 +2122,9 @@ async def get_authorization_stats(
     # Order by most recent first
     applications = query.order_by(Application.created_at.desc()).limit(100).all()
 
-    # Build response with first traveler email
+    # Build response with applicant email
     app_summaries = []
     for app in applications:
-        first_email = None
-        if app.travelers and len(app.travelers) > 0:
-            first_email = app.travelers[0].email
-
         app_summaries.append(AuthorizationSummary(
             id=app.id,
             session_id=app.session_id,
@@ -2360,7 +2137,7 @@ async def get_authorization_stats(
             fulfillment_status=app.fulfillment_status,
             fulfillment_delivered_at=app.fulfillment_delivered_at,
             created_at=app.created_at,
-            first_traveler_email=first_email
+            applicant_email=app.email
         ))
 
     return AuthorizationStatsResponse(
@@ -2402,10 +2179,10 @@ async def create_paypal_order(request: Request, request_data: CreateOrderRequest
                     "currency_code": request_data.currency,
                     "value": request_data.amount
                 },
-                "description": "DAC Assistance — Service Fee"
+                "description": "Canada eTA Assistance — Service Fee"
             }],
             "application_context": {
-                "brand_name": "DAC Service",
+                "brand_name": "Canada eTA Service",
                 "landing_page": "BILLING",
                 "user_action": "PAY_NOW",
                 "return_url": request_data.return_url or "http://localhost:8080/payment-success",
@@ -2952,10 +2729,9 @@ async def void_authorization(request: Request, request_data: VoidAuthorizationRe
                 Application.authorization_id == request_data.authorization_id
             ).first()
 
-            if application and application.travelers:
-                first_traveler = application.travelers[0]
-                customer_email = first_traveler.email
-                customer_name = f"{first_traveler.first_name} {first_traveler.last_name}"
+            if application and application.email:
+                customer_email = application.email
+                customer_name = f"{application.given_names or ''} {application.surname or ''}".strip() or "Applicant"
                 reference_number = application.session_id
                 amount_refunded = float(application.amount_paid) if application.amount_paid else 0.0
 
@@ -2971,7 +2747,7 @@ async def void_authorization(request: Request, request_data: VoidAuthorizationRe
                 db.commit()
         except Exception as email_error:
             # Don't fail the void if email fails
-            print(f"⚠️ Failed to send refund confirmation email: {str(email_error)}")
+            print(f"WARNING: Failed to send refund confirmation email: {str(email_error)}")
 
         return VoidAuthorizationResponse(
             authorization_id=request_data.authorization_id,

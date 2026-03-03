@@ -80,7 +80,7 @@ const PaymentSuccess = () => {
     const earliestArrivalDate = new Date(applicationData.arrival_date + 'T00:00:00');
 
     const now = new Date();
-    const today = new Date(now.toLocaleString('en-US', { timeZone: 'America/Curacao' }));
+    const today = new Date(now.toLocaleString('en-US', { timeZone: 'America/Toronto' }));
     today.setHours(0, 0, 0, 0);
     const daysUntilArrival = Math.ceil((earliestArrivalDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 
@@ -117,7 +117,7 @@ const PaymentSuccess = () => {
                       <div className="h-full w-2/3 bg-blue-500 rounded-full"></div>
                     </div>
                   </div>
-                  <img src="https://flagcdn.com/w40/cw.png" alt="CW" className="w-8 h-5 rounded mr-3" />
+                  <img src="https://flagcdn.com/w40/ca.png" alt="CA" className="w-8 h-5 rounded mr-3" />
                   <div className="border-2 border-gray-800 rounded-lg px-3 py-2 text-center min-w-[90px]">
                     <p className="text-[10px] text-gray-500 uppercase">Est. delivery</p>
                     <p className="text-xl font-bold text-gray-900 leading-tight">{deliveryInfo.deliveryMonth} {deliveryInfo.deliveryDay}</p>
@@ -153,10 +153,10 @@ const PaymentSuccess = () => {
                 {/* Message */}
                 <div className="p-4 text-left text-sm text-gray-700">
                   <p>
-                    We've received your <strong>Curaçao Digital Immigration Card</strong> application and are currently reviewing it. Your document will be delivered on <strong>{deliveryInfo.deliveryDateFormatted}</strong>.
+                    We've received your <strong>Canada eTA</strong> application and are currently reviewing it. Your document will be delivered on <strong>{deliveryInfo.deliveryDateFormatted}</strong>.
                   </p>
                   <p className="mt-2 text-gray-500 text-xs">
-                    The estimated delivery date ensures that your Curaçao Digital Immigration Card will be valid on the date of your trip.
+                    The estimated delivery date ensures that your Canada eTA will be valid on the date of your trip.
                   </p>
                 </div>
               </CardContent>
@@ -170,7 +170,7 @@ const PaymentSuccess = () => {
               Payment Successful!
             </h1>
             <p className="text-gray-600 text-lg">
-              Your Curaçao Digital Immigration Card (Immigration Card) application has been submitted successfully
+              Your Canada eTA (eTA) application has been submitted successfully
             </p>
           </div>
 
@@ -193,7 +193,7 @@ const PaymentSuccess = () => {
                 <div className="text-left space-y-3">
                   <div className="flex justify-between py-2 border-b">
                     <span className="text-gray-600">Application Type:</span>
-                    <span className="font-medium">Immigration Card Application</span>
+                    <span className="font-medium">eTA Application</span>
                   </div>
                   <div className="flex justify-between py-2 border-b">
                     <span className="text-gray-600">Processing Time:</span>
@@ -256,9 +256,9 @@ const PaymentSuccess = () => {
               <li className="flex items-start gap-3">
                 <FileText className="h-5 w-5 mt-0.5 flex-shrink-0" />
                 <div>
-                  <strong className="block mb-1">Immigration Card Delivery</strong>
+                  <strong className="block mb-1">eTA Delivery</strong>
                   <span className="text-sm">
-                    You will receive your Curaçao Digital Immigration Card via email as a PDF with a QR code. Present this QR code to immigration upon arrival, either printed or on your mobile device.
+                    Your Canada eTA will be electronically linked to your passport. You will receive a confirmation email with your eTA details.
                   </span>
                 </div>
               </li>
@@ -267,9 +267,7 @@ const PaymentSuccess = () => {
                 <div>
                   <strong className="block mb-1">At Immigration</strong>
                   <span className="text-sm">
-                    Please present the Immigration Card email at Curaçao immigration upon arrival.
-                    <strong> Free WiFi is available at the airport</strong> if you need to access
-                    your email to retrieve the document.
+                    Your eTA is electronically linked to your passport. Make sure to travel with the same passport you used to apply. Present your passport at Canadian immigration upon arrival.
                   </span>
                 </div>
               </li>
