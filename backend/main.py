@@ -964,9 +964,8 @@ async def create_application(request: Request, application: ApplicationCreate, d
                         customer_name=customer_name,
                         reference_number=session_id,
                         amount_paid=application.amount_paid,
-                        num_travelers=1,
                         processing_option=application.processing_option,
-                        earliest_arrival_date=None
+                        travel_date=application.travel_date
                     )
 
                 # Send internal order notification
