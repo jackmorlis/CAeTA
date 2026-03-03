@@ -1,6 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import etaAssistanceImg from '@/assets/eta_application_assistance.webp';
 
 const VisaGuideSection = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="py-16 bg-background font-quicksand">
       <div className="container mx-auto px-4">
@@ -27,11 +30,11 @@ const VisaGuideSection = () => {
           </div>
 
           {/* Image */}
-          <div className="w-full md:w-2/5 lg:w-1/2 flex-shrink-0 order-1 md:order-2">
+          <div className="w-full md:w-2/5 lg:w-1/2 flex-shrink-0 order-1 md:order-2 cursor-pointer" onClick={() => navigate('/apply')}>
             <img
               src={etaAssistanceImg}
-              alt="Canada eTA"
-              className="w-full h-full object-cover rounded-lg shadow-soft"
+              alt="Canada eTA - Apply Now"
+              className="w-full h-full object-cover rounded-lg shadow-soft hover:shadow-lg transition-shadow duration-200"
             />
           </div>
         </div>
