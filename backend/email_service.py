@@ -49,7 +49,7 @@ def send_payment_confirmation_email(
     amount_display = f"${amount_paid:.2f}" if amount_paid else "Amount not available"
 
     # Calculate order breakdown
-    base_price = 49.99
+    base_price = 89.99
     processing_option = processing_option or "standard"
 
     # Determine processing fee based on option
