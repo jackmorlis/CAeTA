@@ -11,7 +11,7 @@ export const SITE_CONFIG = {
   siteNameShort: 'Canada eTA',
 
   // Contact information
-  supportEmail: 'support@canada-eta.earrivalform.com',
+  supportEmail: 'help@earrival-support.com',
 
   // Legal
   arbitrationLocation: 'Newark, Delaware',

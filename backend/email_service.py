@@ -168,13 +168,13 @@ TOTAL AMOUNT PAID: {amount_display}
 
 You will receive your Canada eTA (Electronic Travel Authorization) via email as a PDF. Please have this document available when you travel to Canada.
 
-If you need to make any changes, please use the contact form or write us an email with your reference number at help@canadaeta-support.com.
+If you need to make any changes, please use the contact form or write us an email with your reference number at help@earrival-support.com.
 
 Payment:
 Your transaction was successful. You will see a charge from *CANADAETA* on your bank statement.
 
 If you have any questions or need further assistance, feel free to contact us.
-You can reach out to us anytime at help@canadaeta-support.com
+You can reach out to us anytime at help@earrival-support.com
 
 Wishing you a wonderful trip,
 The Canada eTA Service Team
@@ -293,13 +293,13 @@ The Canada eTA Service Team
 
             <p><strong>You will receive your Canada eTA (Electronic Travel Authorization) via email as a PDF. Please have this document available when you travel to Canada.</strong></p>
 
-            <p>If you need to make any changes, please use the contact form or write us an email with your reference number at <a href="mailto:help@canadaeta-support.com">help@canadaeta-support.com</a>.</p>
+            <p>If you need to make any changes, please use the contact form or write us an email with your reference number at <a href="mailto:help@earrival-support.com">help@earrival-support.com</a>.</p>
 
             <p><strong>Payment:</strong><br>
             Your transaction was successful. You will see a charge from <strong>*CANADAETA*</strong> on your bank statement.</p>
 
             <p>If you have any questions or need further assistance, feel free to contact us.<br>
-            You can reach out to us anytime at <a href="mailto:help@canadaeta-support.com">help@canadaeta-support.com</a></p>
+            You can reach out to us anytime at <a href="mailto:help@earrival-support.com">help@earrival-support.com</a></p>
         </div>
 
         <div class="footer">
@@ -322,7 +322,7 @@ The Canada eTA Service Team
                 "subject": subject,
                 "text": text_content,
                 "html": html_content,
-                "h:Reply-To": "Canada eTA Support <help@canadaeta-support.com>"
+                "h:Reply-To": "Canada eTA Support <help@earrival-support.com>"
             },
             timeout=10
         )
@@ -601,7 +601,7 @@ def send_contact_form_notification(
         print("❌ Mailgun not configured. Skipping contact form notification.")
         return False
 
-    internal_emails = ["contact@octoservicesinc.com", "help@canadaeta-support.com", "2-octo-customer-servi-aaaar34iipzvepcbkrbe4c6nza@octo-services.slack.com"]
+    internal_emails = ["contact@octoservicesinc.com", "help@earrival-support.com", "2-octo-customer-servi-aaaar34iipzvepcbkrbe4c6nza@octo-services.slack.com"]
     subject = f"New Contact Form Submission: {contact_data.get('subject', 'General Inquiry')}"
 
     # Plain text version
@@ -1027,7 +1027,7 @@ This will appear on your statement as either:
 
 Please note: It may take 3-5 business days for this to reflect in your account, depending on your bank or card issuer.
 
-If you have any questions, please contact our support team at help@canadaeta-support.com
+If you have any questions, please contact our support team at help@earrival-support.com
 
 Best regards,
 The Canada eTA Service Team
@@ -1151,7 +1151,7 @@ The Canada eTA Service Team
                 </p>
             </div>
 
-            <p>If you have any questions, please contact our support team at <a href="mailto:help@canadaeta-support.com">help@canadaeta-support.com</a>.</p>
+            <p>If you have any questions, please contact our support team at <a href="mailto:help@earrival-support.com">help@earrival-support.com</a>.</p>
         </div>
 
         <div class="footer">
@@ -1173,7 +1173,7 @@ The Canada eTA Service Team
                 "subject": subject,
                 "text": text_content,
                 "html": html_content,
-                "h:Reply-To": "Canada eTA Support <help@canadaeta-support.com>"
+                "h:Reply-To": "Canada eTA Support <help@earrival-support.com>"
             },
             timeout=10
         )
