@@ -168,3 +168,5 @@ All colors MUST be HSL.
     -moz-appearance: textfield !important;
   }
 }
+/* cache-bust */
+:root { --cache-bust: 1; }

@@ -363,6 +363,55 @@ const AdminPanel = () => {
       doc.line(margin, y, pageWidth - margin, y);
       y += sectionGap;
 
+      // Representative (if applicable)
+      if (selectedApp.representative_surname || selectedApp.representative_given_names) {
+        y += 6;
+        doc.setFont('helvetica', 'bold');
+        doc.text('Representative Information', 14, y);
+        y += 5;
+        doc.setFont('helvetica', 'normal');
+        addLabelValue('Representative Surname', selectedApp.representative_surname);
+        addLabelValue('Representative Given Names', selectedApp.representative_given_names);
+      }
+
+      // Additional Personal Details
+      y += 6;
+      doc.setFont('helvetica', 'bold');
+      doc.text('Additional Personal Details', 14, y);
+      y += 5;
+      doc.setFont('helvetica', 'normal');
+      addLabelValue('Middle Name', selectedApp.middle_name);
+      addLabelValue('Marital Status', selectedApp.marital_status);
+
+      // Employment
+      y += 6;
+      doc.setFont('helvetica', 'bold');
+      doc.text('Employment Information', 14, y);
+      y += 5;
+      doc.setFont('helvetica', 'normal');
+      addLabelValue('Occupation', selectedApp.occupation);
+      addLabelValue('Job Title', selectedApp.job_title);
+      addLabelValue('Employer Name', selectedApp.employer_name);
+      addLabelValue('Employer Country', selectedApp.employer_country);
+      addLabelValue('Employer City', selectedApp.employer_city);
+      addLabelValue('Employment Since', selectedApp.employment_since_year);
+
+      // Background Questions
+      y += 6;
+      doc.setFont('helvetica', 'bold');
+      doc.text('Background Questions', 14, y);
+      y += 5;
+      doc.setFont('helvetica', 'normal');
+      addLabelValue('Refused Visa/Entry', selectedApp.bg_refused_visa);
+      if (selectedApp.bg_refused_visa_details) addLabelValue('Refused Visa Details', selectedApp.bg_refused_visa_details);
+      addLabelValue('Criminal Offence', selectedApp.bg_criminal_offence);
+      if (selectedApp.bg_criminal_offence_details) addLabelValue('Criminal Details', selectedApp.bg_criminal_offence_details);
+      addLabelValue('TB Contact', selectedApp.bg_tuberculosis);
+      addLabelValue('TB Health Worker', selectedApp.bg_tb_health_worker);
+      addLabelValue('TB Diagnosed', selectedApp.bg_tb_diagnosed);
+      addLabelValue('Medical Condition', selectedApp.bg_medical_condition);
+      if (selectedApp.bg_additional_details) addLabelValue('Additional Details', selectedApp.bg_additional_details);
+
       // Address Information
       addText('ADDRESS INFORMATION', 12, true);
       y += 3;
@@ -397,6 +446,7 @@ const AdminPanel = () => {
       y += 3;
       addLabelValue('Consent Agreed', selectedApp.consent_agreed ? 'Yes' : 'No');
       addLabelValue('Signature', selectedApp.signature);
+      addLabelValue('Declaration Agreed', selectedApp.declaration_agreed ? 'Yes' : 'No');
 
       // Device Fingerprint Section (if available)
       if (selectedApp.device_fingerprint) {
@@ -1013,6 +1063,42 @@ const AdminPanel = () => {
                         </div>
                       </div>
                     </div>
+
+                  {/* Representative Information (for minors) */}
+                  {(selectedApp.representative_surname || selectedApp.representative_given_names) && (
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4">Representative Information</h3>
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <span className="text-slate-600 font-medium">Representative Surname:</span>
+                            <span className="ml-2 font-semibold">{selectedApp.representative_surname || 'N/A'}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-600 font-medium">Representative Given Names:</span>
+                            <span className="ml-2 font-semibold">{selectedApp.representative_given_names || 'N/A'}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Additional Personal Details */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Additional Personal Details</h3>
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Middle Name:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.middle_name || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Marital Status:</span>
+                          <span className="ml-2 font-semibold capitalize">{selectedApp.marital_status || 'N/A'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   </div>
 
                   {/* Passport Information */}
@@ -1128,6 +1214,139 @@ const AdminPanel = () => {
                     </div>
                   </div>
 
+
+                  {/* Representative Information (for minors) */}
+                  {(selectedApp.representative_surname || selectedApp.representative_given_names) && (
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4">Representative Information</h3>
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <span className="text-slate-600 font-medium">Representative Surname:</span>
+                            <span className="ml-2 font-semibold">{selectedApp.representative_surname || 'N/A'}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-600 font-medium">Representative Given Names:</span>
+                            <span className="ml-2 font-semibold">{selectedApp.representative_given_names || 'N/A'}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Additional Personal Details */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Additional Personal Details</h3>
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Middle Name:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.middle_name || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Marital Status:</span>
+                          <span className="ml-2 font-semibold capitalize">{selectedApp.marital_status || 'N/A'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Employment Information */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Employment Information</h3>
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Occupation:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.occupation || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Job Title:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.job_title || 'N/A'}</span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Employer Name:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.employer_name || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Employer Country:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.employer_country || 'N/A'}</span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Employer City:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.employer_city || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Employment Since:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.employment_since_year || 'N/A'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Background Questions */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Background Questions</h3>
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Refused Visa/Entry to Canada:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.bg_refused_visa || 'N/A'}</span>
+                        </div>
+                        {selectedApp.bg_refused_visa_details && (
+                          <div>
+                            <span className="text-slate-600 font-medium">Refused Visa Details:</span>
+                            <span className="ml-2 font-semibold">{selectedApp.bg_refused_visa_details}</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Criminal Offence:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.bg_criminal_offence || 'N/A'}</span>
+                        </div>
+                        {selectedApp.bg_criminal_offence_details && (
+                          <div>
+                            <span className="text-slate-600 font-medium">Criminal Offence Details:</span>
+                            <span className="ml-2 font-semibold">{selectedApp.bg_criminal_offence_details}</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Tuberculosis Contact:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.bg_tuberculosis || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">TB Health Worker:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.bg_tb_health_worker || 'N/A'}</span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">TB Diagnosed:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.bg_tb_diagnosed || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Medical Condition:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.bg_medical_condition || 'N/A'}</span>
+                        </div>
+                      </div>
+                      {selectedApp.bg_additional_details && (
+                        <div className="grid grid-cols-1 gap-4">
+                          <div>
+                            <span className="text-slate-600 font-medium">Additional Details:</span>
+                            <span className="ml-2 font-semibold">{selectedApp.bg_additional_details}</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
                   {/* Consent & Signature */}
                   <div>
                     <h3 className="text-lg font-semibold mb-4">Consent & Signature</h3>
@@ -1140,6 +1359,12 @@ const AdminPanel = () => {
                         <div>
                           <span className="text-slate-600 font-medium">Signature:</span>
                           <span className="ml-2 font-semibold">{selectedApp.signature || 'N/A'}</span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Declaration Agreed:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.declaration_agreed ? 'Yes' : 'No'}</span>
                         </div>
                       </div>
                     </div>

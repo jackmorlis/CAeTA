@@ -38,6 +38,31 @@ export interface ApplicationCreate {
   travel_timezone?: string;
   consent_agreed?: boolean;
   signature?: string;
+  // Representative info (for minors)
+  representative_surname?: string;
+  representative_given_names?: string;
+  // Additional personal details
+  middle_name?: string;
+  marital_status?: string;
+  // Employment information
+  occupation?: string;
+  job_title?: string;
+  employer_name?: string;
+  employer_country?: string;
+  employer_city?: string;
+  employment_since_year?: string;
+  // Background questions
+  bg_refused_visa?: string;
+  bg_refused_visa_details?: string;
+  bg_criminal_offence?: string;
+  bg_criminal_offence_details?: string;
+  bg_tuberculosis?: string;
+  bg_tb_health_worker?: string;
+  bg_tb_diagnosed?: string;
+  bg_medical_condition?: string;
+  bg_additional_details?: string;
+  // Declaration
+  declaration_agreed?: boolean;
   processing_option?: string;
   // Payment fields (optional - filled after payment)
   payment_method?: string;
@@ -86,6 +111,31 @@ export interface ApplicationResponse {
   // Consent
   consent_agreed?: boolean;
   signature?: string;
+  // Representative info (for minors)
+  representative_surname?: string;
+  representative_given_names?: string;
+  // Additional personal details
+  middle_name?: string;
+  marital_status?: string;
+  // Employment information
+  occupation?: string;
+  job_title?: string;
+  employer_name?: string;
+  employer_country?: string;
+  employer_city?: string;
+  employment_since_year?: string;
+  // Background questions
+  bg_refused_visa?: string;
+  bg_refused_visa_details?: string;
+  bg_criminal_offence?: string;
+  bg_criminal_offence_details?: string;
+  bg_tuberculosis?: string;
+  bg_tb_health_worker?: string;
+  bg_tb_diagnosed?: string;
+  bg_medical_condition?: string;
+  bg_additional_details?: string;
+  // Declaration
+  declaration_agreed?: boolean;
   // Processing & Payment
   processing_option?: string;
   created_at: string;

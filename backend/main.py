@@ -122,6 +122,36 @@ class Application(Base):
     consent_agreed = Column(Boolean, nullable=True)
     signature = Column(String, nullable=True)
 
+    # Representative info (for minors)
+    representative_surname = Column(String, nullable=True)
+    representative_given_names = Column(String, nullable=True)
+
+    # Additional personal details
+    middle_name = Column(String, nullable=True)
+    marital_status = Column(String, nullable=True)
+
+    # Employment information
+    occupation = Column(String, nullable=True)
+    job_title = Column(String, nullable=True)
+    employer_name = Column(String, nullable=True)
+    employer_country = Column(String, nullable=True)
+    employer_city = Column(String, nullable=True)
+    employment_since_year = Column(String, nullable=True)
+
+    # Background questions
+    bg_refused_visa = Column(String, nullable=True)
+    bg_refused_visa_details = Column(String, nullable=True)
+    bg_criminal_offence = Column(String, nullable=True)
+    bg_criminal_offence_details = Column(String, nullable=True)
+    bg_tuberculosis = Column(String, nullable=True)
+    bg_tb_health_worker = Column(String, nullable=True)
+    bg_tb_diagnosed = Column(String, nullable=True)
+    bg_medical_condition = Column(String, nullable=True)
+    bg_additional_details = Column(String, nullable=True)
+
+    # Declaration
+    declaration_agreed = Column(Boolean, nullable=True)
+
     processing_option = Column(String(50), nullable=True, default="standard")  # 'standard', 'fast', 'ultra'
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -245,6 +275,36 @@ class ApplicationCreate(BaseModel):
     consent_agreed: Optional[bool] = None
     signature: Optional[str] = None
 
+    # Representative info (for minors)
+    representative_surname: Optional[str] = None
+    representative_given_names: Optional[str] = None
+
+    # Additional personal details
+    middle_name: Optional[str] = None
+    marital_status: Optional[str] = None
+
+    # Employment information
+    occupation: Optional[str] = None
+    job_title: Optional[str] = None
+    employer_name: Optional[str] = None
+    employer_country: Optional[str] = None
+    employer_city: Optional[str] = None
+    employment_since_year: Optional[str] = None
+
+    # Background questions
+    bg_refused_visa: Optional[str] = None
+    bg_refused_visa_details: Optional[str] = None
+    bg_criminal_offence: Optional[str] = None
+    bg_criminal_offence_details: Optional[str] = None
+    bg_tuberculosis: Optional[str] = None
+    bg_tb_health_worker: Optional[str] = None
+    bg_tb_diagnosed: Optional[str] = None
+    bg_medical_condition: Optional[str] = None
+    bg_additional_details: Optional[str] = None
+
+    # Declaration
+    declaration_agreed: Optional[bool] = None
+
     processing_option: Optional[str] = "standard"  # 'standard', 'fast', 'ultra'
 
     # Payment fields (optional - filled after payment)
@@ -308,6 +368,36 @@ class ApplicationResponse(BaseModel):
     travel_timezone: Optional[str]
     consent_agreed: Optional[bool]
     signature: Optional[str]
+
+    # Representative info (for minors)
+    representative_surname: Optional[str]
+    representative_given_names: Optional[str]
+
+    # Additional personal details
+    middle_name: Optional[str]
+    marital_status: Optional[str]
+
+    # Employment information
+    occupation: Optional[str]
+    job_title: Optional[str]
+    employer_name: Optional[str]
+    employer_country: Optional[str]
+    employer_city: Optional[str]
+    employment_since_year: Optional[str]
+
+    # Background questions
+    bg_refused_visa: Optional[str]
+    bg_refused_visa_details: Optional[str]
+    bg_criminal_offence: Optional[str]
+    bg_criminal_offence_details: Optional[str]
+    bg_tuberculosis: Optional[str]
+    bg_tb_health_worker: Optional[str]
+    bg_tb_diagnosed: Optional[str]
+    bg_medical_condition: Optional[str]
+    bg_additional_details: Optional[str]
+
+    # Declaration
+    declaration_agreed: Optional[bool]
 
     processing_option: Optional[str]
     created_at: datetime
