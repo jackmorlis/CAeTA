@@ -71,98 +71,12 @@ const PaymentSuccess = () => {
     );
   }
 
-  // Calculate delivery info based on arrival date
-  const getDeliveryInfo = () => {
-    if (!applicationData?.arrival_date) {
-      return null;
-    }
-
-    const earliestArrivalDate = new Date(applicationData.arrival_date + 'T00:00:00');
-
-    const now = new Date();
-    const today = new Date(now.toLocaleString('en-US', { timeZone: 'America/Toronto' }));
-    today.setHours(0, 0, 0, 0);
-    const daysUntilArrival = Math.ceil((earliestArrivalDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-
-    if (daysUntilArrival > 7) {
-      const deliveryDate = new Date(earliestArrivalDate);
-      deliveryDate.setDate(deliveryDate.getDate() - 7);
-
-      return {
-        deliveryDateFormatted: deliveryDate.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' }),
-        deliveryDay: deliveryDate.getDate(),
-        deliveryMonth: deliveryDate.toLocaleDateString('en-US', { month: 'short' }),
-      };
-    }
-
-    return null;
-  };
-
-  const deliveryInfo = getDeliveryInfo();
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
-      <Header minimal={!!deliveryInfo} />
+      <Header />
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto text-center">
-          {/* Delivery Tracker - Only show if arrival >2 days away */}
-          {deliveryInfo && (
-            <Card className="mb-6 overflow-hidden">
-              <CardContent className="p-0">
-                {/* Header with progress bar and delivery date */}
-                <div className="flex items-center justify-between p-4 border-b bg-white">
-                  <div className="flex-1 mr-4">
-                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full w-2/3 bg-blue-500 rounded-full"></div>
-                    </div>
-                  </div>
-                  <img src="https://flagcdn.com/w40/ca.png" alt="CA" className="w-8 h-5 rounded mr-3" />
-                  <div className="border-2 border-gray-800 rounded-lg px-3 py-2 text-center min-w-[90px]">
-                    <p className="text-[10px] text-gray-500 uppercase">Est. delivery</p>
-                    <p className="text-xl font-bold text-gray-900 leading-tight">{deliveryInfo.deliveryMonth} {deliveryInfo.deliveryDay}</p>
-                    <p className="text-[10px] text-gray-500">07:00 AM</p>
-                  </div>
-                </div>
-
-                {/* Progress steps */}
-                <div className="px-4 py-3 bg-gray-50">
-                  <div className="flex items-center justify-center mb-2">
-                    <span className="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-medium rounded-full">
-                      Waiting
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between max-w-md mx-auto">
-                    <div className="flex flex-col items-center">
-                      <div className="w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm">✓</div>
-                      <span className="text-xs text-gray-600 mt-1">Application</span>
-                    </div>
-                    <div className="flex-1 h-0.5 bg-gray-900 mx-2"></div>
-                    <div className="flex flex-col items-center">
-                      <div className="w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm font-bold">2</div>
-                      <span className="text-xs text-gray-600 mt-1">Waiting</span>
-                    </div>
-                    <div className="flex-1 h-0.5 bg-gray-300 mx-2"></div>
-                    <div className="flex flex-col items-center">
-                      <div className="w-8 h-8 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center text-sm">3</div>
-                      <span className="text-xs text-gray-400 mt-1">Delivered</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Message */}
-                <div className="p-4 text-left text-sm text-gray-700">
-                  <p>
-                    We've received your <strong>Canada eTA</strong> application and are currently reviewing it. Your document will be delivered on <strong>{deliveryInfo.deliveryDateFormatted}</strong>.
-                  </p>
-                  <p className="mt-2 text-gray-500 text-xs">
-                    The estimated delivery date ensures that your Canada eTA will be valid on the date of your trip.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
           {/* Success Icon */}
           <div className="mb-6">
             <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-3" />

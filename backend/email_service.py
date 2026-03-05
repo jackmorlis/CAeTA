@@ -21,7 +21,6 @@ def send_payment_confirmation_email(
     reference_number: str,
     amount_paid: float = None,
     processing_option: str = None,
-    travel_date: date = None
 ) -> bool:
     """
     Send payment confirmation email to customer
@@ -32,7 +31,6 @@ def send_payment_confirmation_email(
         reference_number: Application reference number (CETA-XXXXXX)
         amount_paid: Total amount paid for the application
         processing_option: Processing option selected (standard, fast, ultra)
-        travel_date: Planned travel date (for delivery tracker)
 
     Returns:
         bool: True if email sent successfully, False otherwise
@@ -67,100 +65,13 @@ def send_payment_confirmation_email(
     calculated_total = base_price + processing_fee
     final_total = amount_paid if amount_paid else calculated_total
 
-    # Calculate delivery tracker if travel date is more than 7 days away
-    delivery_tracker_text = ""
-    delivery_tracker_html = ""
 
-    if travel_date:
-        if isinstance(travel_date, str):
-            try:
-                travel_date = datetime.strptime(travel_date, "%Y-%m-%d").date()
-            except ValueError:
-                travel_date = None
-    if travel_date:
-        today = datetime.now(ZoneInfo('America/Toronto')).date()
-        days_until_travel = (travel_date - today).days
 
-        if days_until_travel > 7:
-            delivery_date = travel_date - timedelta(days=7)
-            delivery_date_formatted = delivery_date.strftime("%A, %b %d, %Y")
-            delivery_day = delivery_date.strftime("%d")
-            delivery_month = delivery_date.strftime("%b")
-
-            delivery_tracker_text = f"""
-================== DELIVERY TRACKER ==================
-Est. delivery: {delivery_month} {delivery_day}, 07:00 AM
-
-[✓] Application → [2] Waiting → [ ] Delivered
-
-We've received your Canada eTA (Electronic Travel Authorization) application and are currently reviewing it. Your document will be delivered on {delivery_date_formatted}.
-
-The estimated delivery date ensures that your Canada eTA will be valid on the date of your trip.
-======================================================
-"""
-
-            delivery_tracker_html = f"""
-            <!-- Delivery Tracker -->
-            <div style="border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; margin-bottom: 20px;">
-                <!-- Header with progress bar and delivery date -->
-                <div style="padding: 15px; border-bottom: 1px solid #e0e0e0; background-color: #ffffff;">
-                    <table style="width: 100%;">
-                        <tr>
-                            <td style="width: 60%; vertical-align: middle;">
-                                <div style="background-color: #e0e0e0; height: 8px; border-radius: 4px; overflow: hidden;">
-                                    <div style="background-color: #3b82f6; height: 8px; width: 66%; border-radius: 4px;"></div>
-                                </div>
-                            </td>
-                            <td style="width: 10%; text-align: center; vertical-align: middle;">
-                                <img src="https://flagcdn.com/w40/ca.png" alt="CA" style="width: 28px; height: 18px; border-radius: 2px;">
-                            </td>
-                            <td style="width: 30%; text-align: right; vertical-align: middle;">
-                                <div style="border: 2px solid #1f2937; border-radius: 8px; padding: 8px 12px; display: inline-block; text-align: center;">
-                                    <div style="font-size: 10px; color: #6b7280; text-transform: uppercase;">Est. delivery</div>
-                                    <div style="font-size: 20px; font-weight: bold; color: #1f2937; line-height: 1.2;">{delivery_month} {delivery_day}</div>
-                                    <div style="font-size: 10px; color: #6b7280;">07:00 AM</div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-
-                <!-- Progress steps -->
-                <div style="padding: 15px; background-color: #f9fafb; text-align: center;">
-                    <div style="margin-bottom: 10px;">
-                        <span style="background-color: #fef3c7; color: #b45309; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 500;">Waiting</span>
-                    </div>
-                    <table style="width: 100%; max-width: 350px; margin: 0 auto;">
-                        <tr>
-                            <td style="text-align: center; width: 33%;">
-                                <div style="width: 32px; height: 32px; border-radius: 50%; background-color: #1f2937; color: white; text-align: center; line-height: 32px; font-size: 14px; margin: 0 auto;">&#10003;</div>
-                                <div style="font-size: 11px; color: #4b5563; margin-top: 4px;">Application</div>
-                            </td>
-                            <td style="text-align: center; width: 33%;">
-                                <div style="width: 32px; height: 32px; border-radius: 50%; background-color: #1f2937; color: white; text-align: center; line-height: 32px; font-size: 14px; font-weight: bold; margin: 0 auto;">2</div>
-                                <div style="font-size: 11px; color: #4b5563; margin-top: 4px;">Waiting</div>
-                            </td>
-                            <td style="text-align: center; width: 33%;">
-                                <div style="width: 32px; height: 32px; border-radius: 50%; background-color: #e5e7eb; color: #9ca3af; text-align: center; line-height: 32px; font-size: 14px; margin: 0 auto;">3</div>
-                                <div style="font-size: 11px; color: #9ca3af; margin-top: 4px;">Delivered</div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-
-                <!-- Message -->
-                <div style="padding: 15px; font-size: 14px; color: #374151; line-height: 1.5;">
-                    <p style="margin: 0 0 8px 0;">We've received your <strong>Canada eTA</strong> (Electronic Travel Authorization) application and are currently reviewing it. Your document will be delivered on <strong>{delivery_date_formatted}</strong>.</p>
-                    <p style="margin: 0; font-size: 12px; color: #6b7280;">The estimated delivery date ensures that your Canada eTA will be valid on the date of your trip.</p>
-                </div>
-            </div>
-"""
 
     # Plain text version
     text_content = f"""Hello {customer_name}
 
 Your Canada eTA application has been received successfully.
-{delivery_tracker_text}
 REFERENCE NUMBER:
 {reference_number}
 
@@ -272,7 +183,6 @@ The Canada eTA Service Team
 
             <p>Your Canada eTA application has been received successfully.</p>
 
-            {delivery_tracker_html}
 
             <div class="reference-box">
                 <div>REFERENCE NUMBER:</div>

@@ -1080,7 +1080,6 @@ async def create_application(request: Request, application: ApplicationCreate, d
                         reference_number=session_id,
                         amount_paid=application.amount_paid,
                         processing_option=application.processing_option,
-                        travel_date=application.travel_date
                     )
 
                 # Send internal order notification
