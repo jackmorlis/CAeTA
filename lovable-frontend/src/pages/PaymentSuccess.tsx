@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle, Mail, FileText, Plane } from "lucide-react";
+import { CheckCircle, Mail, FileText, Plane, Users } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { apiClient, type ApplicationResponse } from "@/lib/api";
@@ -221,6 +221,23 @@ const PaymentSuccess = () => {
               </div>
             </CardContent>
           </Card>
+
+          {/* Apply for Another Traveler */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <Users className="h-5 w-5 text-blue-600 flex-shrink-0" />
+              <p className="text-blue-800 text-sm sm:text-base">
+                <span className="font-semibold">Traveling with others?</span>{' '}
+                Each traveler needs their own eTA, including children.
+              </p>
+            </div>
+            <Button
+              onClick={() => navigate('/apply')}
+              className="bg-blue-600 hover:bg-blue-700 text-white whitespace-nowrap flex-shrink-0"
+            >
+              Apply for Another Traveler
+            </Button>
+          </div>
 
           {/* Customer Support */}
           <div className="bg-slate-50 p-6 rounded-lg mb-8">
