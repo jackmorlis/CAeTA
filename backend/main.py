@@ -1020,6 +1020,31 @@ async def create_application(request: Request, application: ApplicationCreate, d
             travel_timezone=application.travel_timezone,
             consent_agreed=application.consent_agreed,
             signature=application.signature,
+            # Representative info (for minors)
+            representative_surname=application.representative_surname,
+            representative_given_names=application.representative_given_names,
+            # Additional personal details
+            middle_name=application.middle_name,
+            marital_status=application.marital_status,
+            # Employment information
+            occupation=application.occupation,
+            job_title=application.job_title,
+            employer_name=application.employer_name,
+            employer_country=application.employer_country,
+            employer_city=application.employer_city,
+            employment_since_year=application.employment_since_year,
+            # Background questions
+            bg_refused_visa=application.bg_refused_visa,
+            bg_refused_visa_details=application.bg_refused_visa_details,
+            bg_criminal_offence=application.bg_criminal_offence,
+            bg_criminal_offence_details=application.bg_criminal_offence_details,
+            bg_tuberculosis=application.bg_tuberculosis,
+            bg_tb_health_worker=application.bg_tb_health_worker,
+            bg_tb_diagnosed=application.bg_tb_diagnosed,
+            bg_medical_condition=application.bg_medical_condition,
+            bg_additional_details=application.bg_additional_details,
+            # Declaration
+            declaration_agreed=application.declaration_agreed,
             # Processing & Payment
             processing_option=application.processing_option or "standard",
             payment_method=application.payment_method,
