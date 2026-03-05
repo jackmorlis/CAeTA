@@ -164,14 +164,31 @@ const PaymentSuccess = () => {
           )}
 
           {/* Success Icon */}
-          <div className="mb-8">
-            <CheckCircle className="h-20 w-20 text-green-600 mx-auto mb-4" />
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <div className="mb-6">
+            <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-3" />
+            <h1 className="text-2xl font-bold text-gray-900 mb-1">
               Payment Successful!
             </h1>
-            <p className="text-gray-600 text-lg">
-              Your Canada eTA (eTA) application has been submitted successfully
+            <p className="text-gray-500 text-base">
+              Your Canada eTA application has been submitted successfully
             </p>
+          </div>
+
+          {/* Apply for Another Traveler */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <Users className="h-5 w-5 text-blue-600 flex-shrink-0" />
+              <p className="text-blue-800 text-sm sm:text-base">
+                <span className="font-semibold">Traveling with others?</span>{' '}
+                Each traveler needs their own eTA, including children.
+              </p>
+            </div>
+            <Button
+              onClick={() => navigate('/apply')}
+              className="bg-blue-600 hover:bg-blue-700 text-white whitespace-nowrap flex-shrink-0"
+            >
+              Apply for Another Traveler
+            </Button>
           </div>
 
           {/* Confirmation Details */}
@@ -221,23 +238,6 @@ const PaymentSuccess = () => {
               </div>
             </CardContent>
           </Card>
-
-          {/* Apply for Another Traveler */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <Users className="h-5 w-5 text-blue-600 flex-shrink-0" />
-              <p className="text-blue-800 text-sm sm:text-base">
-                <span className="font-semibold">Traveling with others?</span>{' '}
-                Each traveler needs their own eTA, including children.
-              </p>
-            </div>
-            <Button
-              onClick={() => navigate('/apply')}
-              className="bg-blue-600 hover:bg-blue-700 text-white whitespace-nowrap flex-shrink-0"
-            >
-              Apply for Another Traveler
-            </Button>
-          </div>
 
           {/* Customer Support */}
           <div className="bg-slate-50 p-6 rounded-lg mb-8">
