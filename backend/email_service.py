@@ -72,6 +72,12 @@ def send_payment_confirmation_email(
     delivery_tracker_html = ""
 
     if travel_date:
+        if isinstance(travel_date, str):
+            try:
+                travel_date = datetime.strptime(travel_date, "%Y-%m-%d").date()
+            except ValueError:
+                travel_date = None
+    if travel_date:
         today = datetime.now(ZoneInfo('America/Toronto')).date()
         days_until_travel = (travel_date - today).days
 
