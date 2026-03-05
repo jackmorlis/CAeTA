@@ -171,7 +171,7 @@ You will receive your Canada eTA (Electronic Travel Authorization) via email as 
 If you need to make any changes, please use the contact form or write us an email with your reference number at help@earrival-support.com.
 
 Payment:
-Your transaction was successful. You will see a charge from *CANADAETA* on your bank statement.
+Your transaction was successful. You will see a charge from *EARRIVAL* on your bank statement.
 
 If you have any questions or need further assistance, feel free to contact us.
 You can reach out to us anytime at help@earrival-support.com
@@ -296,7 +296,7 @@ The Canada eTA Service Team
             <p>If you need to make any changes, please use the contact form or write us an email with your reference number at <a href="mailto:help@earrival-support.com">help@earrival-support.com</a>.</p>
 
             <p><strong>Payment:</strong><br>
-            Your transaction was successful. You will see a charge from <strong>*CANADAETA*</strong> on your bank statement.</p>
+            Your transaction was successful. You will see a charge from <strong>*EARRIVAL*</strong> on your bank statement.</p>
 
             <p>If you have any questions or need further assistance, feel free to contact us.<br>
             You can reach out to us anytime at <a href="mailto:help@earrival-support.com">help@earrival-support.com</a></p>
