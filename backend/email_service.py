@@ -166,7 +166,7 @@ eTA Application Service Fee: ${base_price:.2f}
 TOTAL AMOUNT PAID: {amount_display}
 ===============================================
 
-You will receive your Canada eTA (Electronic Travel Authorization) via email as a PDF. Please have this document available when you travel to Canada.
+Once approved, you will receive a confirmation email with your eTA number. Your Canada eTA is electronically linked to your passport — there is no document to print or carry. Simply travel with the passport you used to apply.
 
 If you need to make any changes, please use the contact form or write us an email with your reference number at help@earrival-support.com.
 
@@ -291,7 +291,7 @@ The Canada eTA Service Team
                 </table>
             </div>
 
-            <p><strong>You will receive your Canada eTA (Electronic Travel Authorization) via email as a PDF. Please have this document available when you travel to Canada.</strong></p>
+            <p><strong>Once approved, you will receive a confirmation email with your eTA number. Your Canada eTA is electronically linked to your passport — there is no document to print or carry. Simply travel with the passport you used to apply.</strong></p>
 
             <p>If you need to make any changes, please use the contact form or write us an email with your reference number at <a href="mailto:help@earrival-support.com">help@earrival-support.com</a>.</p>
 
