@@ -1070,12 +1070,18 @@ const AdminPanel = () => {
                       { key: 'passport_number', label: 'Passport number', value: selectedApp.passport_number, mono: true },
                       { key: 'surname', label: 'Surname(s) / last name(s)', value: selectedApp.surname },
                       { key: 'given_names', label: 'Given name(s) / first name(s)', value: selectedApp.given_names },
-                      { key: 'date_of_birth', label: 'Date of birth', value: selectedApp.date_of_birth },
+                      { key: 'dob_year', label: 'Date of birth — Year', value: selectedApp.date_of_birth?.split('-')[0] },
+                      { key: 'dob_month', label: 'Date of birth — Month', value: selectedApp.date_of_birth?.split('-')[1] },
+                      { key: 'dob_day', label: 'Date of birth — Day', value: selectedApp.date_of_birth?.split('-')[2] },
                       { key: 'gender', label: 'Gender', value: selectedApp.gender, capitalize: true },
                       { key: 'country_of_birth', label: 'Country / territory of birth', value: selectedApp.country_of_birth },
                       { key: 'city_of_birth', label: 'City / town of birth', value: selectedApp.city_of_birth },
-                      { key: 'passport_issue_date', label: 'Date of issue of passport', value: selectedApp.passport_issue_date },
-                      { key: 'passport_expiry_date', label: 'Date of expiry of passport', value: selectedApp.passport_expiry_date },
+                      { key: 'issue_year', label: 'Date of issue — Year', value: selectedApp.passport_issue_date?.split('-')[0] },
+                      { key: 'issue_month', label: 'Date of issue — Month', value: selectedApp.passport_issue_date?.split('-')[1] },
+                      { key: 'issue_day', label: 'Date of issue — Day', value: selectedApp.passport_issue_date?.split('-')[2] },
+                      { key: 'expiry_year', label: 'Date of expiry — Year', value: selectedApp.passport_expiry_date?.split('-')[0] },
+                      { key: 'expiry_month', label: 'Date of expiry — Month', value: selectedApp.passport_expiry_date?.split('-')[1] },
+                      { key: 'expiry_day', label: 'Date of expiry — Day', value: selectedApp.passport_expiry_date?.split('-')[2] },
                     ].map(f => (
                       <div key={f.key} className={`py-1.5 px-2 -mx-2 rounded border-b transition-colors duration-300 ${copiedFields.has(f.key) ? 'bg-green-50 border-green-300' : 'border-slate-100'} group`}>
                         <span className="text-slate-500">{f.label}</span>

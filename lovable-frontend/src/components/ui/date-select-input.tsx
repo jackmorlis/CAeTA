@@ -225,22 +225,25 @@ export function DateSelectInput({
     "h-12 w-full rounded-md border-2 border-gray-200 bg-background px-2 py-2 text-sm ring-offset-background hover:border-primary focus:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
 
   return (
-    <div className={cn("flex flex-col gap-2 w-full", className)}>
-      {/* Year */}
+    <div className={cn("flex flex-nowrap gap-2 w-full", className)}>
+      {/* Day */}
       <select
-        value={year}
-        onChange={(e) => handleYearChange(e.target.value)}
+        value={day}
+        onChange={(e) => handleDayChange(e.target.value)}
         disabled={disabled}
-        className={cn(baseSelectClass)}
+        className={cn(baseSelectClass, "min-w-0 flex-1")}
       >
         <option value="" disabled>
-          Select Year
+          Day
         </option>
-        {years.map((y) => (
-          <option key={y} value={String(y)}>
-            {y}
-          </option>
-        ))}
+        {Array.from({ length: dayRange.end - dayRange.start + 1 }, (_, i) => {
+          const v = dayRange.start + i;
+          return (
+            <option key={v} value={String(v).padStart(2, "0")}>
+              {v}
+            </option>
+          );
+        })}
       </select>
 
       {/* Month */}
@@ -248,10 +251,10 @@ export function DateSelectInput({
         value={month}
         onChange={(e) => handleMonthChange(e.target.value)}
         disabled={disabled}
-        className={cn(baseSelectClass)}
+        className={cn(baseSelectClass, "min-w-0 flex-1")}
       >
         <option value="" disabled>
-          Select Month
+          Month
         </option>
         {MONTHS.filter((m) => {
           const mNum = parseInt(m.value, 10);
@@ -263,24 +266,21 @@ export function DateSelectInput({
         ))}
       </select>
 
-      {/* Day */}
+      {/* Year */}
       <select
-        value={day}
-        onChange={(e) => handleDayChange(e.target.value)}
+        value={year}
+        onChange={(e) => handleYearChange(e.target.value)}
         disabled={disabled}
-        className={cn(baseSelectClass)}
+        className={cn(baseSelectClass, "min-w-0 flex-1")}
       >
         <option value="" disabled>
-          Select Day
+          Year
         </option>
-        {Array.from({ length: dayRange.end - dayRange.start + 1 }, (_, i) => {
-          const v = dayRange.start + i;
-          return (
-            <option key={v} value={String(v).padStart(2, "0")}>
-              {v}
-            </option>
-          );
-        })}
+        {years.map((y) => (
+          <option key={y} value={String(y)}>
+            {y}
+          </option>
+        ))}
       </select>
     </div>
   );
