@@ -1024,8 +1024,8 @@ const AdminPanel = () => {
                         <span className="text-slate-500">{f.label}</span>
                         <div className="flex items-center gap-1.5 ml-4">
                           <span className="font-semibold text-right">{f.value || 'N/A'}</span>
-                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-slate-200" title="Copy">
-                            {copiedField === f.key ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
+                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-slate-200" title="Copy">
+                            {copiedField === f.key ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
                           </button>
                         </div>
                       </div>
@@ -1048,8 +1048,8 @@ const AdminPanel = () => {
                         <span className="text-slate-500">{f.label}</span>
                         <div className="flex items-center gap-1.5 ml-4">
                           <span className={`font-semibold text-right ${f.mono ? 'font-mono' : ''} ${f.capitalize ? 'capitalize' : ''}`}>{f.value || 'N/A'}</span>
-                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-slate-200" title="Copy">
-                            {copiedField === f.key ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
+                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-slate-200" title="Copy">
+                            {copiedField === f.key ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
                           </button>
                         </div>
                       </div>
@@ -1066,8 +1066,8 @@ const AdminPanel = () => {
                         <span className="text-slate-500">{f.label}</span>
                         <div className="flex items-center gap-1.5 ml-4">
                           <span className={`font-semibold text-right ${f.mono ? 'font-mono' : ''}`}>{f.value || 'N/A'}</span>
-                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-slate-200" title="Copy">
-                            {copiedField === f.key ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
+                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-slate-200" title="Copy">
+                            {copiedField === f.key ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
                           </button>
                         </div>
                       </div>
@@ -1083,8 +1083,8 @@ const AdminPanel = () => {
                         <span className="text-slate-500">{f.label}</span>
                         <div className="flex items-center gap-1.5 ml-4">
                           <span className="font-semibold text-right">{f.value || 'N/A'}</span>
-                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-slate-200" title="Copy">
-                            {copiedField === f.key ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
+                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-slate-200" title="Copy">
+                            {copiedField === f.key ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
                           </button>
                         </div>
                       </div>
@@ -1103,8 +1103,8 @@ const AdminPanel = () => {
                         <span className="text-slate-500">{f.label} {f.note && <span className="text-xs text-amber-500">{f.note}</span>}</span>
                         <div className="flex items-center gap-1.5 ml-4">
                           <span className="font-semibold text-right">{f.value || 'N/A'}</span>
-                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-slate-200" title="Copy">
-                            {copiedField === f.key ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
+                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-slate-200" title="Copy">
+                            {copiedField === f.key ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
                           </button>
                         </div>
                       </div>
@@ -1122,8 +1122,8 @@ const AdminPanel = () => {
                         <span className="text-slate-500">{f.label}</span>
                         <div className="flex items-center gap-1.5 ml-4">
                           <span className="font-semibold text-right">{f.value || 'N/A'}</span>
-                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-slate-200" title="Copy">
-                            {copiedField === f.key ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
+                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-slate-200" title="Copy">
+                            {copiedField === f.key ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
                           </button>
                         </div>
                       </div>
@@ -1140,8 +1140,8 @@ const AdminPanel = () => {
                         <span className="text-slate-500">{f.label}</span>
                         <div className="flex items-center gap-1.5 ml-4">
                           <span className="font-semibold text-right">{f.value || 'N/A'}</span>
-                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-slate-200" title="Copy">
-                            {copiedField === f.key ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
+                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-slate-200" title="Copy">
+                            {copiedField === f.key ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
                           </button>
                         </div>
                       </div>
@@ -1198,8 +1198,8 @@ const AdminPanel = () => {
                           <span className="text-gray-500">{f.label}</span>
                           <div className="flex items-center gap-1.5 ml-4">
                             <span className={`font-semibold text-right ${f.capitalize ? 'capitalize' : ''}`}>{f.value || 'N/A'}</span>
-                            <button onClick={() => copyToClipboard(f.value || '', f.key)} className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-gray-300" title="Copy">
-                              {copiedField === f.key ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5 text-gray-400" />}
+                            <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-gray-300" title="Copy">
+                              {copiedField === f.key ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-gray-400" />}
                             </button>
                           </div>
                         </div>
