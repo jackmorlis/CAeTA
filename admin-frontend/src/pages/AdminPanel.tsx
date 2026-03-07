@@ -1119,8 +1119,29 @@ const AdminPanel = () => {
                       </div>
                     ))}
 
-                    {/* 4. Contact Information */}
-                    <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">4. Contact Information</h3>
+                    {/* 4. Employment Information */}
+                    <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">4. Employment Information</h3>
+                    {[
+                      { key: 'occupation', label: 'Occupation', value: selectedApp.occupation },
+                      { key: 'job_title', label: 'Job title', value: selectedApp.job_title },
+                      { key: 'employer_name', label: 'Name of employer or school, as applicable', value: selectedApp.employer_name },
+                      { key: 'employer_country', label: 'Country / territory', value: selectedApp.employer_country },
+                      { key: 'employer_city', label: 'City / town', value: selectedApp.employer_city },
+                      { key: 'employment_since_year', label: 'Since what year?', value: selectedApp.employment_since_year },
+                    ].map(f => (
+                      <div key={f.key} className={`py-1.5 px-2 -mx-2 rounded border-b transition-colors duration-300 ${copiedFields.has(f.key) ? 'bg-green-50 border-green-300' : 'border-slate-100'} group`}>
+                        <span className="text-slate-500">{f.label}</span>
+                        <div className="flex items-center gap-1.5 mt-1">
+                          <span className="font-semibold">{f.value || 'N/A'}</span>
+                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-slate-200" title="Copy">
+                            {copiedFields.has(f.key) ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* 5. Contact Information */}
+                    <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">5. Contact Information</h3>
                     {[
                       { key: 'language_preference', label: 'Preferred language to contact you', value: selectedApp.language_preference },
                       { key: 'email', label: 'Email address', value: selectedApp.email },
@@ -1137,8 +1158,8 @@ const AdminPanel = () => {
                       </div>
                     ))}
 
-                    {/* 5. Residential Address */}
-                    <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">5. Residential Address</h3>
+                    {/* 6. Residential Address */}
+                    <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">6. Residential Address</h3>
                     {[
                       { key: 'apartment_unit', label: 'Apartment / unit number', value: selectedApp.apartment_unit },
                       { key: 'street_address', label: 'Street / civic no. & street address', value: selectedApp.street_address, note: '(IRCC splits into 2 fields)' },
@@ -1157,8 +1178,8 @@ const AdminPanel = () => {
                       </div>
                     ))}
 
-                    {/* 6. Travel Information */}
-                    <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">6. Travel Information</h3>
+                    {/* 7. Travel Information */}
+                    <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">7. Travel Information</h3>
                     {[
                       { key: 'travel_date_known', label: 'Do you know when you will travel to Canada?', value: selectedApp.travel_date_known },
                       { key: 'travel_date', label: 'Travel date', value: selectedApp.travel_date },
@@ -1176,8 +1197,8 @@ const AdminPanel = () => {
                       </div>
                     ))}
 
-                    {/* 7. Consent and Declaration */}
-                    <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">7. Consent and Declaration</h3>
+                    {/* 8. Consent and Declaration */}
+                    <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">8. Consent and Declaration</h3>
                     {[
                       { key: 'consent_agreed', label: 'I Agree (consent)', value: selectedApp.consent_agreed ? 'Yes' : 'No' },
                       { key: 'signature', label: 'Signature of applicant', value: selectedApp.signature },
@@ -1204,12 +1225,6 @@ const AdminPanel = () => {
 
                       {[
                         { key: 'middle_name', label: 'Middle name', value: selectedApp.middle_name },
-                        { key: 'occupation', label: 'Occupation', value: selectedApp.occupation },
-                        { key: 'job_title', label: 'Job title', value: selectedApp.job_title },
-                        { key: 'employer_name', label: 'Employer name', value: selectedApp.employer_name },
-                        { key: 'employer_country', label: 'Employer country', value: selectedApp.employer_country },
-                        { key: 'employer_city', label: 'Employer city', value: selectedApp.employer_city },
-                        { key: 'employment_since_year', label: 'Employment since (year)', value: selectedApp.employment_since_year },
                         { key: 'bg_refused_visa', label: 'Refused visa/entry to Canada', value: selectedApp.bg_refused_visa },
                         ...(selectedApp.bg_refused_visa_details ? [{ key: 'bg_refused_visa_details', label: 'Refused visa details', value: selectedApp.bg_refused_visa_details }] : []),
                         { key: 'bg_criminal_offence', label: 'Criminal offence', value: selectedApp.bg_criminal_offence },
