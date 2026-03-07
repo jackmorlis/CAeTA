@@ -25,6 +25,8 @@ export interface ApplicationCreate {
   uci_number?: string;
   language_preference?: string;
   email?: string;
+  phone_country_code?: string;
+  phone_number?: string;
   apartment_unit?: string;
   street_address?: string;
   city?: string;

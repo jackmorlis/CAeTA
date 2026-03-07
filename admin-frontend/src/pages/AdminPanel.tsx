@@ -344,6 +344,7 @@ const AdminPanel = () => {
       addLabelValue('Date of Birth', selectedApp.date_of_birth);
       addLabelValue('Gender', selectedApp.gender);
       addLabelValue('Email', selectedApp.email);
+      addLabelValue('Phone', selectedApp.phone_country_code && selectedApp.phone_number ? `${selectedApp.phone_country_code} ${selectedApp.phone_number}` : 'N/A');
       addLabelValue('Nationality', selectedApp.nationality);
       addLabelValue('Country of Birth', selectedApp.country_of_birth);
       addLabelValue('City of Birth', selectedApp.city_of_birth);
@@ -1078,6 +1079,7 @@ const AdminPanel = () => {
                     {[
                       { key: 'language_preference', label: 'Preferred language to contact you', value: selectedApp.language_preference },
                       { key: 'email', label: 'Email address', value: selectedApp.email },
+                      { key: 'phone', label: 'Phone number', value: selectedApp.phone_country_code && selectedApp.phone_number ? `${selectedApp.phone_country_code} ${selectedApp.phone_number}` : undefined },
                     ].map(f => (
                       <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-slate-100 group">
                         <span className="text-slate-500">{f.label}</span>

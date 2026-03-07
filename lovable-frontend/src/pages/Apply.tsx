@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Plane, CreditCard, User, CheckCircle, Globe, Mail, MapPin, Plus, Trash2, Briefcase } from 'lucide-react';
+import { Plane, CreditCard, User, CheckCircle, Globe, Mail, MapPin, Plus, Trash2, Briefcase, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -99,6 +99,8 @@ const formSchema = z.object({
   // Step 0 — Travel Document
   passportCountryCode: z.string().optional().default(""),
   usPermanentResident: z.string().optional().default(""),
+  phoneCountryCode: z.string().optional().default("+1"),
+  phoneNumber: z.string().optional().default(""),
 
   // Step 1 — Passport Details
   passportNumber: z.string().optional().default(""),
@@ -280,6 +282,8 @@ const Apply = () => {
   const formDefaults = {
       passportCountryCode: "",
       usPermanentResident: "",
+      phoneCountryCode: "+1",
+      phoneNumber: "",
       passportNumber: "",
       passportNumberConfirm: "",
       surname: "",
@@ -418,6 +422,8 @@ const Apply = () => {
         uci_number: data.uciNumber || undefined,
         language_preference: data.languagePreference,
         email: data.email,
+        phone_country_code: data.phoneCountryCode || undefined,
+        phone_number: data.phoneNumber || undefined,
         apartment_unit: data.apartmentUnit || undefined,
         street_address: data.streetAddress,
         city: data.city,
@@ -527,6 +533,10 @@ const Apply = () => {
     if (!d.dateOfBirth) { form.setError('dateOfBirth', { type: 'manual', message: 'Date of birth is required' }); valid = false; }
     if (!d.gender) { form.setError('gender', { type: 'manual', message: 'Gender is required' }); valid = false; }
     if (!d.maritalStatus) { form.setError('maritalStatus', { type: 'manual', message: 'Marital status is required' }); valid = false; }
+
+    // Phone number
+    if (!d.phoneNumber?.trim()) { form.setError('phoneNumber', { type: 'manual', message: 'Phone number is required' }); valid = false; }
+    else if (!/^[\d\s\-\(\)]{7,15}$/.test(d.phoneNumber.trim())) { form.setError('phoneNumber', { type: 'manual', message: 'Please enter a valid phone number' }); valid = false; }
 
     // Representative fields required if applicant is under 18
     if (isMinor) {
@@ -968,6 +978,102 @@ const Apply = () => {
                           <FormMessage />
                         </FormItem>
                       )} />
+
+                      {/* Phone Number */}
+                      <div>
+                        <FormLabel className="text-base md:text-lg font-bold text-slate-800 mb-3 block">
+                          <span className="flex items-center gap-2"><Phone className="h-5 w-5" /> Phone number <span className="text-red-500">*</span></span>
+                        </FormLabel>
+                        <div className="grid grid-cols-[140px_1fr] gap-3">
+                          <FormField control={form.control} name="phoneCountryCode" render={({ field }) => (
+                            <FormItem>
+                              <Select onValueChange={field.onChange} value={field.value}>
+                                <FormControl>
+                                  <SelectTrigger className="h-12 border-2 border-gray-200 hover:border-primary focus:border-primary">
+                                    <SelectValue placeholder="+1" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="max-h-64">
+                                  <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                                  <SelectItem value="+44">🇬🇧 +44</SelectItem>
+                                  <SelectItem value="+33">🇫🇷 +33</SelectItem>
+                                  <SelectItem value="+49">🇩🇪 +49</SelectItem>
+                                  <SelectItem value="+61">🇦🇺 +61</SelectItem>
+                                  <SelectItem value="+81">🇯🇵 +81</SelectItem>
+                                  <SelectItem value="+86">🇨🇳 +86</SelectItem>
+                                  <SelectItem value="+91">🇮🇳 +91</SelectItem>
+                                  <SelectItem value="+52">🇲🇽 +52</SelectItem>
+                                  <SelectItem value="+55">🇧🇷 +55</SelectItem>
+                                  <SelectItem value="+34">🇪🇸 +34</SelectItem>
+                                  <SelectItem value="+39">🇮🇹 +39</SelectItem>
+                                  <SelectItem value="+82">🇰🇷 +82</SelectItem>
+                                  <SelectItem value="+31">🇳🇱 +31</SelectItem>
+                                  <SelectItem value="+46">🇸🇪 +46</SelectItem>
+                                  <SelectItem value="+47">🇳🇴 +47</SelectItem>
+                                  <SelectItem value="+48">🇵🇱 +48</SelectItem>
+                                  <SelectItem value="+41">🇨🇭 +41</SelectItem>
+                                  <SelectItem value="+43">🇦🇹 +43</SelectItem>
+                                  <SelectItem value="+32">🇧🇪 +32</SelectItem>
+                                  <SelectItem value="+45">🇩🇰 +45</SelectItem>
+                                  <SelectItem value="+358">🇫🇮 +358</SelectItem>
+                                  <SelectItem value="+353">🇮🇪 +353</SelectItem>
+                                  <SelectItem value="+351">🇵🇹 +351</SelectItem>
+                                  <SelectItem value="+30">🇬🇷 +30</SelectItem>
+                                  <SelectItem value="+90">🇹🇷 +90</SelectItem>
+                                  <SelectItem value="+7">🇷🇺 +7</SelectItem>
+                                  <SelectItem value="+966">🇸🇦 +966</SelectItem>
+                                  <SelectItem value="+971">🇦🇪 +971</SelectItem>
+                                  <SelectItem value="+234">🇳🇬 +234</SelectItem>
+                                  <SelectItem value="+27">🇿🇦 +27</SelectItem>
+                                  <SelectItem value="+254">🇰🇪 +254</SelectItem>
+                                  <SelectItem value="+63">🇵🇭 +63</SelectItem>
+                                  <SelectItem value="+66">🇹🇭 +66</SelectItem>
+                                  <SelectItem value="+84">🇻🇳 +84</SelectItem>
+                                  <SelectItem value="+62">🇮🇩 +62</SelectItem>
+                                  <SelectItem value="+60">🇲🇾 +60</SelectItem>
+                                  <SelectItem value="+65">🇸🇬 +65</SelectItem>
+                                  <SelectItem value="+64">🇳🇿 +64</SelectItem>
+                                  <SelectItem value="+56">🇨🇱 +56</SelectItem>
+                                  <SelectItem value="+57">🇨🇴 +57</SelectItem>
+                                  <SelectItem value="+54">🇦🇷 +54</SelectItem>
+                                  <SelectItem value="+51">🇵🇪 +51</SelectItem>
+                                  <SelectItem value="+20">🇪🇬 +20</SelectItem>
+                                  <SelectItem value="+212">🇲🇦 +212</SelectItem>
+                                  <SelectItem value="+972">🇮🇱 +972</SelectItem>
+                                  <SelectItem value="+380">🇺🇦 +380</SelectItem>
+                                  <SelectItem value="+40">🇷🇴 +40</SelectItem>
+                                  <SelectItem value="+36">🇭🇺 +36</SelectItem>
+                                  <SelectItem value="+420">🇨🇿 +420</SelectItem>
+                                  <SelectItem value="+385">🇭🇷 +385</SelectItem>
+                                  <SelectItem value="+370">🇱🇹 +370</SelectItem>
+                                  <SelectItem value="+371">🇱🇻 +371</SelectItem>
+                                  <SelectItem value="+372">🇪🇪 +372</SelectItem>
+                                  <SelectItem value="+359">🇧🇬 +359</SelectItem>
+                                  <SelectItem value="+1-868">🇹🇹 +1-868</SelectItem>
+                                  <SelectItem value="+1-876">🇯🇲 +1-876</SelectItem>
+                                  <SelectItem value="+1-246">🇧🇧 +1-246</SelectItem>
+                                  <SelectItem value="+1-767">🇩🇲 +1-767</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )} />
+
+                          <FormField control={form.control} name="phoneNumber" render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Input
+                                  placeholder="Phone number"
+                                  {...field}
+                                  className="h-12 border-2 border-gray-200 hover:border-primary focus:border-primary"
+                                  type="tel"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )} />
+                        </div>
+                      </div>
 
                       {/* Representative fields — shown if applicant is under 18 */}
                       {isMinor && (

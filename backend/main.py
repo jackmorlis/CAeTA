@@ -108,6 +108,8 @@ class Application(Base):
     uci_number = Column(String, nullable=True)
     language_preference = Column(String, nullable=True)
     email = Column(String, nullable=True)
+    phone_country_code = Column(String, nullable=True)
+    phone_number = Column(String, nullable=True)
     apartment_unit = Column(String, nullable=True)
     street_address = Column(String, nullable=True)
     city = Column(String, nullable=True)
@@ -261,6 +263,8 @@ class ApplicationCreate(BaseModel):
     uci_number: Optional[str] = None
     language_preference: Optional[str] = None
     email: Optional[str] = None
+    phone_country_code: Optional[str] = None
+    phone_number: Optional[str] = None
     apartment_unit: Optional[str] = None
     street_address: Optional[str] = None
     city: Optional[str] = None
@@ -355,6 +359,8 @@ class ApplicationResponse(BaseModel):
     uci_number: Optional[str]
     language_preference: Optional[str]
     email: Optional[str]
+    phone_country_code: Optional[str]
+    phone_number: Optional[str]
     apartment_unit: Optional[str]
     street_address: Optional[str]
     city: Optional[str]
@@ -1007,6 +1013,8 @@ async def create_application(request: Request, application: ApplicationCreate, d
             uci_number=application.uci_number,
             language_preference=application.language_preference,
             email=application.email,
+            phone_country_code=application.phone_country_code,
+            phone_number=application.phone_number,
             apartment_unit=application.apartment_unit,
             street_address=application.street_address,
             city=application.city,
