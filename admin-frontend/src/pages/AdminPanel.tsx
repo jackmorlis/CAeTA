@@ -54,6 +54,28 @@ const AdminPanel = () => {
     return idx >= 1 && idx <= 12 ? names[idx - 1] : m;
   };
 
+  const occupationLabels: Record<string, string> = {
+    art_culture: 'Art, culture, recreation and sport occupations',
+    business_finance: 'Business, finance and administration occupations',
+    education_law: 'Education, law and social, community and government services occupations',
+    health: 'Health occupations',
+    homemaker: 'Homemaker',
+    management: 'Management occupations',
+    manufacturing: 'Manufacturing and utilities occupations',
+    military: 'Military/armed forces',
+    science: 'Natural and applied sciences and related occupations',
+    natural_resources: 'Natural resources, agriculture and related production occupations',
+    retired: 'Retired',
+    sales_service: 'Sales and service occupations',
+    student: 'Student',
+    trades_transport: 'Trades, transport and equipment operators and related occupations',
+    unemployed: 'Unemployed',
+  };
+  const occupationLabel = (val?: string) => val ? (occupationLabels[val] || val) : undefined;
+
+  const genderLabels: Record<string, string> = { female: 'Female', male: 'Male', another_gender: 'Another gender' };
+  const genderLabel = (val?: string) => val ? (genderLabels[val] || val) : undefined;
+
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -1079,7 +1101,7 @@ const AdminPanel = () => {
                       { key: 'dob_year', label: 'Date of birth — Year', value: selectedApp.date_of_birth?.split('-')[0] },
                       { key: 'dob_month', label: 'Date of birth — Month', value: monthName(selectedApp.date_of_birth?.split('-')[1]) },
                       { key: 'dob_day', label: 'Date of birth — Day', value: selectedApp.date_of_birth?.split('-')[2] },
-                      { key: 'gender', label: 'Gender', value: selectedApp.gender, capitalize: true },
+                      { key: 'gender', label: 'Gender', value: genderLabel(selectedApp.gender) },
                       { key: 'country_of_birth', label: 'Country / territory of birth', value: selectedApp.country_of_birth },
                       { key: 'city_of_birth', label: 'City / town of birth', value: selectedApp.city_of_birth },
                       { key: 'issue_year', label: 'Date of issue — Year', value: selectedApp.passport_issue_date?.split('-')[0] },
@@ -1122,7 +1144,7 @@ const AdminPanel = () => {
                     {/* 4. Employment Information */}
                     <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">4. Employment Information</h3>
                     {[
-                      { key: 'occupation', label: 'Occupation', value: selectedApp.occupation },
+                      { key: 'occupation', label: 'Occupation', value: occupationLabel(selectedApp.occupation) },
                       { key: 'job_title', label: 'Job title', value: selectedApp.job_title },
                       { key: 'employer_name', label: 'Name of employer or school, as applicable', value: selectedApp.employer_name },
                       { key: 'employer_country', label: 'Country / territory', value: selectedApp.employer_country },
