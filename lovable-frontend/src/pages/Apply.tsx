@@ -1622,32 +1622,18 @@ const Apply = () => {
                         )} />
                       </div>
 
-                      {/* District / Postal Code */}
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <FormField control={form.control} name="districtRegion" render={({ field }) => (
-                          <FormItem className="space-y-3">
-                            <FormLabel className="text-base md:text-lg font-bold text-slate-800">
-                              District/region
-                            </FormLabel>
-                            <FormControl>
-                              <Input placeholder="Optional" {...field} className="h-12 border-2 border-gray-200 hover:border-primary focus:border-primary" />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )} />
-
-                        <FormField control={form.control} name="postalCode" render={({ field }) => (
-                          <FormItem className="space-y-3">
-                            <FormLabel className="text-base md:text-lg font-bold text-slate-800">
-                              Zip/postal code
-                            </FormLabel>
-                            <FormControl>
-                              <Input placeholder="Optional" {...field} className="h-12 border-2 border-gray-200 hover:border-primary focus:border-primary" />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )} />
-                      </div>
+                      {/* Postal Code */}
+                      <FormField control={form.control} name="postalCode" render={({ field }) => (
+                        <FormItem className="space-y-3">
+                          <FormLabel className="text-base md:text-lg font-bold text-slate-800">
+                            Zip/postal code
+                          </FormLabel>
+                          <FormControl>
+                            <Input placeholder="Optional" {...field} className="h-12 border-2 border-gray-200 hover:border-primary focus:border-primary" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
 
                       <div className="flex justify-between">
                         <Button type="button" variant="outline" onClick={() => changeStep(1)}>&larr; Back</Button>
