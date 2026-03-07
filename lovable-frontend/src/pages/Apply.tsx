@@ -1153,38 +1153,23 @@ const Apply = () => {
                         )} />
                       </div>
 
-                      {/* Middle Name / Date of Birth */}
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <FormField control={form.control} name="middleName" render={({ field }) => (
-                          <FormItem className="space-y-3">
-                            <FormLabel className="text-base md:text-lg font-bold text-slate-800">
-                              Middle name(s)
-                            </FormLabel>
-                            <FormControl>
-                              <Input placeholder="As on passport (optional)" {...field} className="h-12 border-2 border-gray-200 hover:border-primary focus:border-primary" />
-                            </FormControl>
-                            <p className="text-sm text-slate-500">If you have no middle name, leave blank.</p>
-                            <FormMessage />
-                          </FormItem>
-                        )} />
-
-                        <FormField control={form.control} name="dateOfBirth" render={({ field }) => (
-                          <FormItem className="space-y-3">
-                            <FormLabel className="text-base md:text-lg font-bold text-slate-800">
-                              Date of birth <span className="text-red-500">*</span>
-                            </FormLabel>
-                            <FormControl>
-                              <DateSelectInput
-                                date={field.value}
-                                onDateChange={(v) => field.onChange(v || '')}
-                                maxDate={getTodayInToronto()}
-                                minDate="1900-01-01"
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )} />
-                      </div>
+                      {/* Date of Birth */}
+                      <FormField control={form.control} name="dateOfBirth" render={({ field }) => (
+                        <FormItem className="space-y-3">
+                          <FormLabel className="text-base md:text-lg font-bold text-slate-800">
+                            Date of birth <span className="text-red-500">*</span>
+                          </FormLabel>
+                          <FormControl>
+                            <DateSelectInput
+                              date={field.value}
+                              onDateChange={(v) => field.onChange(v || '')}
+                              maxDate={getTodayInToronto()}
+                              minDate="1900-01-01"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
 
                       {/* Gender / Marital Status */}
                       <div className="grid md:grid-cols-2 gap-4">
