@@ -1221,8 +1221,32 @@ const AdminPanel = () => {
                       </div>
                     ))}
 
-                    {/* 8. Consent and Declaration */}
-                    <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">8. Consent and Declaration</h3>
+                    {/* 8. Background Questions */}
+                    <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">8. Background Questions</h3>
+                    {[
+                      { key: 'bg_refused_visa', label: 'Have you ever been refused a visa or permit, denied entry to, or ordered to leave Canada or any other country/territory?', value: selectedApp.bg_refused_visa },
+                      ...(selectedApp.bg_refused_visa_details ? [{ key: 'bg_refused_visa_details', label: 'Details (refused visa)', value: selectedApp.bg_refused_visa_details }] : []),
+                      { key: 'bg_criminal_offence', label: 'Have you ever committed, been arrested for, been charged with or convicted of any criminal offence in any country/territory?', value: selectedApp.bg_criminal_offence },
+                      ...(selectedApp.bg_criminal_offence_details ? [{ key: 'bg_criminal_offence_details', label: 'Details (criminal offence)', value: selectedApp.bg_criminal_offence_details }] : []),
+                      { key: 'bg_tuberculosis', label: 'In the past two years, were you diagnosed with tuberculosis or have you been in close contact with a person with tuberculosis?', value: selectedApp.bg_tuberculosis },
+                      { key: 'bg_tb_health_worker', label: 'Are you a health care worker?', value: selectedApp.bg_tb_health_worker },
+                      { key: 'bg_tb_diagnosed', label: 'Have you been diagnosed with tuberculosis?', value: selectedApp.bg_tb_diagnosed },
+                      { key: 'bg_medical_condition', label: 'Do you have one of these conditions?', value: selectedApp.bg_medical_condition },
+                      ...(selectedApp.bg_additional_details ? [{ key: 'bg_additional_details', label: 'Please briefly indicate if there are additional details pertinent to your application', value: selectedApp.bg_additional_details }] : []),
+                    ].map(f => (
+                      <div key={f.key} className={`py-1.5 px-2 -mx-2 rounded border-b transition-colors duration-300 ${copiedFields.has(f.key) ? 'bg-green-50 border-green-300' : 'border-slate-100'} group`}>
+                        <span className="text-slate-500">{f.label}</span>
+                        <div className="flex items-center gap-1.5 mt-1">
+                          <span className="font-semibold">{f.value || 'N/A'}</span>
+                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-slate-200" title="Copy">
+                            {copiedFields.has(f.key) ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* 9. Consent and Declaration */}
+                    <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">9. Consent and Declaration</h3>
                     {[
                       { key: 'consent_agreed', label: 'I Agree (consent)', value: selectedApp.consent_agreed ? 'Yes' : 'No' },
                       { key: 'signature', label: 'Signature of applicant', value: selectedApp.signature },
@@ -1249,15 +1273,6 @@ const AdminPanel = () => {
 
                       {[
                         { key: 'middle_name', label: 'Middle name', value: selectedApp.middle_name },
-                        { key: 'bg_refused_visa', label: 'Refused visa/entry to Canada', value: selectedApp.bg_refused_visa },
-                        ...(selectedApp.bg_refused_visa_details ? [{ key: 'bg_refused_visa_details', label: 'Refused visa details', value: selectedApp.bg_refused_visa_details }] : []),
-                        { key: 'bg_criminal_offence', label: 'Criminal offence', value: selectedApp.bg_criminal_offence },
-                        ...(selectedApp.bg_criminal_offence_details ? [{ key: 'bg_criminal_offence_details', label: 'Criminal offence details', value: selectedApp.bg_criminal_offence_details }] : []),
-                        { key: 'bg_tuberculosis', label: 'Tuberculosis contact', value: selectedApp.bg_tuberculosis },
-                        { key: 'bg_tb_health_worker', label: 'TB health worker', value: selectedApp.bg_tb_health_worker },
-                        { key: 'bg_tb_diagnosed', label: 'TB diagnosed', value: selectedApp.bg_tb_diagnosed },
-                        { key: 'bg_medical_condition', label: 'Medical condition', value: selectedApp.bg_medical_condition },
-                        ...(selectedApp.bg_additional_details ? [{ key: 'bg_additional_details', label: 'Additional details', value: selectedApp.bg_additional_details }] : []),
                         { key: 'postal_code', label: 'Postal code', value: selectedApp.postal_code },
                       ].map(f => (
                         <div key={f.key} className={`py-1.5 px-2 -mx-2 rounded border-b transition-colors duration-300 ${copiedFields.has(f.key) ? 'bg-green-50 border-green-300' : 'border-gray-200'} group`}>
