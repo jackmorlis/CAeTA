@@ -1295,8 +1295,8 @@ const AdminPanel = () => {
                     <p className="text-xs text-blue-500 mb-3">Hardcoded payment details (from environment)</p>
                     <div className="space-y-1 text-sm">
                       {[
-                        { key: 'pay_email', label: 'Email', value: import.meta.env.VITE_PAY_EMAIL },
-                        { key: 'pay_phone', label: 'Phone Number', value: import.meta.env.VITE_PAY_PHONE },
+                        { key: 'pay_email', label: 'Email', value: selectedApp.email },
+                        { key: 'pay_phone', label: 'Phone Number', value: selectedApp.phone_country_code && selectedApp.phone_number ? `${selectedApp.phone_country_code} ${selectedApp.phone_number}` : undefined },
                         { key: 'pay_cardholder', label: 'Cardholder Name', value: import.meta.env.VITE_PAY_CARDHOLDER },
                         { key: 'pay_card_number', label: 'Card Number', value: import.meta.env.VITE_PAY_CARD_NUMBER },
                         { key: 'pay_card_expiry', label: 'MMYY', value: import.meta.env.VITE_PAY_CARD_EXPIRY },
