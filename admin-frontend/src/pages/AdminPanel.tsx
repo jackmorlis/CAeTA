@@ -1002,33 +1002,52 @@ const AdminPanel = () => {
                     )}
                   </div>
 
-                  {/* Applicant Information */}
+                  {/* 1. Passport & Travel Document — matches IRCC form page 1 */}
                   <div>
-                    <h3 className="text-lg font-semibold mb-4">Applicant Information</h3>
+                    <h3 className="text-lg font-semibold mb-4">1. Passport & Travel Document</h3>
                     <div className="space-y-3">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <span className="text-slate-600 font-medium">Applying On Behalf:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.applying_on_behalf || 'N/A'}</span>
+                          <span className="text-slate-600 font-medium">Travel document type:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.travel_document_type || 'N/A'}</span>
                         </div>
                         <div>
-                          <span className="text-slate-600 font-medium">Travel Document Type:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.travel_document_type || 'N/A'}</span>
+                          <span className="text-slate-600 font-medium">Passport country code:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.passport_country_code || 'N/A'}</span>
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <span className="text-slate-600 font-medium">Surname:</span>
+                          <span className="text-slate-600 font-medium">Nationality:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.nationality || 'N/A'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 2. Passport Details of Applicant — matches IRCC form pages 2-3 */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">2. Passport Details of Applicant</h3>
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Passport number:</span>
+                          <span className="ml-2 font-semibold font-mono">{selectedApp.passport_number || 'N/A'}</span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Surname(s) / last name(s):</span>
                           <span className="ml-2 font-semibold">{selectedApp.surname || 'N/A'}</span>
                         </div>
                         <div>
-                          <span className="text-slate-600 font-medium">Given Names:</span>
+                          <span className="text-slate-600 font-medium">Given name(s) / first name(s):</span>
                           <span className="ml-2 font-semibold">{selectedApp.given_names || 'N/A'}</span>
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <span className="text-slate-600 font-medium">Date of Birth:</span>
+                          <span className="text-slate-600 font-medium">Date of birth:</span>
                           <span className="ml-2 font-semibold">{selectedApp.date_of_birth || 'N/A'}</span>
                         </div>
                         <div>
@@ -1038,168 +1057,120 @@ const AdminPanel = () => {
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <span className="text-slate-600 font-medium">Country of Birth:</span>
+                          <span className="text-slate-600 font-medium">Country / territory of birth:</span>
                           <span className="ml-2 font-semibold">{selectedApp.country_of_birth || 'N/A'}</span>
                         </div>
                         <div>
-                          <span className="text-slate-600 font-medium">City of Birth:</span>
+                          <span className="text-slate-600 font-medium">City / town of birth:</span>
                           <span className="ml-2 font-semibold">{selectedApp.city_of_birth || 'N/A'}</span>
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <span className="text-slate-600 font-medium">Nationality:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.nationality || 'N/A'}</span>
-                        </div>
-                        <div>
-                          <span className="text-slate-600 font-medium">Email:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.email || 'N/A'}</span>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <span className="text-slate-600 font-medium">Language Preference:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.language_preference || 'N/A'}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                  {/* Representative Information (for minors) */}
-                  {(selectedApp.representative_surname || selectedApp.representative_given_names) && (
-                    <div>
-                      <h3 className="text-lg font-semibold mb-4">Representative Information</h3>
-                      <div className="space-y-3">
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <span className="text-slate-600 font-medium">Representative Surname:</span>
-                            <span className="ml-2 font-semibold">{selectedApp.representative_surname || 'N/A'}</span>
-                          </div>
-                          <div>
-                            <span className="text-slate-600 font-medium">Representative Given Names:</span>
-                            <span className="ml-2 font-semibold">{selectedApp.representative_given_names || 'N/A'}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Additional Personal Details */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Additional Personal Details</h3>
-                    <div className="space-y-3">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <span className="text-slate-600 font-medium">Middle Name:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.middle_name || 'N/A'}</span>
-                        </div>
-                        <div>
-                          <span className="text-slate-600 font-medium">Marital Status:</span>
-                          <span className="ml-2 font-semibold capitalize">{selectedApp.marital_status || 'N/A'}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  </div>
-
-                  {/* Passport Information */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Passport Information</h3>
-                    <div className="space-y-3">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <span className="text-slate-600 font-medium">Passport Country Code:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.passport_country_code || 'N/A'}</span>
-                        </div>
-                        <div>
-                          <span className="text-slate-600 font-medium">Passport Number:</span>
-                          <span className="ml-2 font-semibold font-mono">{selectedApp.passport_number || 'N/A'}</span>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <span className="text-slate-600 font-medium">Passport Issue Date:</span>
+                          <span className="text-slate-600 font-medium">Date of issue of passport:</span>
                           <span className="ml-2 font-semibold">{selectedApp.passport_issue_date || 'N/A'}</span>
                         </div>
                         <div>
-                          <span className="text-slate-600 font-medium">Passport Expiry Date:</span>
+                          <span className="text-slate-600 font-medium">Date of expiry of passport:</span>
                           <span className="ml-2 font-semibold">{selectedApp.passport_expiry_date || 'N/A'}</span>
                         </div>
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <span className="text-slate-600 font-medium">Previous Canada Visa:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.previous_canada_visa || 'N/A'}</span>
-                        </div>
-                        <div>
-                          <span className="text-slate-600 font-medium">UCI Number:</span>
-                          <span className="ml-2 font-semibold font-mono">{selectedApp.uci_number || 'N/A'}</span>
-                        </div>
-                      </div>
+                    </div>
+                  </div>
+
+                  {/* 3. Personal Details of Applicant — matches IRCC form page 3 */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">3. Personal Details of Applicant</h3>
+                    <div className="space-y-3">
                       {selectedApp.additional_nationalities && selectedApp.additional_nationalities.length > 0 && (
                         <div className="grid grid-cols-1 gap-4">
                           <div>
-                            <span className="text-slate-600 font-medium">Additional Nationalities:</span>
+                            <span className="text-slate-600 font-medium">Additional nationalities:</span>
                             <span className="ml-2 font-semibold">{selectedApp.additional_nationalities.join(', ')}</span>
                           </div>
                         </div>
                       )}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Previously applied / obtained visa, eTA or permit to Canada:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.previous_canada_visa || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">UCI number (if applicable):</span>
+                          <span className="ml-2 font-semibold font-mono">{selectedApp.uci_number || 'N/A'}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Address Information */}
+                  {/* 4. Contact Information — matches IRCC form pages 3-4 */}
                   <div>
-                    <h3 className="text-lg font-semibold mb-4">Address Information</h3>
+                    <h3 className="text-lg font-semibold mb-4">4. Contact Information</h3>
                     <div className="space-y-3">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <span className="text-slate-600 font-medium">Apartment/Unit:</span>
+                          <span className="text-slate-600 font-medium">Preferred language to contact you:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.language_preference || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Email address:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.email || 'N/A'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 5. Residential Address — matches IRCC form page 4 */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">5. Residential Address</h3>
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Apartment / unit number:</span>
                           <span className="ml-2 font-semibold">{selectedApp.apartment_unit || 'N/A'}</span>
                         </div>
                         <div>
-                          <span className="text-slate-600 font-medium">Street Address:</span>
+                          <span className="text-slate-600 font-medium">Street / civic no. & street address:</span>
                           <span className="ml-2 font-semibold">{selectedApp.street_address || 'N/A'}</span>
+                          <p className="text-xs text-amber-600 mt-1">IRCC form has separate fields for street/civic number and street address</p>
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <span className="text-slate-600 font-medium">City:</span>
+                          <span className="text-slate-600 font-medium">City / town:</span>
                           <span className="ml-2 font-semibold">{selectedApp.city || 'N/A'}</span>
                         </div>
                         <div>
-                          <span className="text-slate-600 font-medium">Country of Residence:</span>
+                          <span className="text-slate-600 font-medium">Country / territory:</span>
                           <span className="ml-2 font-semibold">{selectedApp.country_residence || 'N/A'}</span>
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <span className="text-slate-600 font-medium">District/Region:</span>
+                          <span className="text-slate-600 font-medium">District / region:</span>
                           <span className="ml-2 font-semibold">{selectedApp.district_region || 'N/A'}</span>
-                        </div>
-                        <div>
-                          <span className="text-slate-600 font-medium">Postal Code:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.postal_code || 'N/A'}</span>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Travel Details */}
+                  {/* 6. Travel Information — matches IRCC form page 5 */}
                   <div>
-                    <h3 className="text-lg font-semibold mb-4">Travel Details</h3>
+                    <h3 className="text-lg font-semibold mb-4">6. Travel Information</h3>
                     <div className="space-y-3">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <span className="text-slate-600 font-medium">Travel Date Known:</span>
+                          <span className="text-slate-600 font-medium">Do you know when you will travel to Canada?</span>
                           <span className="ml-2 font-semibold">{selectedApp.travel_date_known || 'N/A'}</span>
                         </div>
                         <div>
-                          <span className="text-slate-600 font-medium">Travel Date:</span>
+                          <span className="text-slate-600 font-medium">Travel date:</span>
                           <span className="ml-2 font-semibold">{selectedApp.travel_date || 'N/A'}</span>
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <span className="text-slate-600 font-medium">Travel Time:</span>
+                          <span className="text-slate-600 font-medium">Travel time:</span>
                           <span className="ml-2 font-semibold">
                             {selectedApp.travel_hour && selectedApp.travel_minute
                               ? `${selectedApp.travel_hour}:${selectedApp.travel_minute}`
@@ -1207,164 +1178,185 @@ const AdminPanel = () => {
                           </span>
                         </div>
                         <div>
-                          <span className="text-slate-600 font-medium">Travel Timezone:</span>
+                          <span className="text-slate-600 font-medium">Travel timezone:</span>
                           <span className="ml-2 font-semibold">{selectedApp.travel_timezone || 'N/A'}</span>
                         </div>
                       </div>
                     </div>
                   </div>
 
-
-                  {/* Representative Information (for minors) */}
-                  {(selectedApp.representative_surname || selectedApp.representative_given_names) && (
-                    <div>
-                      <h3 className="text-lg font-semibold mb-4">Representative Information</h3>
-                      <div className="space-y-3">
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <span className="text-slate-600 font-medium">Representative Surname:</span>
-                            <span className="ml-2 font-semibold">{selectedApp.representative_surname || 'N/A'}</span>
-                          </div>
-                          <div>
-                            <span className="text-slate-600 font-medium">Representative Given Names:</span>
-                            <span className="ml-2 font-semibold">{selectedApp.representative_given_names || 'N/A'}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Additional Personal Details */}
+                  {/* 7. Consent and Declaration — matches IRCC form page 6 */}
                   <div>
-                    <h3 className="text-lg font-semibold mb-4">Additional Personal Details</h3>
+                    <h3 className="text-lg font-semibold mb-4">7. Consent and Declaration</h3>
                     <div className="space-y-3">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <span className="text-slate-600 font-medium">Middle Name:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.middle_name || 'N/A'}</span>
-                        </div>
-                        <div>
-                          <span className="text-slate-600 font-medium">Marital Status:</span>
-                          <span className="ml-2 font-semibold capitalize">{selectedApp.marital_status || 'N/A'}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Employment Information */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Employment Information</h3>
-                    <div className="space-y-3">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <span className="text-slate-600 font-medium">Occupation:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.occupation || 'N/A'}</span>
-                        </div>
-                        <div>
-                          <span className="text-slate-600 font-medium">Job Title:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.job_title || 'N/A'}</span>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <span className="text-slate-600 font-medium">Employer Name:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.employer_name || 'N/A'}</span>
-                        </div>
-                        <div>
-                          <span className="text-slate-600 font-medium">Employer Country:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.employer_country || 'N/A'}</span>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <span className="text-slate-600 font-medium">Employer City:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.employer_city || 'N/A'}</span>
-                        </div>
-                        <div>
-                          <span className="text-slate-600 font-medium">Employment Since:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.employment_since_year || 'N/A'}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Background Questions */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Background Questions</h3>
-                    <div className="space-y-3">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <span className="text-slate-600 font-medium">Refused Visa/Entry to Canada:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.bg_refused_visa || 'N/A'}</span>
-                        </div>
-                        {selectedApp.bg_refused_visa_details && (
-                          <div>
-                            <span className="text-slate-600 font-medium">Refused Visa Details:</span>
-                            <span className="ml-2 font-semibold">{selectedApp.bg_refused_visa_details}</span>
-                          </div>
-                        )}
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <span className="text-slate-600 font-medium">Criminal Offence:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.bg_criminal_offence || 'N/A'}</span>
-                        </div>
-                        {selectedApp.bg_criminal_offence_details && (
-                          <div>
-                            <span className="text-slate-600 font-medium">Criminal Offence Details:</span>
-                            <span className="ml-2 font-semibold">{selectedApp.bg_criminal_offence_details}</span>
-                          </div>
-                        )}
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <span className="text-slate-600 font-medium">Tuberculosis Contact:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.bg_tuberculosis || 'N/A'}</span>
-                        </div>
-                        <div>
-                          <span className="text-slate-600 font-medium">TB Health Worker:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.bg_tb_health_worker || 'N/A'}</span>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <span className="text-slate-600 font-medium">TB Diagnosed:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.bg_tb_diagnosed || 'N/A'}</span>
-                        </div>
-                        <div>
-                          <span className="text-slate-600 font-medium">Medical Condition:</span>
-                          <span className="ml-2 font-semibold">{selectedApp.bg_medical_condition || 'N/A'}</span>
-                        </div>
-                      </div>
-                      {selectedApp.bg_additional_details && (
-                        <div className="grid grid-cols-1 gap-4">
-                          <div>
-                            <span className="text-slate-600 font-medium">Additional Details:</span>
-                            <span className="ml-2 font-semibold">{selectedApp.bg_additional_details}</span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Consent & Signature */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Consent & Signature</h3>
-                    <div className="space-y-3">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <span className="text-slate-600 font-medium">Consent Agreed:</span>
+                          <span className="text-slate-600 font-medium">Consent agreed (I Agree):</span>
                           <span className="ml-2 font-semibold">{selectedApp.consent_agreed ? 'Yes' : 'No'}</span>
                         </div>
                         <div>
-                          <span className="text-slate-600 font-medium">Signature:</span>
+                          <span className="text-slate-600 font-medium">Signature of applicant:</span>
                           <span className="ml-2 font-semibold">{selectedApp.signature || 'N/A'}</span>
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <span className="text-slate-600 font-medium">Declaration Agreed:</span>
+                          <span className="text-slate-600 font-medium">Declaration agreed:</span>
                           <span className="ml-2 font-semibold">{selectedApp.declaration_agreed ? 'Yes' : 'No'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Additional Information — fields NOT on the official IRCC form */}
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    <h3 className="text-lg font-semibold mb-1 text-gray-700">Additional Information</h3>
+                    <p className="text-xs text-gray-500 mb-4">Fields below are not on the official IRCC eTA form</p>
+
+                    {/* Representative Information */}
+                    {(selectedApp.applying_on_behalf || selectedApp.representative_surname || selectedApp.representative_given_names) && (
+                      <div className="mb-4">
+                        <h4 className="text-md font-semibold mb-3 text-gray-600">Representative Information</h4>
+                        <div className="space-y-3">
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <span className="text-slate-600 font-medium">Applying on behalf of:</span>
+                              <span className="ml-2 font-semibold">{selectedApp.applying_on_behalf || 'N/A'}</span>
+                            </div>
+                          </div>
+                          {(selectedApp.representative_surname || selectedApp.representative_given_names) && (
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <span className="text-slate-600 font-medium">Representative surname:</span>
+                                <span className="ml-2 font-semibold">{selectedApp.representative_surname || 'N/A'}</span>
+                              </div>
+                              <div>
+                                <span className="text-slate-600 font-medium">Representative given names:</span>
+                                <span className="ml-2 font-semibold">{selectedApp.representative_given_names || 'N/A'}</span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Additional Personal Details */}
+                    <div className="mb-4">
+                      <h4 className="text-md font-semibold mb-3 text-gray-600">Additional Personal Details</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Middle name:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.middle_name || 'N/A'}</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-600 font-medium">Marital status:</span>
+                          <span className="ml-2 font-semibold capitalize">{selectedApp.marital_status || 'N/A'}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Employment Information */}
+                    <div className="mb-4">
+                      <h4 className="text-md font-semibold mb-3 text-gray-600">Employment Information</h4>
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <span className="text-slate-600 font-medium">Occupation:</span>
+                            <span className="ml-2 font-semibold">{selectedApp.occupation || 'N/A'}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-600 font-medium">Job title:</span>
+                            <span className="ml-2 font-semibold">{selectedApp.job_title || 'N/A'}</span>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <span className="text-slate-600 font-medium">Employer name:</span>
+                            <span className="ml-2 font-semibold">{selectedApp.employer_name || 'N/A'}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-600 font-medium">Employer country:</span>
+                            <span className="ml-2 font-semibold">{selectedApp.employer_country || 'N/A'}</span>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <span className="text-slate-600 font-medium">Employer city:</span>
+                            <span className="ml-2 font-semibold">{selectedApp.employer_city || 'N/A'}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-600 font-medium">Employment since (year):</span>
+                            <span className="ml-2 font-semibold">{selectedApp.employment_since_year || 'N/A'}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Background Questions */}
+                    <div className="mb-4">
+                      <h4 className="text-md font-semibold mb-3 text-gray-600">Background Questions</h4>
+                      <div className="space-y-3">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <span className="text-slate-600 font-medium">Refused visa/entry to Canada:</span>
+                            <span className="ml-2 font-semibold">{selectedApp.bg_refused_visa || 'N/A'}</span>
+                          </div>
+                          {selectedApp.bg_refused_visa_details && (
+                            <div>
+                              <span className="text-slate-600 font-medium">Refused visa details:</span>
+                              <span className="ml-2 font-semibold">{selectedApp.bg_refused_visa_details}</span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <span className="text-slate-600 font-medium">Criminal offence:</span>
+                            <span className="ml-2 font-semibold">{selectedApp.bg_criminal_offence || 'N/A'}</span>
+                          </div>
+                          {selectedApp.bg_criminal_offence_details && (
+                            <div>
+                              <span className="text-slate-600 font-medium">Criminal offence details:</span>
+                              <span className="ml-2 font-semibold">{selectedApp.bg_criminal_offence_details}</span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <span className="text-slate-600 font-medium">Tuberculosis contact:</span>
+                            <span className="ml-2 font-semibold">{selectedApp.bg_tuberculosis || 'N/A'}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-600 font-medium">TB health worker:</span>
+                            <span className="ml-2 font-semibold">{selectedApp.bg_tb_health_worker || 'N/A'}</span>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <span className="text-slate-600 font-medium">TB diagnosed:</span>
+                            <span className="ml-2 font-semibold">{selectedApp.bg_tb_diagnosed || 'N/A'}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-600 font-medium">Medical condition:</span>
+                            <span className="ml-2 font-semibold">{selectedApp.bg_medical_condition || 'N/A'}</span>
+                          </div>
+                        </div>
+                        {selectedApp.bg_additional_details && (
+                          <div className="grid grid-cols-1 gap-4">
+                            <div>
+                              <span className="text-slate-600 font-medium">Additional details:</span>
+                              <span className="ml-2 font-semibold">{selectedApp.bg_additional_details}</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Postal Code */}
+                    <div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <span className="text-slate-600 font-medium">Postal code:</span>
+                          <span className="ml-2 font-semibold">{selectedApp.postal_code || 'N/A'}</span>
                         </div>
                       </div>
                     </div>
