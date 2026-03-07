@@ -148,9 +148,9 @@ const formSchema = z.object({
   // Step 5 — Travel Information
   travelDateKnown: z.string().optional().default(""),
   travelDate: z.string().optional().default(""),
-  travelHour: z.string().optional().default(""),
-  travelMinute: z.string().optional().default(""),
-  travelTimezone: z.string().optional().default(""),
+  travelHour: z.string().optional().default("00"),
+  travelMinute: z.string().optional().default("00"),
+  travelTimezone: z.string().optional().default("(UTC-05:00) Eastern Time (US & Canada)"),
 
   // Background Questions
   bgRefusedVisa: z.string().optional().default(""),
@@ -319,9 +319,9 @@ const Apply = () => {
       employmentSinceYear: "",
       travelDateKnown: "",
       travelDate: "",
-      travelHour: "",
-      travelMinute: "",
-      travelTimezone: "",
+      travelHour: "00",
+      travelMinute: "00",
+      travelTimezone: "(UTC-05:00) Eastern Time (US & Canada)",
       bgRefusedVisa: "",
       bgRefusedVisaDetails: "",
       bgCriminalOffence: "",
