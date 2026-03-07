@@ -1153,22 +1153,21 @@ const Apply = () => {
                         )} />
                       </div>
 
-                      {/* Middle Name */}
-                      <FormField control={form.control} name="middleName" render={({ field }) => (
-                        <FormItem className="space-y-3">
-                          <FormLabel className="text-base md:text-lg font-bold text-slate-800">
-                            Middle name(s)
-                          </FormLabel>
-                          <FormControl>
-                            <Input placeholder="As on passport (optional)" {...field} className="h-12 border-2 border-gray-200 hover:border-primary focus:border-primary" />
-                          </FormControl>
-                          <p className="text-sm text-slate-500">Enter the middle name exactly as shown on passport. If you have no middle name, you can leave it blank.</p>
-                          <FormMessage />
-                        </FormItem>
-                      )} />
-
-                      {/* Date of Birth / Gender */}
+                      {/* Middle Name / Date of Birth */}
                       <div className="grid md:grid-cols-2 gap-4">
+                        <FormField control={form.control} name="middleName" render={({ field }) => (
+                          <FormItem className="space-y-3">
+                            <FormLabel className="text-base md:text-lg font-bold text-slate-800">
+                              Middle name(s)
+                            </FormLabel>
+                            <FormControl>
+                              <Input placeholder="As on passport (optional)" {...field} className="h-12 border-2 border-gray-200 hover:border-primary focus:border-primary" />
+                            </FormControl>
+                            <p className="text-sm text-slate-500">If you have no middle name, leave blank.</p>
+                            <FormMessage />
+                          </FormItem>
+                        )} />
+
                         <FormField control={form.control} name="dateOfBirth" render={({ field }) => (
                           <FormItem className="space-y-3">
                             <FormLabel className="text-base md:text-lg font-bold text-slate-800">
@@ -1185,9 +1184,12 @@ const Apply = () => {
                             <FormMessage />
                           </FormItem>
                         )} />
+                      </div>
 
+                      {/* Gender / Marital Status */}
+                      <div className="grid md:grid-cols-2 gap-4">
                         <FormField control={form.control} name="gender" render={({ field }) => (
-                          <FormItem className="space-y-3 flex flex-col justify-end">
+                          <FormItem className="space-y-3">
                             <FormLabel className="text-base md:text-lg font-bold text-slate-800">
                               Gender <span className="text-red-500">*</span>
                             </FormLabel>
@@ -1202,34 +1204,33 @@ const Apply = () => {
                               </RadioGroup>
                             </FormControl>
                             <FormMessage />
-                        </FormItem>
-                      )} />
-                      </div>
+                          </FormItem>
+                        )} />
 
-                      {/* Marital Status */}
-                      <FormField control={form.control} name="maritalStatus" render={({ field }) => (
-                        <FormItem className="space-y-3">
-                          <FormLabel className="text-base md:text-lg font-bold text-slate-800">
-                            Marital status <span className="text-red-500">*</span>
-                          </FormLabel>
-                          <Select onValueChange={field.onChange} value={field.value}>
-                            <FormControl>
-                              <SelectTrigger className="h-12 border-2 border-gray-200 hover:border-primary focus:border-primary">
-                                <SelectValue placeholder="Select marital status" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="Single">Single</SelectItem>
-                              <SelectItem value="Married">Married</SelectItem>
-                              <SelectItem value="Common-law">Common-law</SelectItem>
-                              <SelectItem value="Divorced">Divorced</SelectItem>
-                              <SelectItem value="Separated">Separated</SelectItem>
-                              <SelectItem value="Widowed">Widowed</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )} />
+                        <FormField control={form.control} name="maritalStatus" render={({ field }) => (
+                          <FormItem className="space-y-3">
+                            <FormLabel className="text-base md:text-lg font-bold text-slate-800">
+                              Marital status <span className="text-red-500">*</span>
+                            </FormLabel>
+                            <Select onValueChange={field.onChange} value={field.value}>
+                              <FormControl>
+                                <SelectTrigger className="h-12 border-2 border-gray-200 hover:border-primary focus:border-primary">
+                                  <SelectValue placeholder="Select marital status" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="Single">Single</SelectItem>
+                                <SelectItem value="Married">Married</SelectItem>
+                                <SelectItem value="Common-law">Common-law</SelectItem>
+                                <SelectItem value="Divorced">Divorced</SelectItem>
+                                <SelectItem value="Separated">Separated</SelectItem>
+                                <SelectItem value="Widowed">Widowed</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )} />
+                      </div>
 
                       {/* Phone Number */}
                       <FormField control={form.control} name="phoneNumber" render={({ field: phoneField }) => (
