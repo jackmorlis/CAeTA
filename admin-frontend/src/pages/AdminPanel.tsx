@@ -1054,10 +1054,10 @@ const AdminPanel = () => {
                       { key: 'passport_country_code', label: 'Select the code that matches the one on your passport', value: selectedApp.passport_country_code },
                       { key: 'nationality', label: 'What is the nationality noted on this passport?', value: selectedApp.nationality },
                     ].map(f => (
-                      <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-slate-100 group">
+                      <div key={f.key} className="py-1.5 border-b border-slate-100 group">
                         <span className="text-slate-500">{f.label}</span>
-                        <div className="flex items-center gap-1.5 ml-4">
-                          <span className="font-semibold text-right">{f.value || 'N/A'}</span>
+                        <div className="flex items-center gap-1.5 mt-1">
+                          <span className="font-semibold">{f.value || 'N/A'}</span>
                           <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-slate-200" title="Copy">
                             {copiedField === f.key ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
                           </button>
@@ -1078,10 +1078,10 @@ const AdminPanel = () => {
                       { key: 'passport_issue_date', label: 'Date of issue of passport', value: selectedApp.passport_issue_date },
                       { key: 'passport_expiry_date', label: 'Date of expiry of passport', value: selectedApp.passport_expiry_date },
                     ].map(f => (
-                      <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-slate-100 group">
+                      <div key={f.key} className="py-1.5 border-b border-slate-100 group">
                         <span className="text-slate-500">{f.label}</span>
-                        <div className="flex items-center gap-1.5 ml-4">
-                          <span className={`font-semibold text-right ${f.mono ? 'font-mono' : ''} ${f.capitalize ? 'capitalize' : ''}`}>{f.value || 'N/A'}</span>
+                        <div className="flex items-center gap-1.5 mt-1">
+                          <span className={`font-semibold ${f.mono ? 'font-mono' : ''} ${f.capitalize ? 'capitalize' : ''}`}>{f.value || 'N/A'}</span>
                           <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-slate-200" title="Copy">
                             {copiedField === f.key ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
                           </button>
@@ -1096,10 +1096,10 @@ const AdminPanel = () => {
                       { key: 'previous_canada_visa', label: 'Have you ever applied for or obtained a visa, an eTA or a permit to visit, live, work or study in Canada?', value: selectedApp.previous_canada_visa },
                       { key: 'uci_number', label: 'UCI number (if applicable)', value: selectedApp.uci_number, mono: true },
                     ].map(f => (
-                      <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-slate-100 group">
+                      <div key={f.key} className="py-1.5 border-b border-slate-100 group">
                         <span className="text-slate-500">{f.label}</span>
-                        <div className="flex items-center gap-1.5 ml-4">
-                          <span className={`font-semibold text-right ${f.mono ? 'font-mono' : ''}`}>{f.value || 'N/A'}</span>
+                        <div className="flex items-center gap-1.5 mt-1">
+                          <span className={`font-semibold ${f.mono ? 'font-mono' : ''}`}>{f.value || 'N/A'}</span>
                           <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-slate-200" title="Copy">
                             {copiedField === f.key ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
                           </button>
@@ -1114,10 +1114,10 @@ const AdminPanel = () => {
                       { key: 'email', label: 'Email address', value: selectedApp.email },
                       { key: 'phone', label: 'Phone number', value: selectedApp.phone_country_code && selectedApp.phone_number ? `${selectedApp.phone_country_code} ${selectedApp.phone_number}` : undefined },
                     ].map(f => (
-                      <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-slate-100 group">
+                      <div key={f.key} className="py-1.5 border-b border-slate-100 group">
                         <span className="text-slate-500">{f.label}</span>
-                        <div className="flex items-center gap-1.5 ml-4">
-                          <span className="font-semibold text-right">{f.value || 'N/A'}</span>
+                        <div className="flex items-center gap-1.5 mt-1">
+                          <span className="font-semibold">{f.value || 'N/A'}</span>
                           <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-slate-200" title="Copy">
                             {copiedField === f.key ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
                           </button>
@@ -1134,10 +1134,10 @@ const AdminPanel = () => {
                       { key: 'country_residence', label: 'Country / territory', value: selectedApp.country_residence },
                       { key: 'district_region', label: 'District / region', value: selectedApp.district_region },
                     ].map(f => (
-                      <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-slate-100 group">
+                      <div key={f.key} className="py-1.5 border-b border-slate-100 group">
                         <span className="text-slate-500">{f.label} {f.note && <span className="text-xs text-amber-500">{f.note}</span>}</span>
-                        <div className="flex items-center gap-1.5 ml-4">
-                          <span className="font-semibold text-right">{f.value || 'N/A'}</span>
+                        <div className="flex items-center gap-1.5 mt-1">
+                          <span className="font-semibold">{f.value || 'N/A'}</span>
                           <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-slate-200" title="Copy">
                             {copiedField === f.key ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
                           </button>
@@ -1153,10 +1153,10 @@ const AdminPanel = () => {
                       { key: 'travel_time', label: 'Travel time', value: selectedApp.travel_hour && selectedApp.travel_minute ? `${selectedApp.travel_hour}:${selectedApp.travel_minute}` : undefined },
                       { key: 'travel_timezone', label: 'Travel timezone', value: selectedApp.travel_timezone },
                     ].map(f => (
-                      <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-slate-100 group">
+                      <div key={f.key} className="py-1.5 border-b border-slate-100 group">
                         <span className="text-slate-500">{f.label}</span>
-                        <div className="flex items-center gap-1.5 ml-4">
-                          <span className="font-semibold text-right">{f.value || 'N/A'}</span>
+                        <div className="flex items-center gap-1.5 mt-1">
+                          <span className="font-semibold">{f.value || 'N/A'}</span>
                           <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-slate-200" title="Copy">
                             {copiedField === f.key ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
                           </button>
@@ -1171,10 +1171,10 @@ const AdminPanel = () => {
                       { key: 'signature', label: 'Signature of applicant', value: selectedApp.signature },
                       { key: 'declaration_agreed', label: 'Declaration agreed', value: selectedApp.declaration_agreed ? 'Yes' : 'No' },
                     ].map(f => (
-                      <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-slate-100 group">
+                      <div key={f.key} className="py-1.5 border-b border-slate-100 group">
                         <span className="text-slate-500">{f.label}</span>
-                        <div className="flex items-center gap-1.5 ml-4">
-                          <span className="font-semibold text-right">{f.value || 'N/A'}</span>
+                        <div className="flex items-center gap-1.5 mt-1">
+                          <span className="font-semibold">{f.value || 'N/A'}</span>
                           <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-slate-200" title="Copy">
                             {copiedField === f.key ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
                           </button>
@@ -1210,10 +1210,10 @@ const AdminPanel = () => {
                         ...(selectedApp.bg_additional_details ? [{ key: 'bg_additional_details', label: 'Additional details', value: selectedApp.bg_additional_details }] : []),
                         { key: 'postal_code', label: 'Postal code', value: selectedApp.postal_code },
                       ].map(f => (
-                        <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-gray-200 group">
+                        <div key={f.key} className="py-1.5 border-b border-gray-200 group">
                           <span className="text-gray-500">{f.label}</span>
-                          <div className="flex items-center gap-1.5 ml-4">
-                            <span className={`font-semibold text-right ${f.capitalize ? 'capitalize' : ''}`}>{f.value || 'N/A'}</span>
+                          <div className="flex items-center gap-1.5 mt-1">
+                            <span className={`font-semibold ${f.capitalize ? 'capitalize' : ''}`}>{f.value || 'N/A'}</span>
                             <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-gray-300" title="Copy">
                               {copiedField === f.key ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-gray-400" />}
                             </button>
