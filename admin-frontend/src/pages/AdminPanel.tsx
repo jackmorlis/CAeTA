@@ -1204,7 +1204,9 @@ const AdminPanel = () => {
                     <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">7. Travel Information</h3>
                     {[
                       { key: 'travel_date_known', label: 'Do you know when you will travel to Canada?', value: selectedApp.travel_date_known },
-                      { key: 'travel_date', label: 'Travel date', value: selectedApp.travel_date },
+                      { key: 'travel_year', label: 'Travel date — Year', value: selectedApp.travel_date?.split('-')[0] },
+                      { key: 'travel_month', label: 'Travel date — Month', value: monthName(selectedApp.travel_date?.split('-')[1]) },
+                      { key: 'travel_day', label: 'Travel date — Day', value: selectedApp.travel_date?.split('-')[2] },
                       { key: 'travel_time', label: 'Travel time', value: selectedApp.travel_hour && selectedApp.travel_minute ? `${selectedApp.travel_hour}:${selectedApp.travel_minute}` : undefined },
                       { key: 'travel_timezone', label: 'Travel timezone', value: selectedApp.travel_timezone },
                     ].map(f => (
