@@ -1104,13 +1104,14 @@ const AdminPanel = () => {
                     <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">3. Personal Details of Applicant</h3>
                     {[
                       { key: 'additional_nationalities', label: 'Additional nationalities', value: selectedApp.additional_nationalities && selectedApp.additional_nationalities.length > 0 ? selectedApp.additional_nationalities.join(', ') : 'None' },
+                      { key: 'marital_status', label: 'Marital status', value: selectedApp.marital_status, capitalize: true },
                       { key: 'previous_canada_visa', label: 'Have you ever applied for or obtained a visa, an eTA or a permit to visit, live, work or study in Canada?', value: selectedApp.previous_canada_visa },
                       { key: 'uci_number', label: 'UCI number (if applicable)', value: selectedApp.uci_number, mono: true },
                     ].map(f => (
                       <div key={f.key} className={`py-1.5 px-2 -mx-2 rounded border-b transition-colors duration-300 ${copiedFields.has(f.key) ? 'bg-green-50 border-green-300' : 'border-slate-100'} group`}>
                         <span className="text-slate-500">{f.label}</span>
                         <div className="flex items-center gap-1.5 mt-1">
-                          <span className={`font-semibold ${f.mono ? 'font-mono' : ''}`}>{f.value || 'N/A'}</span>
+                          <span className={`font-semibold ${f.mono ? 'font-mono' : ''} ${f.capitalize ? 'capitalize' : ''}`}>{f.value || 'N/A'}</span>
                           <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-slate-200" title="Copy">
                             {copiedFields.has(f.key) ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
                           </button>
@@ -1203,7 +1204,6 @@ const AdminPanel = () => {
 
                       {[
                         { key: 'middle_name', label: 'Middle name', value: selectedApp.middle_name },
-                        { key: 'marital_status', label: 'Marital status', value: selectedApp.marital_status, capitalize: true },
                         { key: 'occupation', label: 'Occupation', value: selectedApp.occupation },
                         { key: 'job_title', label: 'Job title', value: selectedApp.job_title },
                         { key: 'employer_name', label: 'Employer name', value: selectedApp.employer_name },
