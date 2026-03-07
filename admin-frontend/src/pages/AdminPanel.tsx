@@ -1014,8 +1014,41 @@ const AdminPanel = () => {
                   {/* IRCC eTA Form Fields — single column, one field per line, matching official form order */}
                   <div className="space-y-1 text-sm">
 
+                    {/* 0. Applying on Behalf */}
+                    <h3 className="text-base font-semibold pt-2 pb-1 border-b border-slate-200">0. Applying on Behalf</h3>
+                    {(() => {
+                      const isMinorApp = (() => {
+                        if (!selectedApp.date_of_birth) return false;
+                        const dob = new Date(selectedApp.date_of_birth);
+                        const today = new Date();
+                        let age = today.getFullYear() - dob.getFullYear();
+                        const m = today.getMonth() - dob.getMonth();
+                        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+                        return age < 18;
+                      })();
+                      const fields = isMinorApp ? [
+                        { key: 'behalf_someone', label: 'Are you applying on behalf of someone?', value: 'Yes' },
+                        { key: 'behalf_minor', label: 'Are you applying on behalf of a minor child?', value: 'Yes' },
+                        { key: 'representative_surname', label: 'Surname(s) / last name(s) of parent/guardian', value: selectedApp.representative_surname },
+                        { key: 'representative_given_names', label: 'Given name(s) / first name(s) of parent/guardian', value: selectedApp.representative_given_names },
+                      ] : [
+                        { key: 'behalf_someone', label: 'Are you applying on behalf of someone?', value: 'No' },
+                      ];
+                      return fields.map(f => (
+                        <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-slate-100 group">
+                          <span className="text-slate-500">{f.label}</span>
+                          <div className="flex items-center gap-1.5 ml-4">
+                            <span className="font-semibold text-right">{f.value || 'N/A'}</span>
+                            <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-slate-200" title="Copy">
+                              {copiedField === f.key ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
+                            </button>
+                          </div>
+                        </div>
+                      ));
+                    })()}
+
                     {/* 1. Passport & Travel Document */}
-                    <h3 className="text-base font-semibold pt-2 pb-1 border-b border-slate-200">1. Passport & Travel Document</h3>
+                    <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">1. Passport & Travel Document</h3>
                     {[
                       { key: 'travel_document_type', label: 'What travel document do you plan to use to travel to Canada?', value: selectedApp.travel_document_type },
                       { key: 'passport_country_code', label: 'Select the code that matches the one on your passport', value: selectedApp.passport_country_code },
@@ -1157,25 +1190,6 @@ const AdminPanel = () => {
                     <p className="text-xs text-gray-500 mb-3">Fields below are not on the official IRCC eTA form</p>
                     <div className="space-y-1 text-sm">
 
-                      {(selectedApp.applying_on_behalf || selectedApp.representative_surname || selectedApp.representative_given_names) && (
-                        <>
-                          {[
-                            { key: 'applying_on_behalf', label: 'Applying on behalf of', value: selectedApp.applying_on_behalf },
-                            ...(selectedApp.representative_surname ? [{ key: 'representative_surname', label: 'Representative surname', value: selectedApp.representative_surname }] : []),
-                            ...(selectedApp.representative_given_names ? [{ key: 'representative_given_names', label: 'Representative given names', value: selectedApp.representative_given_names }] : []),
-                          ].map(f => (
-                            <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-gray-200 group">
-                              <span className="text-gray-500">{f.label}</span>
-                              <div className="flex items-center gap-1.5 ml-4">
-                                <span className="font-semibold text-right">{f.value || 'N/A'}</span>
-                                <button onClick={() => copyToClipboard(f.value || '', f.key)} className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-gray-300" title="Copy">
-                                  {copiedField === f.key ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5 text-gray-400" />}
-                                </button>
-                              </div>
-                            </div>
-                          ))}
-                        </>
-                      )}
                       {[
                         { key: 'middle_name', label: 'Middle name', value: selectedApp.middle_name },
                         { key: 'marital_status', label: 'Marital status', value: selectedApp.marital_status, capitalize: true },
