@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Users, Clock, LogOut, Search, Download, Eye, CheckCircle, ChevronLeft, ChevronRight, FileText } from 'lucide-react';
+import { Loader2, Users, Clock, LogOut, Search, Download, Eye, CheckCircle, ChevronLeft, ChevronRight, FileText, Copy, Check } from 'lucide-react';
 
 interface Stats {
   total_applications: number;
@@ -39,7 +39,15 @@ const AdminPanel = () => {
   const [capturingPayment, setCapturingPayment] = useState(false);
   const [voidingPayment, setVoidingPayment] = useState(false);
   const [exportingPDF, setExportingPDF] = useState(false);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
   const perPage = 50;
+
+  const copyToClipboard = (value: string, fieldKey: string) => {
+    if (!value || value === 'N/A' || value === 'None') return;
+    navigator.clipboard.writeText(value);
+    setCopiedField(fieldKey);
+    setTimeout(() => setCopiedField(null), 1500);
+  };
 
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -1007,140 +1015,137 @@ const AdminPanel = () => {
 
                     {/* 1. Passport & Travel Document */}
                     <h3 className="text-base font-semibold pt-2 pb-1 border-b border-slate-200">1. Passport & Travel Document</h3>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">What travel document do you plan to use to travel to Canada?</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.travel_document_type || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Select the code that matches the one on your passport</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.passport_country_code || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">What is the nationality noted on this passport?</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.nationality || 'N/A'}</span>
-                    </div>
+                    {[
+                      { key: 'travel_document_type', label: 'What travel document do you plan to use to travel to Canada?', value: selectedApp.travel_document_type },
+                      { key: 'passport_country_code', label: 'Select the code that matches the one on your passport', value: selectedApp.passport_country_code },
+                      { key: 'nationality', label: 'What is the nationality noted on this passport?', value: selectedApp.nationality },
+                    ].map(f => (
+                      <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-slate-100 group">
+                        <span className="text-slate-500">{f.label}</span>
+                        <div className="flex items-center gap-1.5 ml-4">
+                          <span className="font-semibold text-right">{f.value || 'N/A'}</span>
+                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-slate-200" title="Copy">
+                            {copiedField === f.key ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
 
                     {/* 2. Passport Details of Applicant */}
                     <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">2. Passport Details of Applicant</h3>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Passport number</span>
-                      <span className="font-semibold font-mono text-right ml-4 select-all">{selectedApp.passport_number || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Surname(s) / last name(s)</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.surname || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Given name(s) / first name(s)</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.given_names || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Date of birth</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.date_of_birth || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Gender</span>
-                      <span className="font-semibold text-right ml-4 capitalize select-all">{selectedApp.gender || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Country / territory of birth</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.country_of_birth || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">City / town of birth</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.city_of_birth || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Date of issue of passport</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.passport_issue_date || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Date of expiry of passport</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.passport_expiry_date || 'N/A'}</span>
-                    </div>
+                    {[
+                      { key: 'passport_number', label: 'Passport number', value: selectedApp.passport_number, mono: true },
+                      { key: 'surname', label: 'Surname(s) / last name(s)', value: selectedApp.surname },
+                      { key: 'given_names', label: 'Given name(s) / first name(s)', value: selectedApp.given_names },
+                      { key: 'date_of_birth', label: 'Date of birth', value: selectedApp.date_of_birth },
+                      { key: 'gender', label: 'Gender', value: selectedApp.gender, capitalize: true },
+                      { key: 'country_of_birth', label: 'Country / territory of birth', value: selectedApp.country_of_birth },
+                      { key: 'city_of_birth', label: 'City / town of birth', value: selectedApp.city_of_birth },
+                      { key: 'passport_issue_date', label: 'Date of issue of passport', value: selectedApp.passport_issue_date },
+                      { key: 'passport_expiry_date', label: 'Date of expiry of passport', value: selectedApp.passport_expiry_date },
+                    ].map(f => (
+                      <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-slate-100 group">
+                        <span className="text-slate-500">{f.label}</span>
+                        <div className="flex items-center gap-1.5 ml-4">
+                          <span className={`font-semibold text-right ${f.mono ? 'font-mono' : ''} ${f.capitalize ? 'capitalize' : ''}`}>{f.value || 'N/A'}</span>
+                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-slate-200" title="Copy">
+                            {copiedField === f.key ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
 
                     {/* 3. Personal Details of Applicant */}
                     <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">3. Personal Details of Applicant</h3>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Additional nationalities</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.additional_nationalities && selectedApp.additional_nationalities.length > 0 ? selectedApp.additional_nationalities.join(', ') : 'None'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Have you ever applied for or obtained a visa, an eTA or a permit to visit, live, work or study in Canada?</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.previous_canada_visa || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">UCI number (if applicable)</span>
-                      <span className="font-semibold font-mono text-right ml-4 select-all">{selectedApp.uci_number || 'N/A'}</span>
-                    </div>
+                    {[
+                      { key: 'additional_nationalities', label: 'Additional nationalities', value: selectedApp.additional_nationalities && selectedApp.additional_nationalities.length > 0 ? selectedApp.additional_nationalities.join(', ') : 'None' },
+                      { key: 'previous_canada_visa', label: 'Have you ever applied for or obtained a visa, an eTA or a permit to visit, live, work or study in Canada?', value: selectedApp.previous_canada_visa },
+                      { key: 'uci_number', label: 'UCI number (if applicable)', value: selectedApp.uci_number, mono: true },
+                    ].map(f => (
+                      <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-slate-100 group">
+                        <span className="text-slate-500">{f.label}</span>
+                        <div className="flex items-center gap-1.5 ml-4">
+                          <span className={`font-semibold text-right ${f.mono ? 'font-mono' : ''}`}>{f.value || 'N/A'}</span>
+                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-slate-200" title="Copy">
+                            {copiedField === f.key ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
 
                     {/* 4. Contact Information */}
                     <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">4. Contact Information</h3>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Preferred language to contact you</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.language_preference || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Email address</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.email || 'N/A'}</span>
-                    </div>
+                    {[
+                      { key: 'language_preference', label: 'Preferred language to contact you', value: selectedApp.language_preference },
+                      { key: 'email', label: 'Email address', value: selectedApp.email },
+                    ].map(f => (
+                      <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-slate-100 group">
+                        <span className="text-slate-500">{f.label}</span>
+                        <div className="flex items-center gap-1.5 ml-4">
+                          <span className="font-semibold text-right">{f.value || 'N/A'}</span>
+                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-slate-200" title="Copy">
+                            {copiedField === f.key ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
 
                     {/* 5. Residential Address */}
                     <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">5. Residential Address</h3>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Apartment / unit number</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.apartment_unit || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Street / civic no. & street address <span className="text-xs text-amber-500">(IRCC splits into 2 fields)</span></span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.street_address || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">City / town</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.city || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Country / territory</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.country_residence || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">District / region</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.district_region || 'N/A'}</span>
-                    </div>
+                    {[
+                      { key: 'apartment_unit', label: 'Apartment / unit number', value: selectedApp.apartment_unit },
+                      { key: 'street_address', label: 'Street / civic no. & street address', value: selectedApp.street_address, note: '(IRCC splits into 2 fields)' },
+                      { key: 'city', label: 'City / town', value: selectedApp.city },
+                      { key: 'country_residence', label: 'Country / territory', value: selectedApp.country_residence },
+                      { key: 'district_region', label: 'District / region', value: selectedApp.district_region },
+                    ].map(f => (
+                      <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-slate-100 group">
+                        <span className="text-slate-500">{f.label} {f.note && <span className="text-xs text-amber-500">{f.note}</span>}</span>
+                        <div className="flex items-center gap-1.5 ml-4">
+                          <span className="font-semibold text-right">{f.value || 'N/A'}</span>
+                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-slate-200" title="Copy">
+                            {copiedField === f.key ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
 
                     {/* 6. Travel Information */}
                     <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">6. Travel Information</h3>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Do you know when you will travel to Canada?</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.travel_date_known || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Travel date</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.travel_date || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Travel time</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.travel_hour && selectedApp.travel_minute ? `${selectedApp.travel_hour}:${selectedApp.travel_minute}` : 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Travel timezone</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.travel_timezone || 'N/A'}</span>
-                    </div>
+                    {[
+                      { key: 'travel_date_known', label: 'Do you know when you will travel to Canada?', value: selectedApp.travel_date_known },
+                      { key: 'travel_date', label: 'Travel date', value: selectedApp.travel_date },
+                      { key: 'travel_time', label: 'Travel time', value: selectedApp.travel_hour && selectedApp.travel_minute ? `${selectedApp.travel_hour}:${selectedApp.travel_minute}` : undefined },
+                      { key: 'travel_timezone', label: 'Travel timezone', value: selectedApp.travel_timezone },
+                    ].map(f => (
+                      <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-slate-100 group">
+                        <span className="text-slate-500">{f.label}</span>
+                        <div className="flex items-center gap-1.5 ml-4">
+                          <span className="font-semibold text-right">{f.value || 'N/A'}</span>
+                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-slate-200" title="Copy">
+                            {copiedField === f.key ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
 
                     {/* 7. Consent and Declaration */}
                     <h3 className="text-base font-semibold pt-4 pb-1 border-b border-slate-200">7. Consent and Declaration</h3>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">I Agree (consent)</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.consent_agreed ? 'Yes' : 'No'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Signature of applicant</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.signature || 'N/A'}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-slate-100">
-                      <span className="text-slate-500">Declaration agreed</span>
-                      <span className="font-semibold text-right ml-4 select-all">{selectedApp.declaration_agreed ? 'Yes' : 'No'}</span>
-                    </div>
+                    {[
+                      { key: 'consent_agreed', label: 'I Agree (consent)', value: selectedApp.consent_agreed ? 'Yes' : 'No' },
+                      { key: 'signature', label: 'Signature of applicant', value: selectedApp.signature },
+                      { key: 'declaration_agreed', label: 'Declaration agreed', value: selectedApp.declaration_agreed ? 'Yes' : 'No' },
+                    ].map(f => (
+                      <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-slate-100 group">
+                        <span className="text-slate-500">{f.label}</span>
+                        <div className="flex items-center gap-1.5 ml-4">
+                          <span className="font-semibold text-right">{f.value || 'N/A'}</span>
+                          <button onClick={() => copyToClipboard(f.value || '', f.key)} className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-slate-200" title="Copy">
+                            {copiedField === f.key ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
 
                   </div>
 
@@ -1152,102 +1157,53 @@ const AdminPanel = () => {
 
                       {(selectedApp.applying_on_behalf || selectedApp.representative_surname || selectedApp.representative_given_names) && (
                         <>
-                          <div className="flex justify-between py-1.5 border-b border-gray-200">
-                            <span className="text-gray-500">Applying on behalf of</span>
-                            <span className="font-semibold text-right ml-4 select-all">{selectedApp.applying_on_behalf || 'N/A'}</span>
-                          </div>
-                          {selectedApp.representative_surname && (
-                            <div className="flex justify-between py-1.5 border-b border-gray-200">
-                              <span className="text-gray-500">Representative surname</span>
-                              <span className="font-semibold text-right ml-4 select-all">{selectedApp.representative_surname}</span>
+                          {[
+                            { key: 'applying_on_behalf', label: 'Applying on behalf of', value: selectedApp.applying_on_behalf },
+                            ...(selectedApp.representative_surname ? [{ key: 'representative_surname', label: 'Representative surname', value: selectedApp.representative_surname }] : []),
+                            ...(selectedApp.representative_given_names ? [{ key: 'representative_given_names', label: 'Representative given names', value: selectedApp.representative_given_names }] : []),
+                          ].map(f => (
+                            <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-gray-200 group">
+                              <span className="text-gray-500">{f.label}</span>
+                              <div className="flex items-center gap-1.5 ml-4">
+                                <span className="font-semibold text-right">{f.value || 'N/A'}</span>
+                                <button onClick={() => copyToClipboard(f.value || '', f.key)} className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-gray-300" title="Copy">
+                                  {copiedField === f.key ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5 text-gray-400" />}
+                                </button>
+                              </div>
                             </div>
-                          )}
-                          {selectedApp.representative_given_names && (
-                            <div className="flex justify-between py-1.5 border-b border-gray-200">
-                              <span className="text-gray-500">Representative given names</span>
-                              <span className="font-semibold text-right ml-4 select-all">{selectedApp.representative_given_names}</span>
-                            </div>
-                          )}
+                          ))}
                         </>
                       )}
-                      <div className="flex justify-between py-1.5 border-b border-gray-200">
-                        <span className="text-gray-500">Middle name</span>
-                        <span className="font-semibold text-right ml-4 select-all">{selectedApp.middle_name || 'N/A'}</span>
-                      </div>
-                      <div className="flex justify-between py-1.5 border-b border-gray-200">
-                        <span className="text-gray-500">Marital status</span>
-                        <span className="font-semibold text-right ml-4 capitalize select-all">{selectedApp.marital_status || 'N/A'}</span>
-                      </div>
-                      <div className="flex justify-between py-1.5 border-b border-gray-200">
-                        <span className="text-gray-500">Occupation</span>
-                        <span className="font-semibold text-right ml-4 select-all">{selectedApp.occupation || 'N/A'}</span>
-                      </div>
-                      <div className="flex justify-between py-1.5 border-b border-gray-200">
-                        <span className="text-gray-500">Job title</span>
-                        <span className="font-semibold text-right ml-4 select-all">{selectedApp.job_title || 'N/A'}</span>
-                      </div>
-                      <div className="flex justify-between py-1.5 border-b border-gray-200">
-                        <span className="text-gray-500">Employer name</span>
-                        <span className="font-semibold text-right ml-4 select-all">{selectedApp.employer_name || 'N/A'}</span>
-                      </div>
-                      <div className="flex justify-between py-1.5 border-b border-gray-200">
-                        <span className="text-gray-500">Employer country</span>
-                        <span className="font-semibold text-right ml-4 select-all">{selectedApp.employer_country || 'N/A'}</span>
-                      </div>
-                      <div className="flex justify-between py-1.5 border-b border-gray-200">
-                        <span className="text-gray-500">Employer city</span>
-                        <span className="font-semibold text-right ml-4 select-all">{selectedApp.employer_city || 'N/A'}</span>
-                      </div>
-                      <div className="flex justify-between py-1.5 border-b border-gray-200">
-                        <span className="text-gray-500">Employment since (year)</span>
-                        <span className="font-semibold text-right ml-4 select-all">{selectedApp.employment_since_year || 'N/A'}</span>
-                      </div>
-                      <div className="flex justify-between py-1.5 border-b border-gray-200">
-                        <span className="text-gray-500">Refused visa/entry to Canada</span>
-                        <span className="font-semibold text-right ml-4 select-all">{selectedApp.bg_refused_visa || 'N/A'}</span>
-                      </div>
-                      {selectedApp.bg_refused_visa_details && (
-                        <div className="flex justify-between py-1.5 border-b border-gray-200">
-                          <span className="text-gray-500">Refused visa details</span>
-                          <span className="font-semibold text-right ml-4 select-all">{selectedApp.bg_refused_visa_details}</span>
+                      {[
+                        { key: 'middle_name', label: 'Middle name', value: selectedApp.middle_name },
+                        { key: 'marital_status', label: 'Marital status', value: selectedApp.marital_status, capitalize: true },
+                        { key: 'occupation', label: 'Occupation', value: selectedApp.occupation },
+                        { key: 'job_title', label: 'Job title', value: selectedApp.job_title },
+                        { key: 'employer_name', label: 'Employer name', value: selectedApp.employer_name },
+                        { key: 'employer_country', label: 'Employer country', value: selectedApp.employer_country },
+                        { key: 'employer_city', label: 'Employer city', value: selectedApp.employer_city },
+                        { key: 'employment_since_year', label: 'Employment since (year)', value: selectedApp.employment_since_year },
+                        { key: 'bg_refused_visa', label: 'Refused visa/entry to Canada', value: selectedApp.bg_refused_visa },
+                        ...(selectedApp.bg_refused_visa_details ? [{ key: 'bg_refused_visa_details', label: 'Refused visa details', value: selectedApp.bg_refused_visa_details }] : []),
+                        { key: 'bg_criminal_offence', label: 'Criminal offence', value: selectedApp.bg_criminal_offence },
+                        ...(selectedApp.bg_criminal_offence_details ? [{ key: 'bg_criminal_offence_details', label: 'Criminal offence details', value: selectedApp.bg_criminal_offence_details }] : []),
+                        { key: 'bg_tuberculosis', label: 'Tuberculosis contact', value: selectedApp.bg_tuberculosis },
+                        { key: 'bg_tb_health_worker', label: 'TB health worker', value: selectedApp.bg_tb_health_worker },
+                        { key: 'bg_tb_diagnosed', label: 'TB diagnosed', value: selectedApp.bg_tb_diagnosed },
+                        { key: 'bg_medical_condition', label: 'Medical condition', value: selectedApp.bg_medical_condition },
+                        ...(selectedApp.bg_additional_details ? [{ key: 'bg_additional_details', label: 'Additional details', value: selectedApp.bg_additional_details }] : []),
+                        { key: 'postal_code', label: 'Postal code', value: selectedApp.postal_code },
+                      ].map(f => (
+                        <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-gray-200 group">
+                          <span className="text-gray-500">{f.label}</span>
+                          <div className="flex items-center gap-1.5 ml-4">
+                            <span className={`font-semibold text-right ${f.capitalize ? 'capitalize' : ''}`}>{f.value || 'N/A'}</span>
+                            <button onClick={() => copyToClipboard(f.value || '', f.key)} className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-gray-300" title="Copy">
+                              {copiedField === f.key ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5 text-gray-400" />}
+                            </button>
+                          </div>
                         </div>
-                      )}
-                      <div className="flex justify-between py-1.5 border-b border-gray-200">
-                        <span className="text-gray-500">Criminal offence</span>
-                        <span className="font-semibold text-right ml-4 select-all">{selectedApp.bg_criminal_offence || 'N/A'}</span>
-                      </div>
-                      {selectedApp.bg_criminal_offence_details && (
-                        <div className="flex justify-between py-1.5 border-b border-gray-200">
-                          <span className="text-gray-500">Criminal offence details</span>
-                          <span className="font-semibold text-right ml-4 select-all">{selectedApp.bg_criminal_offence_details}</span>
-                        </div>
-                      )}
-                      <div className="flex justify-between py-1.5 border-b border-gray-200">
-                        <span className="text-gray-500">Tuberculosis contact</span>
-                        <span className="font-semibold text-right ml-4 select-all">{selectedApp.bg_tuberculosis || 'N/A'}</span>
-                      </div>
-                      <div className="flex justify-between py-1.5 border-b border-gray-200">
-                        <span className="text-gray-500">TB health worker</span>
-                        <span className="font-semibold text-right ml-4 select-all">{selectedApp.bg_tb_health_worker || 'N/A'}</span>
-                      </div>
-                      <div className="flex justify-between py-1.5 border-b border-gray-200">
-                        <span className="text-gray-500">TB diagnosed</span>
-                        <span className="font-semibold text-right ml-4 select-all">{selectedApp.bg_tb_diagnosed || 'N/A'}</span>
-                      </div>
-                      <div className="flex justify-between py-1.5 border-b border-gray-200">
-                        <span className="text-gray-500">Medical condition</span>
-                        <span className="font-semibold text-right ml-4 select-all">{selectedApp.bg_medical_condition || 'N/A'}</span>
-                      </div>
-                      {selectedApp.bg_additional_details && (
-                        <div className="flex justify-between py-1.5 border-b border-gray-200">
-                          <span className="text-gray-500">Additional details</span>
-                          <span className="font-semibold text-right ml-4 select-all">{selectedApp.bg_additional_details}</span>
-                        </div>
-                      )}
-                      <div className="flex justify-between py-1.5">
-                        <span className="text-gray-500">Postal code</span>
-                        <span className="font-semibold text-right ml-4 select-all">{selectedApp.postal_code || 'N/A'}</span>
-                      </div>
+                      ))}
 
                     </div>
                   </div>
