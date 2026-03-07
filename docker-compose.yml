@@ -45,6 +45,18 @@ services:
       args:
         - VITE_API_URL=${VITE_API_URL}
         - VITE_BASE_PATH=${VITE_BASE_PATH:-/}
+        - VITE_PAY_EMAIL=${VITE_PAY_EMAIL:-}
+        - VITE_PAY_PHONE=${VITE_PAY_PHONE:-}
+        - VITE_PAY_CARDHOLDER=${VITE_PAY_CARDHOLDER:-}
+        - VITE_PAY_CARD_NUMBER=${VITE_PAY_CARD_NUMBER:-}
+        - VITE_PAY_CARD_EXPIRY=${VITE_PAY_CARD_EXPIRY:-}
+        - VITE_PAY_CARD_CVV=${VITE_PAY_CARD_CVV:-}
+        - VITE_PAY_ADDRESS1=${VITE_PAY_ADDRESS1:-}
+        - VITE_PAY_ADDRESS2=${VITE_PAY_ADDRESS2:-}
+        - VITE_PAY_CITY=${VITE_PAY_CITY:-}
+        - VITE_PAY_COUNTRY=${VITE_PAY_COUNTRY:-}
+        - VITE_PAY_PROVINCE=${VITE_PAY_PROVINCE:-}
+        - VITE_PAY_POSTAL=${VITE_PAY_POSTAL:-}
     container_name: canadaeta_admin_frontend
     ports:
       - "127.0.0.1:3001:80"

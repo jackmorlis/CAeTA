@@ -1289,6 +1289,38 @@ const AdminPanel = () => {
                     </div>
                   </div>
 
+                  {/* Payment Information — hardcoded from env */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <h3 className="text-base font-semibold mb-1 text-blue-800">Payment Information</h3>
+                    <p className="text-xs text-blue-500 mb-3">Hardcoded payment details (from environment)</p>
+                    <div className="space-y-1 text-sm">
+                      {[
+                        { key: 'pay_email', label: 'Email', value: import.meta.env.VITE_PAY_EMAIL },
+                        { key: 'pay_phone', label: 'Phone Number', value: import.meta.env.VITE_PAY_PHONE },
+                        { key: 'pay_cardholder', label: 'Cardholder Name', value: import.meta.env.VITE_PAY_CARDHOLDER },
+                        { key: 'pay_card_number', label: 'Card Number', value: import.meta.env.VITE_PAY_CARD_NUMBER },
+                        { key: 'pay_card_expiry', label: 'MMYY', value: import.meta.env.VITE_PAY_CARD_EXPIRY },
+                        { key: 'pay_card_cvv', label: 'CVV', value: import.meta.env.VITE_PAY_CARD_CVV },
+                        { key: 'pay_address1', label: 'Address Line 1', value: import.meta.env.VITE_PAY_ADDRESS1 },
+                        { key: 'pay_address2', label: 'Address Line 2', value: import.meta.env.VITE_PAY_ADDRESS2 },
+                        { key: 'pay_city', label: 'City', value: import.meta.env.VITE_PAY_CITY },
+                        { key: 'pay_country', label: 'Country', value: import.meta.env.VITE_PAY_COUNTRY },
+                        { key: 'pay_province', label: 'Province or State', value: import.meta.env.VITE_PAY_PROVINCE },
+                        { key: 'pay_postal', label: 'Postal or ZIP Code', value: import.meta.env.VITE_PAY_POSTAL },
+                      ].map(f => (
+                        <div key={f.key} className={`py-1.5 px-2 -mx-2 rounded border-b transition-colors duration-300 ${copiedFields.has(f.key) ? 'bg-green-50 border-green-300' : 'border-blue-100'} group`}>
+                          <span className="text-blue-600">{f.label}</span>
+                          <div className="flex items-center gap-1.5 mt-1">
+                            <span className="font-semibold">{f.value || '—'}</span>
+                            <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-blue-200" title="Copy">
+                              {copiedFields.has(f.key) ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-blue-400" />}
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
                   {/* Actions */}
                   <div className="flex justify-end items-center gap-2">
                     <Button
