@@ -1035,10 +1035,10 @@ const AdminPanel = () => {
                         { key: 'behalf_someone', label: 'Are you applying on behalf of someone?', value: 'No' },
                       ];
                       return fields.map(f => (
-                        <div key={f.key} className="flex items-center justify-between py-1.5 border-b border-slate-100 group">
+                        <div key={f.key} className="py-1.5 border-b border-slate-100 group">
                           <span className="text-slate-500">{f.label}</span>
-                          <div className="flex items-center gap-1.5 ml-4">
-                            <span className="font-semibold text-right">{f.value || 'N/A'}</span>
+                          <div className="flex items-center gap-1.5 mt-1">
+                            <span className="font-semibold">{f.value || 'N/A'}</span>
                             <button onClick={() => copyToClipboard(f.value || '', f.key)} className="p-0.5 rounded hover:bg-slate-200" title="Copy">
                               {copiedField === f.key ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4 text-slate-400" />}
                             </button>
