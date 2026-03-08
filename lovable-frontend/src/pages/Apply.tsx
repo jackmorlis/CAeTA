@@ -952,12 +952,12 @@ const Apply = () => {
     <div className="min-h-screen bg-background">
       <Header disableLinks />
 
-      <main className="py-8 font-quicksand">
+      <main className="py-4 md:py-8 font-quicksand">
         <div className="container mx-auto px-3 sm:px-4 max-w-6xl w-full">
 
           {/* Mobile Title */}
-          <div className="lg:hidden mb-6">
-            <h1 className="text-2xl font-bold text-slate-800">
+          <div className="lg:hidden mb-3">
+            <h1 className="text-lg font-bold text-slate-800">
               {steps[Math.min(currentStep, TOTAL_STEPS - 1)]?.title || "Application"}
             </h1>
           </div>
@@ -1035,17 +1035,17 @@ const Apply = () => {
               <div className="flex gap-1">
                 {steps.map(step => (
                   <div key={step.number} className={cn(
-                    "h-1.5 rounded-full flex-1 transition-colors",
+                    "h-1 rounded-full flex-1 transition-colors",
                     currentStep >= step.number ? "bg-primary" : "bg-gray-200"
                   )} />
                 ))}
               </div>
-              <p className="text-xs text-slate-500 mt-2">Step {Math.min(currentStep + 1, TOTAL_STEPS)} of {TOTAL_STEPS}</p>
+              <p className="text-xs text-slate-500 mt-1">Step {Math.min(currentStep + 1, TOTAL_STEPS)} of {TOTAL_STEPS}</p>
             </div>
 
             {/* ─── Main Form Content ─── */}
             <div className={cn(currentStep <= TOTAL_STEPS ? "lg:col-span-4" : "lg:col-span-5", "min-w-0 w-full")}>
-              <div className="bg-white rounded-lg shadow-soft p-6 md:p-8 overflow-x-hidden">
+              <div className="bg-white rounded-lg shadow-soft p-4 md:p-8 overflow-x-hidden">
 
                 {/* ════════════════════════════════════════════════ */}
                 {/* STEP 0 — About You                              */}
@@ -1053,13 +1053,6 @@ const Apply = () => {
                 {currentStep === 0 && (
                   <Form {...form}>
                     <div className="space-y-8">
-                      <div>
-                        <h2 className="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-3">
-                          <User className="h-6 w-6" />
-                          About You
-                        </h2>
-                        <p className="text-slate-600 mb-8">Tell us a bit about yourself to get started.</p>
-                      </div>
 
                       {/* Passport Country Code */}
                       <FormField control={form.control} name="passportCountryCode" render={({ field }) => (
@@ -1318,14 +1311,6 @@ const Apply = () => {
                 {currentStep === 1 && (
                   <Form {...form}>
                     <div className="space-y-8">
-                      <div>
-                        <h2 className="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-3">
-                          <Globe className="h-6 w-6" />
-                          Passport Details
-                        </h2>
-                        <p className="text-slate-600 mb-8">Have your passport ready. Enter details exactly as they appear.</p>
-                      </div>
-
                       {/* Passport Number / Confirm */}
                       <div className="grid md:grid-cols-2 gap-4">
                         <FormField control={form.control} name="passportNumber" render={({ field }) => (
@@ -1512,14 +1497,6 @@ const Apply = () => {
                 {currentStep === 2 && (
                   <Form {...form}>
                     <div className="space-y-8">
-                      <div>
-                        <h2 className="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-3">
-                          <Mail className="h-6 w-6" />
-                          Contact & Address
-                        </h2>
-                        <p className="text-slate-600 mb-8">Enter your email and residential address. Your eTA confirmation will be sent to your email.</p>
-                      </div>
-
                       {/* Email / Confirm Email */}
                       <div className="grid md:grid-cols-2 gap-4">
                         <FormField control={form.control} name="email" render={({ field }) => (
@@ -1652,14 +1629,6 @@ const Apply = () => {
                 {currentStep === 3 && (
                   <Form {...form}>
                     <div className="space-y-6">
-                      <div>
-                        <h2 className="text-xl md:text-2xl font-bold text-slate-800 flex items-center gap-2">
-                          <Briefcase className="w-6 h-6 text-primary" />
-                          Employment Information
-                        </h2>
-                        <p className="text-sm text-slate-500 mt-1">Tell us about your current employment situation.</p>
-                      </div>
-
                       {/* Occupation */}
                       <FormField control={form.control} name="occupation" render={({ field }) => (
                         <FormItem className="space-y-3">
@@ -1818,13 +1787,6 @@ const Apply = () => {
                 {currentStep === 4 && (
                   <Form {...form}>
                     <div className="space-y-8">
-                      <div>
-                        <h2 className="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-3">
-                          <Plane className="h-6 w-6" />
-                          Travel & Background
-                        </h2>
-                        <p className="text-slate-600 mb-8">Tell us about your travel plans and history with Canada.</p>
-                      </div>
 
                       <FormField control={form.control} name="previousCanadaVisa" render={({ field }) => (
                         <FormItem className="space-y-3">
@@ -2187,19 +2149,12 @@ const Apply = () => {
                 {/* ════════════════════════════════════════════════ */}
                 {currentStep === 5 && (
                   <Form {...form}>
-                    <div className="space-y-8">
-                      <div>
-                        <h2 className="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-3">
-                          <CreditCard className="h-6 w-6" />
-                          Pricing & Payment
-                        </h2>
-                        <p className="text-slate-600 mb-8">Review your options and complete your payment.</p>
-                      </div>
+                    <div className="space-y-4 md:space-y-8">
 
                       {/* Pricing */}
-                      <div className="space-y-5">
+                      <div className="space-y-3 md:space-y-5">
                         {/* Base cost */}
-                        <div className="text-center text-lg text-slate-700">
+                        <div className="text-center text-base md:text-lg text-slate-700">
                           This document has a cost of <span className="font-bold text-slate-900">$89.99</span> by traveler – Estimated delivery time – <span className="font-bold text-slate-900">less than 24 hours</span>
                         </div>
 
@@ -2209,48 +2164,91 @@ const Apply = () => {
                         <FormField control={form.control} name="processingOption" render={({ field }) => (
                           <FormItem className="space-y-3">
                             <FormControl>
-                              <RadioGroup onValueChange={field.onChange} value={field.value} className="space-y-3">
-                                {/* Standard is the default — no visible radio, auto-selected */}
-                                <input type="hidden" value="standard" />
+                              <div className="space-y-3">
+                                <input type="hidden" name="processingOption" value={field.value || 'standard'} />
 
-                                <div className={cn(
-                                  "border-2 rounded-xl p-5 cursor-pointer hover:border-primary transition-colors",
-                                  field.value === 'fast' ? "border-primary bg-primary/5" : "border-gray-200"
-                                )} onClick={() => field.onChange(field.value === 'fast' ? 'standard' : 'fast')}>
-                                  <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                      <RadioGroupItem value="fast" id="fast" />
-                                      <div>
-                                        <Label htmlFor="fast" className="font-bold cursor-pointer text-base">Fast</Label>
-                                        <p className="text-sm text-slate-500">Processed in less than 4 hours</p>
-                                      </div>
+                                {/* Fast Option */}
+                                <div
+                                  className={cn(
+                                    "flex items-center justify-between p-3 md:p-5 rounded-lg border-2 cursor-pointer transition-all",
+                                    field.value === "fast"
+                                      ? "border-primary bg-primary/5"
+                                      : "border-gray-200 hover:border-gray-300"
+                                  )}
+                                  onClick={() => field.onChange(field.value === 'fast' ? 'standard' : 'fast')}
+                                >
+                                  <div className="flex items-center gap-3 md:gap-4">
+                                    <div
+                                      style={{
+                                        width: '20px',
+                                        height: '20px',
+                                        borderRadius: '50%',
+                                        border: field.value === 'fast' ? 'none' : '2px solid #0284c7',
+                                        backgroundColor: field.value === 'fast' ? '#0284c7' : 'transparent',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        flexShrink: 0
+                                      }}
+                                    >
+                                      {field.value === 'fast' && (
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+                                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                        </svg>
+                                      )}
                                     </div>
-                                    <div className="text-right">
-                                      <div className="font-bold text-lg text-primary">+ $20.00</div>
-                                      <p className="text-xs text-slate-500">additional fee</p>
+                                    <div>
+                                      <p className="font-semibold text-slate-800">Fast</p>
+                                      <p className="text-sm text-primary">Processed in less than 4 hours</p>
                                     </div>
+                                  </div>
+                                  <div className="text-right">
+                                    <p className="font-bold text-lg text-primary">+ $20.00</p>
+                                    <p className="text-sm text-slate-500">additional fee</p>
                                   </div>
                                 </div>
 
-                                <div className={cn(
-                                  "border-2 rounded-xl p-5 cursor-pointer hover:border-primary transition-colors",
-                                  field.value === 'ultra' ? "border-primary bg-primary/5" : "border-gray-200"
-                                )} onClick={() => field.onChange(field.value === 'ultra' ? 'standard' : 'ultra')}>
-                                  <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                      <RadioGroupItem value="ultra" id="ultra" />
-                                      <div>
-                                        <Label htmlFor="ultra" className="font-bold cursor-pointer text-base">Ultra Premium</Label>
-                                        <p className="text-sm text-slate-500">Processed in less than one hour</p>
-                                      </div>
+                                {/* Ultra Premium Option */}
+                                <div
+                                  className={cn(
+                                    "flex items-center justify-between p-3 md:p-5 rounded-lg border-2 cursor-pointer transition-all",
+                                    field.value === "ultra"
+                                      ? "border-primary bg-primary/5"
+                                      : "border-gray-200 hover:border-gray-300"
+                                  )}
+                                  onClick={() => field.onChange(field.value === 'ultra' ? 'standard' : 'ultra')}
+                                >
+                                  <div className="flex items-center gap-3 md:gap-4">
+                                    <div
+                                      style={{
+                                        width: '20px',
+                                        height: '20px',
+                                        borderRadius: '50%',
+                                        border: field.value === 'ultra' ? 'none' : '2px solid #0284c7',
+                                        backgroundColor: field.value === 'ultra' ? '#0284c7' : 'transparent',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        flexShrink: 0
+                                      }}
+                                    >
+                                      {field.value === 'ultra' && (
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+                                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                        </svg>
+                                      )}
                                     </div>
-                                    <div className="text-right">
-                                      <div className="font-bold text-lg text-primary">+ $50.00</div>
-                                      <p className="text-xs text-slate-500">additional fee</p>
+                                    <div>
+                                      <p className="font-semibold text-slate-800">Ultra Premium</p>
+                                      <p className="text-sm text-primary">Processed in less than one hour</p>
                                     </div>
                                   </div>
+                                  <div className="text-right">
+                                    <p className="font-bold text-lg text-primary">+ $50.00</p>
+                                    <p className="text-sm text-slate-500">additional fee</p>
+                                  </div>
                                 </div>
-                              </RadioGroup>
+                              </div>
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -2259,9 +2257,9 @@ const Apply = () => {
 
 
                       {/* Navigation */}
-                      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                      <div className="flex flex-row justify-between items-center gap-2 md:gap-4">
                         <Button type="button" variant="outline" onClick={() => changeStep(4)}>&larr; Back</Button>
-                        <Button type="button" onClick={handleNext} className="px-12 py-6 text-lg font-semibold w-full md:w-auto">
+                        <Button type="button" onClick={handleNext} className="px-6 py-4 md:px-12 md:py-6 text-sm md:text-lg font-semibold">
                           Proceed to Payment
                         </Button>
                       </div>
